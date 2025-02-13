@@ -59,8 +59,6 @@ export default defineComponent({
     padding: 16px 0;
     display: flex;
     width: 100%;
-    bottom: 0;
-    left: 0;
     z-index: 1000;
 
     &__container {
@@ -102,4 +100,18 @@ export default defineComponent({
         color: #555;
     }
 }
+
+.v-application {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+v-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 </style>
+
