@@ -3,6 +3,12 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import TestSass from './components/TestSass.vue'
 import Header from './components/Header.vue'
+<<<<<<< Updated upstream
+=======
+
+
+
+>>>>>>> Stashed changes
 </script>
 
 <template>
