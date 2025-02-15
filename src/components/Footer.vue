@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    
         <v-footer class="footer">
             <v-container class="footer__container">
                 <div class="footer__section footer__section--top">
@@ -42,7 +42,7 @@
                 </div>
             </v-container>
         </v-footer>
-    </v-app>
+    
 </template>
 
 <script lang="ts">
@@ -101,17 +101,6 @@ export default defineComponent({
     }
 }
 
-.v-application {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
 
-v-main {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
 </style>
 

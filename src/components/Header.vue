@@ -7,7 +7,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <v-app>
+    
         <v-layout>
             <v-app-bar app class="navbar">
                 <v-container class="navbar__container">
@@ -33,7 +33,7 @@ export default defineComponent({
                 </v-container>
             </v-app-bar>
         </v-layout>
-    </v-app>
+    
 </template>
 
 <style lang="scss" scoped>
@@ -45,7 +45,7 @@ export default defineComponent({
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 1;
 
     &__container {
         display: flex;
