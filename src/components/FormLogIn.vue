@@ -1,26 +1,34 @@
-<script lang="ts">
+<script lang="ts" setup>
+
 import { useUsuariosStore } from '@/stores/usuarios'
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const store = useUsuariosStore()
+const usuariosStore = useUsuariosStore()
+const router = useRouter()
 
-const userName = ref("");
+const username = ref("");
 const contrasenia = ref("");
 
-// Reglas de validación
-const userNameRules = [
-  (v: string) => !!v || "Este campo es obligatorio",
-  (v: string) => (v && v.length >= 2) || "Debe tener formato válido",
+
+const usernameRules = [
+  (value: string) => (value.length >= 0) || "Rellena este campo"
 ];
 
 const contraseniaRules = [
-  (v: string) => !!v || "Este campo es obligatorio",
-  (v: string) => (v && v.length >= 2) || "Debe tener formato válido",
+  (value: string) => (value.length >= 0) || "Rellena este campo"
 ];
 
-// Función para iniciar sesión
-const loginUser = () => {
-  usersStore.loginUser(userName.value, contrasenia.value);
+
+
+const loginUser = async () => {
+  await usuariosStore.loginUser(username.value, contrasenia.value);
+
+  if (usuariosStore.currentUser) {
+    router.push("/homepage");
+  }
 };
+  
 
 </script>
 
@@ -28,17 +36,30 @@ const loginUser = () => {
 <template>
   <v-sheet class="mx-auto" width="300">
     <v-form fast-fail @submit.prevent="loginUser">
-      <v-text-field v-model="userName" :rules="userNameRules" label="First name"></v-text-field>
-      <v-text-field v-model="contrasenia" :rules="contraseniaRules" label="Last name"></v-text-field>
+      <v-text-field
+        v-model="username"
+        :rules="usernameRules"
+        label="Usuario"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="contrasenia"
+        :rules="contraseniaRules"
+        label="Contraseña"
+        type="password"
+      ></v-text-field>
 
       <v-btn class="mt-2" type="submit" block color="primary">Iniciar sesión</v-btn>
 
-      <!-- Mensajes de error o éxito desde el store -->
-      <v-alert v-if="usersStore.errorMessage" type="error" class="mt-2">{{ usersStore.errorMessage }}</v-alert>
-      <v-alert v-if="usersStore.successMessage" type="success" class="mt-2">{{ usersStore.successMessage }}</v-alert>
+      <!-- Mensaje de error si las credenciales son incorrectas -->
+      <v-alert v-if="usuariosStore.errorMessage" type="error" class="mt-2">
+        {{ usuariosStore.errorMessage }}
+      </v-alert>
     </v-form>
   </v-sheet>
 </template>
+
+
 
 <style lang="scss">
 .mx-auto{

@@ -1,7 +1,9 @@
 // stores/usersStore.ts
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import UsuarioDto from "@/stores/dtos/usuario.dto"; // DTO para tipar los usuarios
+import type { StringMappingType } from "typescript";
 
 export const useUsuariosStore = defineStore("usuarios", () => {
     // Estado reactivo
@@ -9,6 +11,8 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     const currentUser = ref<UsuarioDto | null>(null);
     const errorMessage = ref<string>("");
     const successMessage = ref<string>("");
+
+    const router = useRouter();
 
     // Obtener todos los usuarios del backend
     async function findAll() {
@@ -40,42 +44,6 @@ export const useUsuariosStore = defineStore("usuarios", () => {
         }
     }
 
-    // Actualizar un usuario existente
-    async function updateUser(userId: number, updatedData: Partial<UsuarioDto>) {
-        try {
-            const response = await fetch(`http://localhost:4444/api/usuario/${userId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedData),
-            });
-
-            if (!response.ok) throw new Error("Error al actualizar usuario");
-
-            // Actualizar el usuario en el array reactivo
-            const index = usuarios.value.findIndex((u) => u.id === userId);
-            if (index !== -1) {
-                usuarios.value[index] = { ...usuarios.value[index], ...updatedData };
-            }
-        } catch (error) {
-            console.error("Error al actualizar usuario:", error);
-        }
-    }
-
-    // Eliminar un usuario
-    async function deleteUser(userId: number) {
-        try {
-            const response = await fetch(`http://localhost:4444/api/usuario/${userId}`, {
-                method: "DELETE",
-            });
-
-            if (!response.ok) throw new Error("Error al eliminar usuario");
-
-            usuarios.value = usuarios.value.filter((u) => u.id !== userId);
-        } catch (error) {
-            console.error("Error al eliminar usuario:", error);
-        }
-    }
-
     // Registrar sesión (Register)
     async function RegisterUser(firstName: string, contrasenia: string) {
         try {
@@ -98,6 +66,26 @@ export const useUsuariosStore = defineStore("usuarios", () => {
         }
     }
 
+
+    async function loginUser(username: string, contrasenia: string) {
+        try {
+            const response = await fetch(`http://localhost:4444/api/login?username=${username}&contrasenia=${contrasenia}`)
+        
+            if(!response.ok) {
+                throw new Error("Credenciales incorrectas");
+            }
+
+            const data = await response.json()
+
+            currentUser.value = data.username
+            errorMessage.value = ""
+        
+            router.push("/homepage")
+        } catch (error:any) {
+            errorMessage.value = "Error al iniciar sesión.";
+        }
+    }
+
     return {
         usuarios,
         currentUser,
@@ -105,8 +93,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
         successMessage,
         findAll,
         createUser,
-        updateUser,
-        deleteUser,
         RegisterUser,
+        loginUser
     };
 });
