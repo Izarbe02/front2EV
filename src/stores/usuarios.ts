@@ -45,7 +45,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     }
 
     // Registrar sesión (Register)
-    async function RegisterUser(firstName: string, contrasenia: string) {
+    async function nRegisterUser(firstName: string, contrasenia: string) {
         try {
             const response = await fetch("http://localhost:4444/api/login", {
                 method: "POST",
@@ -63,6 +63,31 @@ export const useUsuariosStore = defineStore("usuarios", () => {
             console.error("Error al iniciar sesión:", error);
             errorMessage.value = error.message || "Error de conexión";
             successMessage.value = "";
+        }
+    }
+
+    async function RegisterUser(usuario: UsuarioDto) {
+        try {
+            const response = await fetch(`http://localhost:4444/api/login?username=${username}&contrasenia=${contrasenia}`)
+        
+            if(response.ok) {
+                throw new Error("Este usuario ya existe");
+            }
+
+            const data = await response.json()
+
+            currentUser.value = data.username
+            errorMessage.value = ""
+            
+            const responsed = await fetch("http://localhost:4444/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ usuario }),
+            });
+
+            router.push("/homepage")
+        } catch (error:any) {
+            errorMessage.value = "Error al crear usuario.";
         }
     }
 
