@@ -16,12 +16,12 @@
                     <v-btn text to="/donde" class="navbar__link">Donde</v-btn>
                     <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
                 </div>
+            </v-container>
 
-                <div class="navbar__search">
-                    <v-text-field class="navbar__search-input" placeholder="Artista" dense solo hide-details>
-                    </v-text-field>
-                    <v-btn class="navbar__search-button">Buscar</v-btn>
-                </div>
+            <v-container class="navbar__search">
+                <v-text-field class="navbar__search-input" placeholder="Artista" dense solo hide-details>
+                </v-text-field>
+                <v-btn class="navbar__search-button">Buscar</v-btn>
             </v-container>
         </v-app-bar>
     </v-layout>
@@ -72,7 +72,9 @@ export default defineComponent({
 
     &__navigation {
         display: flex;
-        gap: 16px;
+        gap: 12px;
+        justify-content: center;
+        width: 100%;
     }
 
     &__link {
@@ -102,13 +104,15 @@ export default defineComponent({
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 20px;
-        padding: 12px 10px;
+        justify-content: center;
+        width: 100%;
+        padding: 10px;
     }
 
     &__search-input {
-        width: 250px;
-        background: $color-darkgray ;
+        width: 100%;
+        max-width: 280px;
+        background: $color-darkgray !important;
         border: 1px solid $color-red;
         color: $color-lightred;
         border-radius: 4px;
@@ -136,13 +140,26 @@ export default defineComponent({
     }
 
     .footer {
-        height: 80px; // Aumenta la altura del footer
+        height: 80px;
         padding: 20px;
     }
 
     @media (max-width: 768px) {
+        .navbar__container {
+            flex-direction: column;
+            align-items: center;
+        }
+
         .navbar__navigation {
-            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar__search {
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
     }
 }
