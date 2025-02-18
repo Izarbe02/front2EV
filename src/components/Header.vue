@@ -1,3 +1,32 @@
+<template>
+    <v-layout>
+        <v-app-bar app class="navbar">
+            <v-container class="navbar__container">
+                <div class="navbar__section-left">
+                    <v-btn icon class="navbar__menu-button">
+                        <v-icon>mdi-menu</v-icon>
+                    </v-btn>
+                    <v-img src="/logo.png" alt="Logo" class="navbar__logo" contain></v-img>
+                </div>
+
+                <div class="navbar__navigation">
+                    <v-btn text to="/conciertos" class="navbar__link navbar__link--active">Conciertos</v-btn>
+                    <v-btn text to="/ciclos" class="navbar__link">Ciclos</v-btn>
+                    <v-btn text to="/videos" class="navbar__link">Videos</v-btn>
+                    <v-btn text to="/donde" class="navbar__link">Donde</v-btn>
+                    <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
+                </div>
+
+                <div class="navbar__search">
+                    <v-text-field class="navbar__search-input" placeholder="Artista" dense solo hide-details>
+                    </v-text-field>
+                    <v-btn class="navbar__search-button">Buscar</v-btn>
+                </div>
+            </v-container>
+        </v-app-bar>
+    </v-layout>
+</template>
+
 <script lang="ts">
 import { defineComponent } from 'vue';
 
@@ -6,63 +35,34 @@ export default defineComponent({
 });
 </script>
 
-<template>
-    
-        <v-layout>
-            <v-app-bar app class="navbar">
-                <v-container class="navbar__container">
-                    <div class="navbar__section-left">
-                        <v-btn icon class="navbar__menu-button">
-                            <v-icon>mdi-menu</v-icon>
-                        </v-btn>
-                        <v-img src="/logo.png" alt="Logo" class="navbar__logo" contain></v-img>
-                    </div>
-
-                    <div class="navbar__navigation">
-                        <v-btn text class="navbar__link">Inicio</v-btn>
-                        <v-btn text class="navbar__link">Servicios</v-btn>
-                        <v-btn text class="navbar__link">Contacto</v-btn>
-                    </div>
-
-                    <div class="navbar__section-right">
-                        <v-btn class="navbar__login-button">
-                            <v-icon left>mdi-account-circle</v-icon>
-                            Mi Cuenta
-                        </v-btn>
-                    </div>
-                </v-container>
-            </v-app-bar>
-        </v-layout>
-    
-</template>
-
 <style lang="scss" scoped>
+@import "@/assets/styles/_variables.scss";
+
 .navbar {
-    background: #f8f9fa;
-    padding: 0 16px;
-    display: flex;
+    background: $color-darkgray !important;
+    padding: 8px 16px;
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 1000;
+    font-family: $first-font;
 
     &__container {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: nowrap;
         width: 100%;
     }
 
-    &__section-left,
-    &__section-right {
+    &__section-left {
         display: flex;
         align-items: center;
     }
 
     &__menu-button {
         margin-right: 8px;
+        color: $color-lightred;
     }
 
     &__logo {
@@ -77,14 +77,67 @@ export default defineComponent({
 
     &__link {
         font-size: 16px;
-        color: #333;
+        font-weight: bold;
+        color: $color-lightred;
         text-transform: none;
+        position: relative;
+
+        &:hover,
+        &--active {
+            color: $color-whitered;
+        }
+
+        &:hover::after {
+            content: "";
+            width: 100%;
+            height: 2px;
+            background: $color-red;
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+        }
     }
 
-    &__login-button {
-        background: #007bff;
-        color: white;
+    &__search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 12px 10px;
+    }
+
+    &__search-input {
+        width: 250px;
+        background: $color-darkgray ;
+        border: 1px solid $color-red;
+        color: $color-lightred;
+        border-radius: 4px;
+        padding-left: 8px;
+        font-size: 16px;
+
+        &::placeholder {
+            color: $color-lightred;
+        }
+    }
+
+    &__search-input:hover {
+        color: $color-whitered;
+    }
+
+    &__search-button {
+        background: transparent;
+        border: 1px solid $color-red;
+        color: $color-lightred;
         text-transform: none;
+
+        &:hover {
+            background: $color-whitered;
+        }
+    }
+
+    .footer {
+        height: 80px; // Aumenta la altura del footer
+        padding: 20px;
     }
 
     @media (max-width: 768px) {
