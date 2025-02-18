@@ -10,10 +10,9 @@
                 </div>
 
                 <div class="navbar__navigation">
-                    <v-btn text to="/conciertos" class="navbar__link navbar__link--active">Conciertos</v-btn>
-                    <v-btn text to="/ciclos" class="navbar__link">Ciclos</v-btn>
-                    <v-btn text to="/videos" class="navbar__link">Videos</v-btn>
-                    <v-btn text to="/donde" class="navbar__link">Donde</v-btn>
+                    <v-btn text to="/Eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
+                    <v-btn text to="/Organizadores" class="navbar__link">Organizadores</v-btn>
+                    <v-btn text to="/About us" class="navbar__link">About us</v-btn>
                     <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
                 </div>
             </v-container>
@@ -21,7 +20,7 @@
             <v-container class="navbar__search">
                 <v-text-field class="navbar__search-input" placeholder="Artista" dense solo hide-details>
                 </v-text-field>
-                <v-btn class="navbar__search-button">Buscar</v-btn>
+                <!----> <v-btn class="navbar__search-button">Buscar</v-btn>
             </v-container>
         </v-app-bar>
     </v-layout>
@@ -145,9 +144,15 @@ export default defineComponent({
     }
 
     @media (max-width: 768px) {
+        .navbar {
+            padding: 8px;
+            height: 80px;
+        }
+
         .navbar__container {
             flex-direction: column;
             align-items: center;
+
         }
 
         .navbar__navigation {
