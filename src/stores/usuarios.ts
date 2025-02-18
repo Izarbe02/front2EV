@@ -44,50 +44,25 @@ export const useUsuariosStore = defineStore("usuarios", () => {
         }
     }
 
-    // Registrar sesión (Register)
-    async function nRegisterUser(firstName: string, contrasenia: string) {
-        try {
-            const response = await fetch("http://localhost:4444/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ firstName, contrasenia }),
-            });
-
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.message || "Error en el inicio de sesión");
-
-            currentUser.value = { id: -1, Username: firstName, Contrasenia: contrasenia };
-            successMessage.value = "Login exitoso. Redirigiendo...";
-            errorMessage.value = "";
-        } catch (error: any) {
-            console.error("Error al iniciar sesión:", error);
-            errorMessage.value = error.message || "Error de conexión";
-            successMessage.value = "";
-        }
-    }
+   
 
     async function RegisterUser(usuario: UsuarioDto) {
         try {
-            const response = await fetch(`http://localhost:4444/api/login?username=${username}&contrasenia=${contrasenia}`)
-        
-            if(response.ok) {
+            const response = await fetch(`http://localhost:5017/api/Usuario/username/${usuario.Username}`);
+    
+            if (response.ok) {
                 throw new Error("Este usuario ya existe");
             }
-
-            const data = await response.json()
-
-            currentUser.value = data.username
-            errorMessage.value = ""
-            
-            const responsed = await fetch("http://localhost:4444/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ usuario }),
-            });
-
-            router.push("/homepage")
-        } catch (error:any) {
-            errorMessage.value = "Error al crear usuario.";
+    
+            await createUser(usuario);
+    
+            currentUser.value = usuario;
+    
+            errorMessage.value = "";
+    
+            router.push("/homepage");
+        } catch (error: any) {
+            errorMessage.value = error.message || "Error al registrar usuario.";
         }
     }
 
