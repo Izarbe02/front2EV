@@ -11,8 +11,7 @@ defineProps<{ text: string }>();
 
 <style scoped lang="scss">
 h1 {
-    margin-top: 10%;
-    margin-bottom: 10%;
+    margin-top: 5%;
     border: #d40202;
     background-color: rgba(0, 0, 0, 0.88);
     font-size: 24px;
