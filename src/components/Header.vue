@@ -2,25 +2,24 @@
     <v-layout>
         <v-app-bar app class="navbar">
             <v-container class="navbar__container">
+                <div class="navbar__navigation">
+                    <v-btn text to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
+                    <v-btn text to="/organizadores" class="navbar__link">Organizadores</v-btn>
+                    <v-btn text to="/about-us" class="navbar__link">About us</v-btn>
+                    <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
+                </div>
                 <div class="navbar__section-left">
-                    <v-btn icon class="navbar__menu-button">
+                    <v-btn icon class="navbar__menu-button" @click="drawer = !drawer">
                         <v-icon>mdi-menu</v-icon>
                     </v-btn>
                     <v-img src="/logo.png" alt="Logo" class="navbar__logo" contain></v-img>
-                </div>
-
-                <div class="navbar__navigation">
-                    <v-btn text to="/Eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
-                    <v-btn text to="/Organizadores" class="navbar__link">Organizadores</v-btn>
-                    <v-btn text to="/About us" class="navbar__link">About us</v-btn>
-                    <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
                 </div>
             </v-container>
 
             <v-container class="navbar__search">
                 <v-text-field class="navbar__search-input" placeholder="Artista" dense solo hide-details>
                 </v-text-field>
-                <!----> <v-btn class="navbar__search-button">Buscar</v-btn>
+                <v-btn class="navbar__search-button">Buscar</v-btn>
             </v-container>
         </v-app-bar>
     </v-layout>
@@ -30,7 +29,11 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: 'Navbar'
+    data() {
+        return {
+            drawer: false
+        };
+    }
 });
 </script>
 
@@ -79,23 +82,13 @@ export default defineComponent({
     &__link {
         font-size: 16px;
         font-weight: bold;
-        color: $color-lightred;
+        color: white;
         text-transform: none;
         position: relative;
 
         &:hover,
         &--active {
-            color: $color-whitered;
-        }
-
-        &:hover::after {
-            content: "";
-            width: 100%;
-            height: 2px;
-            background: $color-red;
-            position: absolute;
-            bottom: -2px;
-            left: 0;
+            color: $color-red;
         }
     }
 
@@ -113,59 +106,112 @@ export default defineComponent({
         max-width: 280px;
         background: $color-darkgray !important;
         border: 1px solid $color-red;
-        color: $color-lightred;
+        color: white;
         border-radius: 4px;
         padding-left: 8px;
         font-size: 16px;
 
         &::placeholder {
-            color: $color-lightred;
+            color: white;
         }
     }
 
     &__search-input:hover {
-        color: $color-whitered;
+        color: $color-red;
     }
 
     &__search-button {
         background: transparent;
         border: 1px solid $color-red;
-        color: $color-lightred;
+        color: white;
         text-transform: none;
 
         &:hover {
-            background: $color-whitered;
+            background: $color-red;
+            color: white;
         }
-    }
-
-    .footer {
-        height: 80px;
-        padding: 20px;
     }
 
     @media (max-width: 768px) {
         .navbar {
-            padding: 8px;
-            height: 80px;
+            height: 60px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .navbar__container {
-            flex-direction: column;
-            align-items: center;
-
+        .navbar__logo {
+            height: 30px;
         }
 
-        .navbar__navigation {
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
+        .navbar__menu-button {
+            width: 36px;
+            height: 36px;
         }
 
         .navbar__search {
-            flex-direction: column;
+            flex-direction: row;
+            justify-content: center;
             align-items: center;
-            width: 100%;
+            width: auto;
+            flex-grow: 1;
+            background: $color-darkgray;
+            border-radius: 8px;
+            padding: 4px 8px;
+            border: 1px solid $color-lightred;
         }
+
+        .navbar__search-input {
+            max-width: 160px;
+            font-size: 14px;
+            background: transparent;
+            border: none;
+            color: white;
+        }
+
+        .navbar__search-button {
+            font-size: 14px;
+            padding: 4px 12px;
+            background: transparent;
+            border: none;
+            color: white;
+        }
+    }
+
+    .navbar {
+        height: 120px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar__navigation {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .navbar__search {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar__search-input {
+        max-width: 220px;
+        font-size: 14px;
+    }
+
+    .navbar__search-button {
+        font-size: 14px;
+        padding: 4px 12px;
     }
 }
 </style>
