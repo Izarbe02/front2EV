@@ -51,10 +51,9 @@ export default defineComponent({
     background: $color-darkgray !important;
     padding: 8px 16px;
     width: 100%;
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
-    z-index: 1000;
     font-family: $first-font;
 
     &__container {

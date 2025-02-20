@@ -62,10 +62,9 @@ export default defineComponent({
     padding: 16px 0;
     display: flex;
     width: 100%;
-    position: fixed;
+    position: relative;
     bottom: 0;
     left: 0;
-    z-index: 1000;
     font-family: $first-font;
 
     &__container {
