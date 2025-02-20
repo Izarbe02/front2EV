@@ -44,6 +44,8 @@ const fecha: Date = new Date();
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
 .evento-detalle {
     background-color: #111;
     color: #fff;

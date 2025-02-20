@@ -55,10 +55,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/Feature/DetalleEventoComp
 
 .footer {
     background: $color-gray;
@@ -68,6 +65,7 @@ export default defineComponent({
     position: relative;
     bottom: 0;
     left: 0;
+
     font-family: $first-font;
 
     &__container {
