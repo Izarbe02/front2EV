@@ -19,7 +19,7 @@
             <v-container class="navbar__search">
                 <v-text-field 
                     class="navbar__search-input" 
-                    placeholder="Artista" 
+                    placeholder="Eventos..." 
                     dense 
                     solo 
                     hide-details>
@@ -44,6 +44,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
 
 .navbar {
     background: $color-darkgray !important;
@@ -126,10 +128,8 @@ export default defineComponent({
     }
 
     &__search-button {
-        background: transparent;
-        border: 1px solid $color-red;
-        color: white;
-        text-transform: none;
+        @include boton-rojo;
+
 
         &:hover {
             background: $color-red;

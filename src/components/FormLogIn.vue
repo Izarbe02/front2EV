@@ -62,6 +62,8 @@ const loginUser = async () => {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
 
 .login {
   display: flex;
@@ -132,17 +134,7 @@ const loginUser = async () => {
   }
 
   &__button {
-    background: transparent;
-    border: 1px solid $color-red;
-    color: $color-lightred;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-top: 16px;
-
-    &:hover {
-      background: $color-red;
-      color: white;
-    }
+    @include boton-rojo;
   }
 
   &__error {

@@ -32,6 +32,10 @@
 
 
 <style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
+
 .evento-container{
     padding: 2%;
     &__tarjetas{
@@ -45,16 +49,7 @@
   }
 
 h1 {
-  margin-top: 5%;
-  border: #d40202;
-  background-color: rgba(0, 0, 0, 0.88);
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 30px;
-  color: #d40202;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-  width: 100%;
-  padding: 10px;
+  @include titulo-evento;
 }
 
 .evento-card {
@@ -86,10 +81,15 @@ h1 {
   }
 
   &__titulo {
-    color: #d40202;
-    font-size: 1.7rem;
-    font-weight: bold;
-    margin-bottom: 5px;
+    margin-top: 5%;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff9f9;
+    text-shadow: 2px 2px 5px rgba(255, 5, 5, 0.7);
+    width: 100%;
+    padding: 10px;
+    font-weight: 500;
   }
 
   &__info {
@@ -103,22 +103,10 @@ h1 {
 
 
   &__boton {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background-color: #272525;
-    color: #d40202;
-    border-radius: 8px;
-    border: 2px solid #d40202;
-    font-size: 1.2rem;
-    padding: 2%;
-    font-weight: bold;
-    cursor: pointer;
-    transition: box-shadow 0.3s ease-in-out;
+    padding: 8px;
+     border-radius: 5px;
+    @include boton-rojo;
 
-    &:hover {
-      box-shadow: 0px 0px 15px #d40202;
-    }
   }
   @media (min-width: 768px){
     .eventos-container__tarjetas{

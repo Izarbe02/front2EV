@@ -54,6 +54,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
 
 .footer {
     background: $color-gray;
@@ -107,12 +109,7 @@ export default defineComponent({
     }
 
     &__social-button {
-        color: $color-lightred;
-        background: $color-lightgray;
-
-        &:hover {
-            color: $color-whitered;
-        }
+        @include boton-gris;
     }
 
     @media (max-width: 768px) {
