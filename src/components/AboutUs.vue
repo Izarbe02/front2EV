@@ -1,8 +1,9 @@
 <template>
     <section class="about">
       <div class="about__container">
+        <h2 class="about__title">Nuestra Misión</h2>
         <div class="about__block">
-          <h2 class="about__title">Nuestra Misión</h2>
+          
           <div class="about__image about__image--small">
             <a href="https://es.pinterest.com/pin/484207397417450655/" target="_blank">
               <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg" alt="Sobre Nosotros" />
@@ -16,8 +17,9 @@
             </p>
           </div>
         </div>
+        <h2 class="about__title">Nuestra Visión</h2>
         <div class="about__block about__block--reverse">
-          <h2 class="about__title">Nuestra Visión</h2>
+       
           <div class="about__image">
             <a href="https://es.pinterest.com/pin/484207397417450655/" target="_blank">
               <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg" alt="Nuestra Visión" />
@@ -108,7 +110,7 @@
     
     &__text {
       font-family: $first-font;
-      color: $color-lightgray;
+      color: $color-whitered;
       font-size: 1rem;
       line-height: 1.6;
     }
