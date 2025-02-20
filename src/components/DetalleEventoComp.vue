@@ -48,8 +48,8 @@ const fecha: Date = new Date();
     background-color: #111;
     color: #fff;
     max-width: 800px;
-    margin: auto;
-    padding: 20px;
+    margin-top: 5%;
+    padding: 2%;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -117,20 +117,6 @@ const fecha: Date = new Date();
 }
 
 
-@media (min-width: 600px) {
-    .evento-detalle {
-        padding: 30px;
-
-        &__titulo {
-            font-size: 1.8rem;
-        }
-
-        &__boton {
-            font-size: 1.1rem;
-        }
-    }
-}
-
 @media (min-width: 900px) {
     .evento-detalle {
         max-width: 900px;
@@ -145,7 +131,7 @@ const fecha: Date = new Date();
         }
 
         &__boton {
-            padding: 12px 20px;
+            padding: 5% 7%;
             font-size: 1.2rem;
         }
     }
