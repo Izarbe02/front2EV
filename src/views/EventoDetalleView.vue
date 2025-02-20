@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import TituloComp from '@/components/TituloComp.vue';
 import Header from '@/components/Header.vue';
-
+import DetalleEventoComp from '@/components/DetalleEventoComp.vue'
 import Footer from '@/components/Footer.vue';
 
 </script>
@@ -9,7 +8,7 @@ import Footer from '@/components/Footer.vue';
 <template>
 
   <Header/>
-
+  <DetalleEventoComp/>
   <Footer/>
   
 </template>
