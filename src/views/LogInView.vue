@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FormLogIn from '@/components/FormLogIn.vue';
 import Header from '@/components/Header.vue'
 
 import Footer from '@/components/Footer.vue'
