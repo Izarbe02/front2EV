@@ -50,7 +50,7 @@ const fecha: Date = new Date();
     background-color: #111;
     color: #fff;
     max-width: 800px;
-    margin-top: 5%;
+    margin: 5% auto;
     padding: 2%;
     text-align: center;
     border-radius: 10px;
@@ -60,6 +60,7 @@ const fecha: Date = new Date();
         font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 10px;
+        margin-top: 19%;
     }
 
     &__portada {
@@ -125,6 +126,7 @@ const fecha: Date = new Date();
 
         &__titulo {
             font-size: 2rem;
+            margin-top: 2%;
         }
 
         &__acciones {
