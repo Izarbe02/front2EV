@@ -9,7 +9,7 @@
             <div class="footer__section footer__section--middle">
                 <v-row justify="center" class="footer__links">
                     <v-col cols="auto">
-                        <v-btn to="/about-us" class="footer__link">About us</v-btn>
+                        <v-btn to="/aboutUs" class="footer__link">About us</v-btn>
                     </v-col>
                     <v-col cols="auto">
                         <v-btn to="/eventos" class="footer__link">Eventos</v-btn>

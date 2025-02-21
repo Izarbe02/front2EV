@@ -5,8 +5,8 @@
                 <div class="navbar__navigation">
                     <v-btn text to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
                     <v-btn text to="/organizadores" class="navbar__link">Organizadores</v-btn>
-                    <v-btn text to="/about-us" class="navbar__link">About us</v-btn>
-                    <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
+                    <v-btn text to="/aboutUs" class="navbar__link">About us</v-btn>
+                    <v-btn text to="/eventos" class="navbar__link">Eventos</v-btn>
                 </div>
                 <div class="navbar__section-left">
                     <v-btn icon class="navbar__menu-button" @click="drawer = !drawer">
