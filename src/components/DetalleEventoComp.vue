@@ -27,7 +27,7 @@ const fecha: Date = new Date();
             <button class="evento-detalle__boton">📅 Añadir al calendario</button>
             <button class="evento-detalle__boton">⬇️ Descargar folleto</button>
         </div>
-
+        <p class="evento-detalle__subtitulo">Descripción del evento</p>
         <p class="evento-detalle__descripcion">Esta es la desc del evento Esta es la desc del eventoEsta es la desc del
             eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
             eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
@@ -110,7 +110,12 @@ const fecha: Date = new Date();
             box-shadow: 0px 0px 10px #d40202;
         }
     }
-
+    &__subtitulo{
+        font-family: 1.3rem;
+        color: $color-lightred;
+        font-weight: bold;
+        text-align: left;
+    }
     &__descripcion {
         font-size: 1rem;
         color: #ddd;
