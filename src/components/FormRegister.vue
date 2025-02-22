@@ -62,6 +62,8 @@ const registrarUsuario = async () => {
 
 
 <style lang="scss">
+@import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
 .mx-auto{
     margin-top: 15%;
     margin-bottom: 15%;

@@ -9,7 +9,7 @@
             <div class="footer__section footer__section--middle">
                 <v-row justify="center" class="footer__links">
                     <v-col cols="auto">
-                        <v-btn to="/about-us" class="footer__link">About us</v-btn>
+                        <v-btn to="/aboutUs" class="footer__link">About us</v-btn>
                     </v-col>
                     <v-col cols="auto">
                         <v-btn to="/eventos" class="footer__link">Eventos</v-btn>
@@ -54,16 +54,18 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
 
 .footer {
     background: $color-gray;
     padding: 16px 0;
     display: flex;
     width: 100%;
-    position: fixed;
+    position: relative;
     bottom: 0;
     left: 0;
-    z-index: 1000;
+
     font-family: $first-font;
 
     &__container {
@@ -107,12 +109,7 @@ export default defineComponent({
     }
 
     &__social-button {
-        color: $color-lightred;
-        background: $color-lightgray;
-
-        &:hover {
-            color: $color-whitered;
-        }
+        @include boton-gris;
     }
 
     @media (max-width: 768px) {

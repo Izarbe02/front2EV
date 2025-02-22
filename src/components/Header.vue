@@ -5,8 +5,8 @@
                 <div class="navbar__navigation">
                     <v-btn text to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
                     <v-btn text to="/organizadores" class="navbar__link">Organizadores</v-btn>
-                    <v-btn text to="/about-us" class="navbar__link">About us</v-btn>
-                    <v-btn text to="/contacto" class="navbar__link">Contacto</v-btn>
+                    <v-btn text to="/aboutUs" class="navbar__link">About us</v-btn>
+                    <v-btn text to="/eventos" class="navbar__link">Eventos</v-btn>
                 </div>
                 <div class="navbar__section-left">
                     <v-btn icon class="navbar__menu-button" @click="drawer = !drawer">
@@ -19,7 +19,7 @@
             <v-container class="navbar__search">
                 <v-text-field 
                     class="navbar__search-input" 
-                    placeholder="Artista" 
+                    placeholder="Eventos..." 
                     dense 
                     solo 
                     hide-details>
@@ -44,15 +44,16 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
 
 .navbar {
     background: $color-darkgray !important;
     padding: 8px 16px;
     width: 100%;
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
-    z-index: 1000;
     font-family: $first-font;
 
     &__container {
@@ -126,10 +127,8 @@ export default defineComponent({
     }
 
     &__search-button {
-        background: transparent;
-        border: 1px solid $color-red;
-        color: white;
-        text-transform: none;
+        @include boton-rojo;
+
 
         &:hover {
             background: $color-red;
