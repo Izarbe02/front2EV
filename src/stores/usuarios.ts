@@ -68,7 +68,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
     async function RegisterUser(usuario: UsuarioDto) {
         try {
-            const response = await fetch(`http://localhost:4444/api/login?username=${username}&contrasenia=${contrasenia}`)
+            const response = await fetch(`http://localhost:4444/api/login?username=${usuario.Username}&contrasenia=${usuario.Contrasenia}`)
         
             if(response.ok) {
                 throw new Error("Este usuario ya existe");
