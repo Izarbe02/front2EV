@@ -37,3 +37,6 @@ npm run build
 ```sh
 npm run lint
 ```
+npm install
+npm i vuetify
+npm install -D sass-embedded

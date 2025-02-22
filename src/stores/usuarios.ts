@@ -17,7 +17,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     // Obtener todos los usuarios del backend
     async function findAll() {
         try {
-            const response = await fetch("http://localhost:4444/api/usuario");
+            const response = await fetch("http://localhost:8888/api/usuario");
             if (!response.ok) throw new Error("Error al obtener usuarios");
 
             const data = await response.json();
@@ -30,7 +30,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     // Crear un nuevo usuario
     async function createUser(user: UsuarioDto) {
         try {
-            const response = await fetch("http://localhost:4444/api/usuario", {
+            const response = await fetch("http://localhost:8888/api/usuario", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user),
@@ -47,7 +47,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     // Registrar sesión (Register)
     async function nRegisterUser(firstName: string, contrasenia: string) {
         try {
-            const response = await fetch("http://localhost:4444/api/login", {
+            const response = await fetch("http://localhost:8888/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ firstName, contrasenia }),
@@ -68,7 +68,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
     async function RegisterUser(usuario: UsuarioDto) {
         try {
-            const response = await fetch(`http://localhost:4444/api/login?username=${usuario.Username}&contrasenia=${usuario.Contrasenia}`)
+            const response = await fetch(`http://localhost:8888/api/login?username=${usuario.Username}&contrasenia=${usuario.Contrasenia}`)
         
             if(response.ok) {
                 throw new Error("Este usuario ya existe");
@@ -79,7 +79,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
             currentUser.value = data.username
             errorMessage.value = ""
             
-            const responsed = await fetch("http://localhost:4444/api/login", {
+            const responsed = await fetch("http://localhost:8888/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ usuario }),
@@ -94,7 +94,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
     async function loginUser(username: string, contrasenia: string) {
         try {
-            const response = await fetch(`http://localhost:4444/api/login?username=${username}&contrasenia=${contrasenia}`)
+            const response = await fetch(`http://localhost:8888/api/login?username=${username}&contrasenia=${contrasenia}`)
         
             if(!response.ok) {
                 throw new Error("Credenciales incorrectas");
