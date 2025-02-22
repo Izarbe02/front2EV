@@ -2,8 +2,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import EventoDto from "@/stores/dtos/evento.dto"; // DTO para tipar los eventos
-import type { StringMappingType } from "typescript";
-
 
 export const useEventosStore = defineStore("eventos", () => {
     // Estado reactivo
@@ -38,38 +36,124 @@ export const useEventosStore = defineStore("eventos", () => {
 
             if (!response.ok) throw new Error("Error al crear evento");
 
-            eventos.value.push(evento);
+            const createdEvento = await response.json();
+            eventos.value.push(createdEvento);
         } catch (error) {
             console.error("Error al crear evento:", error);
         }
     }
 
-    // Borrar un nuevo evento
+    // Borrar un evento
     async function deleteEvento(id: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/Evento/${id}`, {
-                method: "DELETE"
+            const response = await fetch(`http://localhost:8888/api/evento/${id}`, {
+                method: "DELETE",
             });
-            eventos.value = eventos.value.filter(e => e.id !== id);
 
+            if (!response.ok) throw new Error("Error al eliminar evento");
+
+            eventos.value = eventos.value.filter(e => e.id !== id);
         } catch (error) {
-            console.error("Error al obtener eventos:", error);
+            console.error("Error al eliminar evento:", error);
         }
     }
 
-
-        async function updateEvento(id: number, eventoActualizado: EventoDto) {
-            try {
-              await fetch(`http://localhost:4444/api/evento/${id}`, {
+    // Actualizar un evento
+    async function updateEvento(id: number, eventoActualizado: EventoDto) {
+        try {
+            const response = await fetch(`http://localhost:8888/api/evento/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(eventoActualizado),
-              });
-              await findAll(); // Refresca la lista después de actualizar
-            } catch (error) {
-              console.error("Error al actualizar evento:", error);
-            }
-          }
+            });
+
+            if (!response.ok) throw new Error("Error al actualizar evento");
+
+            await findAll(); // Refresca la lista después de actualizar
+        } catch (error) {
+            console.error("Error al actualizar evento:", error);
         }
-)
-;
+    }
+
+    // Obtener un evento por ID
+    async function filtroEvento(id: number) {
+        try {
+            const response = await fetch(`http://localhost:8888/api/evento/${id}`);
+            if (!response.ok) throw new Error("Error al obtener el evento");
+
+            const evento = await response.json();
+            eventos.value = eventos.value.filter(e => e.id !== id);
+            eventos.value.push(evento);
+        } catch (error) {
+            console.error("Error al obtener el evento:", error);
+        }
+    }
+
+    // Obtener eventos por organizador
+    async function getEventoPorOrganizador(organizador: string) {
+        try {
+            const response = await fetch(`http://localhost:8888/api/evento/organizador/${organizador}`);
+            if (!response.ok) throw new Error("Error al obtener eventos por organizador");
+
+            const data = await response.json();
+            eventos.value = data;
+        } catch (error) {
+            console.error("Error al obtener eventos por organizador:", error);
+        }
+    }
+
+    // Obtener eventos por categoría
+    async function getEventoPorCategoria(categoria: string) {
+        try {
+            const response = await fetch(`http://localhost:8888/api/evento/categoria/${categoria}`);
+            if (!response.ok) throw new Error("Error al obtener eventos por categoría");
+
+            const data = await response.json();
+            eventos.value = data;
+        } catch (error) {
+            console.error("Error al obtener eventos por categoría:", error);
+        }
+    }
+
+    // Obtener información detallada de un evento
+    async function getInfoEvento(id: number) {
+        try {
+            const response = await fetch(`http://localhost:8888/api/evento/detalle/${id}`);
+            if (!response.ok) throw new Error("Error al obtener detalles del evento");
+
+            const evento = await response.json();
+            return evento;
+        } catch (error) {
+            console.error("Error al obtener detalles del evento:", error);
+        }
+    }
+
+    // Buscador de eventos
+    async function buscadorEvento(busqueda: string) {
+        try {
+            const response = await fetch(`http://localhost:8888/api/evento/buscar?query=${busqueda}`);
+            if (!response.ok) throw new Error("Error en la búsqueda de eventos");
+
+            const data = await response.json();
+            eventos.value = data;
+        } catch (error) {
+            console.error("Error en la búsqueda de eventos:", error);
+        }
+    }
+
+    return {
+        eventos,
+        currentUser,
+        errorMessage,
+        successMessage,
+        findAll,
+        createEvento,
+        deleteEvento,
+        updateEvento,
+        filtroEvento,
+        getEventoPorOrganizador,
+        getEventoPorCategoria,
+        getInfoEvento,
+        buscadorEvento
+    };
+});
