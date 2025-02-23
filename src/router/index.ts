@@ -5,7 +5,7 @@ import HomePageView from '@/views/HomePageView.vue'
 import LogInView from '@/views/LogInView.vue'
 import EventosView from '@/views/EventosView.vue'
 import EventoDetalleView from '@/views/EventoDetalleView.vue'
-import aboutUsView from '@/views/aboutUsView.vue'
+import aboutUsView from '@/views/AboutUsView.vue'
 
 
 
@@ -42,7 +42,7 @@ const router = createRouter({
     {
       path: '/aboutUs',
       name: 'AboutUs',
-      component: AboutUsView,
+      component: aboutUsView,
     },
    /* {
       path: '/about',
