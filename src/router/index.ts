@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import UsersView from '@/views/UsersView.vue'
 import HomePageView from '@/views/HomePageView.vue'
 import LogInView from '@/views/LogInView.vue'
 import EventosView from '@/views/EventosView.vue'
@@ -12,12 +11,6 @@ import aboutUsView from '@/views/AboutUsView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-  
-    {
-      path: '/users',
-      name: 'users',
-      component: UsersView,
-    },
 
     {
       path: '/',
