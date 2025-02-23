@@ -3,10 +3,10 @@
         <v-app-bar app class="navbar">
             <v-container class="navbar__container">
                 <div class="navbar__navigation">
-                    <v-btn text to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
-                    <v-btn text to="/organizadores" class="navbar__link">Organizadores</v-btn>
-                    <v-btn text to="/aboutUs" class="navbar__link">About us</v-btn>
-                    <v-btn text to="/eventos" class="navbar__link">Eventos</v-btn>
+                    <v-btn  to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
+                    <v-btn  to="/organizadores" class="navbar__link">Organizadores</v-btn>
+                    <v-btn  to="/aboutUs" class="navbar__link">About us</v-btn>
+                    <v-btn  to="/eventos" class="navbar__link">Eventos</v-btn>
                 </div>
                 <div class="navbar__section-left">
                     <v-btn icon class="navbar__menu-button" @click="drawer = !drawer">
@@ -52,8 +52,10 @@ export default defineComponent({
     padding: 8px 16px;
     width: 100%;
     position: relative;
+    position: relative;
     top: 0;
     left: 0;
+
     font-family: $first-font;
 
     &__container {
