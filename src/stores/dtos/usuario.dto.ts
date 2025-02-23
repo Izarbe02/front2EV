@@ -1,7 +1,10 @@
-export default class UsuarioDto {
-    constructor(
-        public id: number,
-        public Username: string,
-        public Contrasenia: string
-    ) {}
-}
+// stores/dtos/usuario.dto.ts
+export default interface UsuarioDto {
+    id: number;
+    username: string;
+    nombre: string;
+    email: string;
+    ubicacion: string;
+    contrasenia: string;
+  }
+  

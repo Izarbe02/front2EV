@@ -1,12 +1,13 @@
 export default class EventoInfoDto {
-    nombreOrg: string;
-    nombreEvento: string;
-    descripcion: string;
-    fechaInicio: Date;
-    fechaFin: Date;
-    ubicacion: string;
-    eventoCategoria: string;
-    tematica: string;
-    enlace: string;
-
+constructor(
+    public nombreOrg: string,
+    public nombreEvento: string,
+    public descripcion: string,
+    public fechaInicio: Date,
+    public fechaFin: Date,
+    public ubicacion: string,
+    public eventoCategoria: string,
+    public tematica: string,
+    public enlace: string
+) {}
 };
