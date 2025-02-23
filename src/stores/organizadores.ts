@@ -1,7 +1,7 @@
 
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import OrganizadorDto from "@/stores/dtos/organizador.dto";
+import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 
 export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Estado reactivo

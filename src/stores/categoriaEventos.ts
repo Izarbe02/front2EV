@@ -1,7 +1,7 @@
 // src/stores/categoriaEventos.ts
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import CategoriaEventoDto from "@/stores/dtos/categoriaEvento.dto";
+import type CategoriaEventoDto from "@/stores/dtos/categoriaEvento.dto";
 
 export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
   // Estado reactivo

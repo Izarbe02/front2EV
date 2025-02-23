@@ -1,7 +1,7 @@
 
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import ComentarioDto from "@/stores/dtos/comentario.dto";
+import type ComentarioDto from "@/stores/dtos/comentario.dto";
 
 export const useComentariosStore = defineStore("comentarios", () => {
   // Estado reactivo

@@ -1,7 +1,7 @@
 // src/stores/posts.ts
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import PostDto from "@/stores/dtos/post.dto";
+import type PostDto from "@/stores/dtos/post.dto";
 
 export const usePostsStore = defineStore("posts", () => {
   // Estado reactivo

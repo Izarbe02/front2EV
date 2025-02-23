@@ -1,7 +1,7 @@
 
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import CategoriaProductoDto from "@/stores/dtos/categoriaProducto.dto";
+import type CategoriaProductoDto from "@/stores/dtos/categoriaProducto.dto";
 
 export const useCategoriaProductosStore = defineStore("categoriaProductos", () => {
   // Estado reactivo
