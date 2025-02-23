@@ -1,104 +1,118 @@
 <script setup lang="ts">
 const fecha: Date = new Date();
-
 </script>
 
 <template>
-
     <div class="evento-detalle">
+        
 
-        <h1 class="evento-detalle__titulo"> NOMBRE EVENTO </h1>
+        <div class="evento-detalle__contenedor">
+           
+            <img src="https://i.pinimg.com/736x/04/91/53/04915321e9222613673b2e5e967b734f.jpg" alt="Portada del evento" class="evento-detalle__portada" />
 
-        <img src="https://i.pinimg.com/736x/f7/cf/ff/f7cfff1b6a2188e086c497c832b909cb.jpg" alt="Portada del evento" class="evento-detalle__portada" />
 
-        <div class="evento-detalle__info">
-            <div class="evento-detalle__fecha">
-                📅 {{ fecha.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                {{ fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
-            </div>
-            <div class="evento-detalle__lugar">
-                📍 SVG2
-                <span class="evento-detalle__direccion">CDLC</span>
+            <div class="evento-detalle__contenido">
+                <h1 class="evento-detalle__titulo"> NOMBRE EVENTO </h1>
+                <div class="evento-detalle__info">
+                    <div class="evento-detalle__categoria"><span class="evento-detalle__infoLetra">Concierto Satanico</span></div>
+                    <div class="evento-detalle__fecha">
+                        📅 {{ fecha.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                        {{ fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                    </div>
+                    <div class="evento-detalle__lugar">
+                        📍 SVG2
+                        <span class="evento-detalle__direccion">CDLC</span>
+                    </div>
+
+                    <div class="evento-detalle__acciones">
+                        <button class="evento-detalle__boton">📋 Copiar Enlace</button>
+                        <button class="evento-detalle__boton">📅 Añadir al calendario</button>
+                        <button class="evento-detalle__boton">⬇️ Descargar folleto</button>
+                    </div>
+                    <div class="evento-detalle__descripcion">
+                        <p class="evento-detalle__subtitulo">Descripción del evento</p>
+                        <p class="evento-detalle__descripcion">
+                            Esta es la desc del evento coorspondiente irira en este container esto es un texto de relleno para ver la magnitud del container. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni, praesentium. Et mollitia excepturi amet veniam ad nisi ut tempora incidunt iusto error illo ab facere reiciendis quidem, repellendus minima aspernatur.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="evento-detalle__acciones">
-            <button class="evento-detalle__boton">📋 Copiar Enlace</button>
-            <button class="evento-detalle__boton">📅 Añadir al calendario</button>
-            <button class="evento-detalle__boton">⬇️ Descargar folleto</button>
-        </div>
-        <p class="evento-detalle__subtitulo">Descripción del evento</p>
-        <p class="evento-detalle__descripcion">Esta es la desc del evento Esta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del eventoEsta es la desc del
-            eventoEsta es la desc del evento</p>
+        
     </div>
-
 </template>
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
+
 .evento-detalle {
     background-color: #111;
     color: #fff;
-    max-width: 800px;
     margin: 5% auto;
-    padding: 2%;
+    margin-top: 90px;
+    padding: 3%;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 
     &__titulo {
-        font-size: 1.5rem;
+        font-size: 1.7rem;
         font-weight: bold;
         margin-bottom: 10px;
-        margin-top: 19%;
+    }
+
+    &__contenedor {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     &__portada {
         width: 100%;
-        max-height: 400px;
+        height: auto;
         border-radius: 8px;
-        margin-bottom: 15px;
+        margin-bottom: 5%;
     }
 
     &__info {
-        font-size: 1rem;
-        margin-bottom: 15px;
+        font-size: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        border: 2px solid #272525;
+        border-radius: 8px;
+        padding: 3%;
     }
-
+    &__infoLetra{
+        font-weight: bold;
+        color: $color-lightred;
+    }
     &__fecha,
     &__lugar {
-        margin-bottom: 5px;
         font-weight: bold;
     }
 
     &__direccion {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         color: #bbb;
     }
 
     &__acciones {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        margin: 15px 0;
+        gap: 10px;
+        margin-top: 10px;
     }
 
     &__boton {
         background-color: #272525;
         color: #d40202;
         border: 2px solid #d40202;
-        padding: 10px;
-        font-size: 1rem;
+        padding: 10px 50px;
+        font-size: 1.2rem;
         font-weight: bold;
         border-radius: 5px;
         cursor: pointer;
@@ -110,38 +124,66 @@ const fecha: Date = new Date();
             box-shadow: 0px 0px 10px #d40202;
         }
     }
-    &__subtitulo{
-        font-family: 1.3rem;
+
+    &__subtitulo {
+        font-size: 1.5rem;
         color: $color-lightred;
         font-weight: bold;
         text-align: left;
+        margin-top: 20px;
     }
+
     &__descripcion {
-        font-size: 1rem;
+        font-size: 1.2rem;
         color: #ddd;
         text-align: left;
         margin-top: 10px;
     }
 }
 
-
+/* Estilos para pantallas grandes */
 @media (min-width: 900px) {
     .evento-detalle {
-        max-width: 900px;
+        max-width: 70%;
 
         &__titulo {
-            font-size: 2rem;
-            margin-top: 2%;
+        font-size: 1.9rem;
+        margin-bottom: 3%;
+        }
+
+        &__contenedor {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 5%;
+        }
+
+
+        &__contenido{
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 50%;
+        }
+
+        &__portada {
+            flex: 1;
+            height: 80%;
+        }
+
+        &__info {
+            flex: 1;
+            text-align: left;
+            
         }
 
         &__acciones {
-            flex-direction: row;
-            justify-content: center;
+            flex-direction: column;
         }
 
         &__boton {
-            padding: 5% 7%;
-            font-size: 1.2rem;
+            padding: 10px 25px;
+            font-size: 1rem;
         }
     }
 }
