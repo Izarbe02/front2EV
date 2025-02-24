@@ -1,9 +1,9 @@
 <template>
     <section class="about">
       <div class="about__container">
-       
+        <h2 class="about__title">Nuestra Misión</h2>
         <div class="about__block about__card">
-           <h2 class="about__title">Nuestra Misión</h2>
+      
           <div class="about__image about__image--small">
             <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg" alt="Sobre Nosotros" />
             
@@ -60,7 +60,7 @@
  
   
   &__container {
-    margin-top: 55%;
+    
     border: 2px solid $color-red;
     box-shadow: 0 0 10px $color-red;
     background: url("@/assets/images/fondo1.jpg") no-repeat center center;
@@ -68,7 +68,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
     max-width: 1200px;
     margin: 0 auto;
     
@@ -82,7 +82,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
     max-width: 350px;
     padding: 1rem;
@@ -106,7 +106,7 @@
 
   &__card {
 
-    margin-bottom: 3rem;
+  
     margin-bottom: 2rem;
     @include desktop {
       max-width: 1100px;

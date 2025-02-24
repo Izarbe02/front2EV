@@ -1,7 +1,7 @@
 // src/stores/roles.ts
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import RolDto from "@/stores/dtos/rol.dto";
+import type RolDto from "@/stores/dtos/rol.dto";
 
 export const useRolesStore = defineStore("roles", () => {
   // Estado reactivo
