@@ -96,10 +96,12 @@ const fecha: Date = new Date();
     }
     &__fecha,
     &__lugar {
+        font-family:$first-font ;
         font-weight: bold;
     }
 
     &__direccion {
+        font-family:$first-font ;
         font-size: 1.1rem;
         color: #bbb;
     }
@@ -112,6 +114,7 @@ const fecha: Date = new Date();
     }
 
     &__boton {
+        font-family:$first-font ;
         background-color: #272525;
         color: #d40202;
         border: 2px solid #d40202;
@@ -130,6 +133,7 @@ const fecha: Date = new Date();
     }
 
     &__subtitulo {
+        font-family:$titulo ;
         font-size: 1.5rem;
         color: $color-lightred;
         font-weight: bold;
@@ -138,6 +142,7 @@ const fecha: Date = new Date();
     }
 
     &__descripcion {
+        font-family:$first-font ;
         font-size: 1.2rem;
         color: #ddd;
         text-align: left;

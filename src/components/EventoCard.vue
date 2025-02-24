@@ -8,7 +8,7 @@
     <h1 class="titulo">EVENTOS</h1>
     <div class="evento-container__tarjetas">
     <div class="evento-card">
-      <img :src="imagen" alt="Evento" class="evento-card__imagen" />
+      <img src='https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg' alt="Evento" class="evento-card__imagen" />
 
       <div class="evento-card__contenido">
         <p class="evento-card__titulo">Nombre Evento</p>
@@ -81,8 +81,9 @@ h1 {
   }
 
   &__titulo {
+    font-family:$titulo ;
     margin-top: 5%;
-    font-size: 24px;
+    font-size: 30px;
     text-align: center;
     margin-bottom: 30px;
     color: #fff9f9;
@@ -93,6 +94,7 @@ h1 {
   }
 
   &__info {
+    font-family:$first-font ;
     font-size: 1.2rem;
     color: #bbb;
     display: flex;
@@ -103,6 +105,7 @@ h1 {
 
 
   &__boton {
+    font-family:$titulo ;
     padding: 8px;
      border-radius: 5px;
     @include boton-rojo;

@@ -4,9 +4,9 @@
             <v-container class="navbar__container">
                 <div class="navbar__navigation">
                     <v-btn  to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
-                    <v-btn  to="/organizadores" class="navbar__link">Organizadores</v-btn>
-                    <v-btn  to="/aboutUs" class="navbar__link">About us</v-btn>
-                    <v-btn  to="/eventos" class="navbar__link">Eventos</v-btn>
+                    <v-btn  to="/organizadores" class="navbar__link">ORGANIZADORES</v-btn>
+                    <v-btn  to="/aboutUs" class="navbar__link">ABOUT US</v-btn>
+                    <v-btn  to="/eventos" class="navbar__link">EVENTOS</v-btn>
                 </div>
                 <div class="navbar__section-left">
                     <v-btn icon class="navbar__menu-button" @click="drawer = !drawer">
@@ -24,7 +24,7 @@
                     solo 
                     hide-details>
                 </v-text-field>
-                <v-btn class="navbar__search-button">Buscar</v-btn>
+                <v-btn class="navbar__search-button">BUSCAR</v-btn>
             </v-container>
         </v-app-bar>
     </v-layout>
@@ -55,8 +55,7 @@ export default defineComponent({
     position: relative;
     top: 0;
     left: 0;
-
-    font-family: $first-font;
+    font-family: $titulo;
 
     &__container {
         display: flex;
@@ -130,7 +129,7 @@ export default defineComponent({
 
     &__search-button {
         @include boton-rojo;
-
+            font-family: $titulo;
 
         &:hover {
             background: $color-red;
