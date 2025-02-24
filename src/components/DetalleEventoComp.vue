@@ -48,7 +48,8 @@ const fecha: Date = new Date();
 @import "@/assets/styles/_mixins.scss";
 
 .evento-detalle {
-    background-color: #111;
+    background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
     color: #fff;
     margin: 5% auto;
     margin-top: 90px;
@@ -58,6 +59,7 @@ const fecha: Date = new Date();
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 
     &__titulo {
+        font-family:$titulo;
         font-size: 1.7rem;
         font-weight: bold;
         margin-bottom: 10px;
@@ -85,10 +87,12 @@ const fecha: Date = new Date();
         border: 2px solid #272525;
         border-radius: 8px;
         padding: 3%;
+   
     }
     &__infoLetra{
         font-weight: bold;
         color: $color-lightred;
+        font-family:$first-font ;
     }
     &__fecha,
     &__lugar {
@@ -141,7 +145,7 @@ const fecha: Date = new Date();
     }
 }
 
-/* Estilos para pantallas grandes */
+
 @media (min-width: 900px) {
     .evento-detalle {
         max-width: 70%;
