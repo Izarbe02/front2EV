@@ -7,7 +7,7 @@ import Footer from './components/Footer.vue';
 
 <template>
   <MetaballBackground />
-  <Header />
+  
   <RouterView />
 
 </template>
