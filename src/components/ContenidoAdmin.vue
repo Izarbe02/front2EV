@@ -17,8 +17,8 @@
                             <td>{{ usuario.nombre }}</td>
                             <td>{{ usuario.email }}</td>
                             <td>
-                                <button class="btn-editar" @click="editarUsuario(usuario.id)">Editar</button>
-                                <button class="btn-borrar" @click="borrarUsuario(usuario.id)">Borrar</button>
+                                <button class="btn-editar" @click="editarUsuario(usuario.id)"><i class="fas fa-pencil-alt"></i></button>
+                                <button class="btn-borrar" @click="borrarUsuario(usuario.id)"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -55,21 +55,53 @@ const borrarUsuario = async (id: number) => {
 @import "@/assets/styles/_mixins.scss";
 
 .contenido{
+    margin-top: 5%;
+    padding: 2%;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: $color-darkgray;
     &__titulo{
-            margin-top: 5%;
             font-family:$titulo;
             font-size: 2.3rem;
             font-weight: bold;
             margin-bottom: 10px;
             color: $color-red;
+            margin-bottom: 5%;
     }
     &__tabla{
         color: white;
         font-size: 1.5rem;
     }
+    th, td {
+    padding: 15px 20px; // Más espacio dentro de cada celda
+    text-align: left;
+    line-height: 1.6; // Mayor separación entre líneas
+  }
+  .btn-editar, .btn-borrar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin: 0 15px;
+}
+
+.btn-editar {
+    color: #797979;
+}
+
+.btn-editar:hover {
+    color: #c0c0c0;
+}
+
+.btn-borrar {
+    color: #bb2231;
+}
+
+.btn-borrar:hover {
+    color: #a71d2a;
+}
 }
 </style>
