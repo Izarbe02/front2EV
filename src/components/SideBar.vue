@@ -2,39 +2,24 @@
       <button class="toggle-btn" @click="toggleSidebar">☰</button>
       <div class="sidebar" :class="{ 'is-hidden': !isSidebarOpen }">
         <ul>
-          <li v-for="option in options" :key="option.id" @click="selectOption(option)">
-            <span class="icon">{{ option.icon }}</span>
-            <span class="text">{{ option.title }}</span>
-          </li>
+          <li @click="setView('UsuariosTable')">Usuarios</li>
+          <li @click="setView('EventosTable')">Eventos</li>
         </ul>
       </div>
   </template>
   
   <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, defineEmits } from 'vue';
   
-  const options = ref([
-    { id: 1, title: 'NEWS', icon: '📄', content: 'News content' },
-    { id: 2, title: 'CHANNELS', icon: '🔲', content: 'Channels content' },
-    { id: 3, title: 'BOOKMARKS', icon: '🔖', content: 'Bookmarks content' },
-    { id: 4, title: 'OVERVIEW', icon: '📊', content: 'Overview content' },
-    { id: 5, title: 'CALENDAR', icon: '📅', content: 'Calendar content' },
-    { id: 6, title: 'TIMELINE', icon: '⏳', content: 'Timeline content' },
-    { id: 7, title: 'PROFILE', icon: '👤', content: 'Profile content' },
-    { id: 8, title: 'WIDGETS', icon: '⚙️', content: 'Widgets content' },
-    { id: 9, title: 'SETTINGS', icon: '⚙️', content: 'Settings content' },
-  ]);
-  
-  const selectedOption = ref<typeof options.value[0] | null>(null);
+  const emit = defineEmits(['changeView'])
   const isSidebarOpen = ref(false);
   
   const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
   };
   
-  const selectOption = (option: typeof options.value[0]) => {
-    selectedOption.value = option;
-    isSidebarOpen.value = false; // Ocultar sidebar después de seleccionar una opción
+  const setView = (view: string) => {
+    emit('changeView', view);
   };
   </script>
   
