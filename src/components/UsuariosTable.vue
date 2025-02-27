@@ -18,30 +18,67 @@
                     <td>{{ usuario.email }}</td>
                     <td>{{ usuario.ubicacion }}</td>
                     <td>
-                        <button class="btn-editar" @click="editarUsuario(usuario.id)"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="btn-editar" @click="abrirForm(usuario)"><i class="fas fa-pencil-alt"></i></button>
                         <button class="btn-borrar" @click="borrarUsuario(usuario.id)"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <div v-if="modalVisible" class="modal">
+            <div class="modal-contenido">
+                <h2>Editar Usuario</h2>
+                <label>Nombre:</label>
+                <input type="text" v-model="usuarioEditado.nombre" />
+                
+                <label>Email:</label>
+                <input type="email" v-model="usuarioEditado.email" />
+                
+                <label>Ubicación:</label>
+                <input type="text" v-model="usuarioEditado.ubicacion" />
+
+                <div class="modal-botones">
+                    <button @click="guardarCambios">Guardar</button>
+                    <button @click="cerrarFormulario">Cancelar</button>
+                </div>
+            </div>
+        </div>
     </div>    
 </template>
 
 <script setup lang="ts">
 
-import { onMounted } from 'vue';
+import { onMounted,ref } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
+import type UsuarioDto from '@/stores/dtos/usuario.dto';
+
+const modalVisible = ref(false);
+const usuarioEditado = ref<UsuarioDto | null>(null);
+
 
 const store = useUsuariosStore();
-const { usuarios, findAll, deleteUsuario } = store;
+const { usuarios, findAll, deleteUsuario, updateUsuario } = store;
 
 onMounted(() => {
     findAll();
 });
 
-const editarUsuario = (id: number) => {
-    console.log("Editar usuario con ID:", id);
-};
+
+const abrirForm = (usuario: UsuarioDto) => {
+    usuarioEditado.value = { ...usuario };
+    modalVisible.value = true;
+}
+
+const guardarCambios = async () => {
+    if(usuarioEditado.value) {
+        await updateUsuario(usuarioEditado.value.id, usuarioEditado.value);
+        modalVisible.value = false;
+    }
+}
+
+const cerrarFormulario = () => {
+    modalVisible.value = false;
+}
+
 
 const borrarUsuario = async (id: number) => {
     if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
@@ -75,7 +112,7 @@ const borrarUsuario = async (id: number) => {
         font-size: 1.5rem;
     }
     th, td {
-    padding: 12px 18px; // Más espacio dentro de cada celda
+    padding: 12px 18px;
     text-align: left;
   }
   .btn-editar, .btn-borrar {
@@ -100,6 +137,52 @@ const borrarUsuario = async (id: number) => {
 
 .btn-borrar:hover {
     color: #a71d2a;
+}
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-contenido {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.modal-botones button {
+    padding: 8px 12px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+.modal-botones button:first-child {
+    background: #007bff;
+    color: white;
+}
+
+.modal-botones button:last-child {
+    background: #dc3545;
+    color: white;
 }
 }
 </style>
