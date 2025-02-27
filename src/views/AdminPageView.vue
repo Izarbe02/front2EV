@@ -16,13 +16,20 @@
   // Carga dinámica de componentes
   const components = {
     UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
-    EventosTable: defineAsyncComponent(() => import('@/components/EventosTable.vue'))
+    EventosTable: defineAsyncComponent(() => import('@/components/EventosTable.vue')),
+    ComentariosTable: defineAsyncComponent(() => import('@/components/ComentarioTable.vue')),
+    TematicaTable: defineAsyncComponent(() => import('@/components/TematicaTable.vue')),
+    CategoriaEventoTable: defineAsyncComponent(() => import('@/components/CategoriaEventoTable.vue'))
   };
   
   const currentComponent = computed(() => components[currentView.value]);
 </script>
   
 <style scoped lang="scss">
- 
+ .contenido-admin{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
 </style>
   

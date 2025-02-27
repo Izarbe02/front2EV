@@ -66,8 +66,8 @@ const borrarEvento = async (id: number) => {
 
 .contenido{
     margin-top: 5%;
-    padding: 2%;
-    border-radius: 8px;
+    padding: 1.5%;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -77,18 +77,17 @@ const borrarEvento = async (id: number) => {
             font-family:$titulo;
             font-size: 2.3rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 1%;
             color: $color-red;
-            margin-bottom: 5%;
     }
     &__tabla{
         color: white;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     th, td {
-    padding: 15px 20px; // Más espacio dentro de cada celda
+    padding: 15px 20px; 
     text-align: left;
-    line-height: 1.6; // Mayor separación entre líneas
+    line-height: 1.4; 
   }
   .btn-editar, .btn-borrar {
     background: none;

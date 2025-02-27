@@ -7,6 +7,7 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Email</th>
+                    <th>Ubicación</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -15,6 +16,7 @@
                     <td>{{ usuario.id }}</td>
                     <td>{{ usuario.nombre }}</td>
                     <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.ubicacion }}</td>
                     <td>
                         <button class="btn-editar" @click="editarUsuario(usuario.id)"><i class="fas fa-pencil-alt"></i></button>
                         <button class="btn-borrar" @click="borrarUsuario(usuario.id)"><i class="fas fa-trash"></i></button>
@@ -59,23 +61,22 @@ const borrarUsuario = async (id: number) => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: $color-darkgray;
+    background-color: #131313;
+    border: solid 2px#5c5c5c;
     &__titulo{
             font-family:$titulo;
             font-size: 2.3rem;
             font-weight: bold;
-            margin-bottom: 10px;
             color: $color-red;
-            margin-bottom: 5%;
+            margin-bottom: 4%;
     }
     &__tabla{
         color: white;
         font-size: 1.5rem;
     }
     th, td {
-    padding: 15px 20px; // Más espacio dentro de cada celda
+    padding: 12px 18px; // Más espacio dentro de cada celda
     text-align: left;
-    line-height: 1.6; // Mayor separación entre líneas
   }
   .btn-editar, .btn-borrar {
     background: none;

@@ -4,6 +4,9 @@
         <ul>
           <li @click="setView('UsuariosTable')">Usuarios</li>
           <li @click="setView('EventosTable')">Eventos</li>
+          <li @click="setView('ComentariosTable')">Comentarios</li>
+          <li @click="setView('TematicaTable')">Tematicas</li>
+          <li @click="setView('CategoriaEventoTable')">Categoria Evento</li>
         </ul>
       </div>
   </template>
@@ -43,7 +46,7 @@
     width: 250px;
     height: 100vh;
     padding: 60px 15px;
-    background: linear-gradient(to bottom, #d67e5c, #a65d3a);
+    background: linear-gradient(to bottom, #000000, #1d1d1d);
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
   }
@@ -52,19 +55,15 @@
     transform: translateX(-100%);
   }
   
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
   li {
+    margin-top: 4%;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 15px 10px;
+    gap: 7%;
+    padding: 20px 10px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 1.2rem;
     color: white;
   }
   

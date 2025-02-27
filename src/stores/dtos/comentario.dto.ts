@@ -1,4 +1,6 @@
 export default interface ComentarioDto {
     id: number;
-    texto: string;
+    idUsuario: number;
+    idEvento: number;
+    contenido: string;
   }
