@@ -22,40 +22,94 @@
                     <td>{{ new Date(evento.fecha_inicio).toLocaleDateString() }}</td>
                     <td>{{ new Date(evento.fecha_fin).toLocaleDateString() }}</td>
           <td>
-            <button class="btn-editar" @click="editarEvento(evento.id)">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button class="btn-borrar" @click="borrarEvento(evento.id)">
-              <i class="fas fa-trash"></i>
-            </button>
+            <button class="btn-editar" @click="abrirForm(evento)"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="btn-borrar" @click="borrarEvento(evento.id)"><i class="fas fa-trash"></i></button>
           </td>
-                </tr>
+        </tr>
+
             </tbody>
         </table>
-    </div>    
+        <div v-if="modalVisible" class="modal">
+            <div class="modal-contenido">
+                <h2>Editar Evento</h2>
+                <label>Nombre:</label>
+                <input type="text" v-model="eventoEditado.nombre" />
+                
+                <label>Descripcion:</label>
+            <input type="text" v-model="eventoEditado.descripcion" />
+            
+            <label>Ubicacion:</label>
+            <input type="text" v-model="eventoEditado.ubicacion" />
+
+
+            <label>Ubicacion:</label>
+            <input type="date" v-model="eventoEditado.fecha_inicio" />
+
+            <label>fecha_fin:</label>
+            <input type="date" v-model="eventoEditado.fecha_fin" />
+
+            <div class="modal-botones">
+                <button @click="guardarCambios">Guardar</button>
+                <button @click="cerrarFormulario">Cancelar</button>
+
+                
+            </div>
+        </div>
+    </div>
+</div>    
 </template>
 
 <script setup lang="ts">
 
-import { onMounted } from 'vue';
+
+
+import { onMounted,ref } from 'vue';
 import { useEventosStore } from '@/stores/eventos';
+import type EventoDto from '@/stores/dtos/evento.dto';
+
+const modalVisible = ref(false);
+const eventoEditado = ref<EventoDto | null>(null);
+
 
 const store = useEventosStore();
-const { eventos, findAll, deleteEvento } = store;
+const { eventos, findAll, deleteEvento, updateEvento } = store;
 
 onMounted(() => {
     findAll();
 });
 
-const editarEvento = (id: number) => {
-    console.log("Editar evento con ID:", id);
-    // Aquí podrías redirigir a una vista de edición o abrir un modal
-};
+
+const abrirForm = (evento: EventoDto) => {
+    eventoEditado.value = { ...evento };
+    modalVisible.value = true;
+}
+
+const guardarCambios = async () => {
+    if(eventoEditado.value) {
+        await updateEvento(eventoEditado.value.id, eventoEditado.value);
+        modalVisible.value = false;
+    }
+}
+
+const cerrarFormulario = () => {
+    modalVisible.value = false;
+}
+
 
 const borrarEvento = async (id: number) => {
-    if (confirm("¿Estás seguro de que quieres eliminar este evento?")) {
+    if (confirm("¿Estás seguro de que quieres eliminar este Evento?")) {
         await deleteEvento(id);
     }
+};
+
+const formatoFecha = (fecha: Date) => {
+  return new Intl.DateTimeFormat('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(fecha);
 };
 </script>
 
