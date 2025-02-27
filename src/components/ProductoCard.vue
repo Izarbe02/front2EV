@@ -15,17 +15,8 @@ onMounted(() => {
   <div class="producto-container">
     <h1 class="titulo">TODOS LOS PRODUCTOS</h1>
     <div class="producto-container__tarjetas">
-      <div
-        v-for="producto in productos"
-        :key="producto.id"
-        class="producto-card"
-      >
-        <img
-          :src="producto.imagen"
-          alt="Imagen del producto"
-          class="producto-card__imagen"
-          onerror="this.src='../assets/Images/default.jpg'"
-        />
+      <div v-for="producto in productos" :key="producto.id" class="producto-card">
+        <img :src="producto.imagen" alt="Imagen del producto" class="producto-card__imagen"/>
 
         <div class="producto-card__contenido">
           <p class="producto-card__titulo">{{ producto.nombre }}</p>
@@ -71,11 +62,11 @@ h1 {
   color: #fff;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 370px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  
+  
 
   &:hover {
     transform: translateY(-3px);
@@ -123,12 +114,19 @@ h1 {
   }
 
   @media (min-width: 768px) {
-    .producto-container__tarjetas {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-bottom: 50px;
-    }
+  .producto-container__tarjetas {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px;
+    margin-bottom: 50px;
+  }
+}
+
+}
+@media (min-width: 768px) {
+  .producto-container__tarjetas {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px;
+    margin-bottom: 50px;
   }
 }
 </style>
