@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import EventoDto from "@/stores/dtos/evento.dto"; // DTO para tipar los eventos
+import EventoDto from "@/stores/dtos/evento.dto";
+import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
 
 export const useEventosStore = defineStore("eventos", () => {
     // Estado reactivo
     const eventos = ref<EventoDto[]>([]);
     const currentUser = ref<EventoDto | null>(null);
+    const eventoInfo = ref<EventoInfoDto | null>(null);
     const errorMessage = ref<string>("");
     const successMessage = ref<string>("");
 
@@ -121,8 +123,8 @@ export const useEventosStore = defineStore("eventos", () => {
             const response = await fetch(`http://localhost:8888/api/evento/detalle/${id}`);
             if (!response.ok) throw new Error("Error al obtener detalles del evento");
 
-            const evento = await response.json();
-            return evento;
+            const eventoInfo = await response.json();
+            return eventoInfo;
         } catch (error) {
             console.error("Error al obtener detalles del evento:", error);
         }
@@ -146,6 +148,7 @@ export const useEventosStore = defineStore("eventos", () => {
         currentUser,
         errorMessage,
         successMessage,
+        eventoInfo,
         findAll,
         createEvento,
         deleteEvento,

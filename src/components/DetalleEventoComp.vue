@@ -1,45 +1,58 @@
 <script setup lang="ts">
-const fecha: Date = new Date();
+    import { onMounted } from 'vue'
+    import { useEventosStore } from '@/stores/eventos'
+    import { useRoute } from 'vue-router'
+    const fecha: Date = new Date();
+    const eventosStore = useEventosStore()
+    const route = useRoute()
+
+    onMounted(() => {
+    const eventoId = Number(route.params.id)
+       eventosStore.getInfoEvento(eventoId)
+    })
+
+
 </script>
 
 <template>
-    <div class="evento-detalle">
-        
-
+    <div class="evento-detalle" v-if="eventosStore.eventoInfo">
         <div class="evento-detalle__contenedor">
-           
-            <img src="https://i.pinimg.com/736x/04/91/53/04915321e9222613673b2e5e967b734f.jpg" alt="Portada del evento" class="evento-detalle__portada" />
-
+            <img :src="eventosStore.eventoInfo.enlace" :alt="eventosStore.eventoInfo.nombreEvento" class="evento-detalle__portada" />
 
             <div class="evento-detalle__contenido">
-                <h1 class="evento-detalle__titulo"> NOMBRE EVENTO </h1>
+                <h1 class="evento-detalle__titulo">{{ eventosStore.eventoInfo.nombreEvento }}</h1>
+
                 <div class="evento-detalle__info">
-                    <div class="evento-detalle__categoria"><span class="evento-detalle__infoLetra">Concierto Satanico</span></div>
+                    <div class="evento-detalle__categoria">
+                        <span class="evento-detalle__infoLetra">{{ eventosStore.eventoInfo.eventoCategoria }}</span>
+                    </div>
                     <div class="evento-detalle__fecha">
-                        📅 {{ fecha.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                        {{ fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        📅 {{ new Date(eventosStore.eventoInfo.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                        {{ new Date(eventosStore.eventoInfo.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
                     </div>
                     <div class="evento-detalle__lugar">
-                        📍 SVG2
-                        <span class="evento-detalle__direccion">CDLC</span>
+                        📍 {{ eventosStore.eventoInfo.ubicacion }}
+                        <span class="evento-detalle__direccion">{{ eventosStore.eventoInfo.nombreOrg }}</span>
                     </div>
 
                     <div class="evento-detalle__acciones">
-                        <button class="evento-detalle__boton">📋 Copiar Enlace</button>
                         <button class="evento-detalle__boton">📅 Añadir al calendario</button>
                         <button class="evento-detalle__boton">⬇️ Descargar folleto</button>
                     </div>
+
                     <div class="evento-detalle__descripcion">
                         <p class="evento-detalle__subtitulo">Descripción del evento</p>
                         <p class="evento-detalle__descripcion">
-                            Esta es la desc del evento coorspondiente irira en este container esto es un texto de relleno para ver la magnitud del container. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni, praesentium. Et mollitia excepturi amet veniam ad nisi ut tempora incidunt iusto error illo ab facere reiciendis quidem, repellendus minima aspernatur.
+                            {{ eventosStore.eventoInfo.descripcion }}
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-
-        
+    </div>
+    
+    <div v-else>
+        <p>Cargando evento...</p>
     </div>
 </template>
 

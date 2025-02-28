@@ -1,35 +1,45 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
+  import { useEventosStore } from '@/stores/eventos'
   const fecha: Date = new Date();
-</script>
+  const eventosStore = useEventosStore()
 
+  onMounted(() => {
+    eventosStore.findAll()
+  })
+</script>
 
 <template>
   <div class="evento-container">
     <h1 class="titulo">EVENTOS</h1>
+
     <div class="evento-container__tarjetas">
-    <div class="evento-card">
-      <img src='https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg' alt="Evento" class="evento-card__imagen" />
+      <div v-for="evento in eventosStore.eventos" :key="evento.id" class="evento-card">
+        <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
 
-      <div class="evento-card__contenido">
-        <p class="evento-card__titulo">Nombre Evento</p>
+        <div class="evento-card__contenido">
+          <p class="evento-card__titulo">{{ evento.nombre }}</p>
 
-        <div class="evento-card__info">
-          <span class="evento-card__fecha">
-            {{ fecha.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-            {{ fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
-          </span>
-          <span class="evento-card__localizacion">
-            SVG2
-          </span>
+          <div class="evento-card__info">
+            <span class="evento-card__fecha">
+              {{ new Date(evento.fecha_inicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+              {{ new Date(evento.fecha_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+            </span>
+            <span class="evento-card__localizacion">
+              {{ evento.ubicacion }}
+            </span>
+          </div>
+
+          <button class="evento-card__boton">
+            <RouterLink :to="`/EventoDetalle/${evento.id}`" class="evento-card__link">
+              Saber más
+            </RouterLink>
+          </button>
         </div>
-
-        <button class="evento-card__boton">Saber más</button>
       </div>
     </div>
   </div>
-  </div>
 </template>
-
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
