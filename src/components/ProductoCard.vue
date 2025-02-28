@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useProductosStore } from "@/stores/productos";
+import { useCategoriaProductosStore } from "@/stores/categoriaProductos";
+
 
 const store = useProductosStore();
 const { productos, findAll } = store;
+const storeCategoriaProducto = useCategoriaProductosStore();
+const { categorias, findAll: findAllCategoriaProducto } = storeCategoriaProducto;
+
 
 // Cargar productos al montar el componente
 onMounted(() => {
   findAll();
 });
+
+const obtenerCategoria = (idCategoria: number) => {
+  const categoriaEncontrada = categorias.find(c => c.id === idCategoria);
+  return categoriaEncontrada ? categoriaEncontrada.nombre : "Sin categoría";
+};
 </script>
 
 <template>
@@ -22,9 +32,14 @@ onMounted(() => {
           <p class="producto-card__titulo">{{ producto.nombre }}</p>
 
           <div class="producto-card__info">
-            <span class="producto-card__localizacion">
-              📍 {{ producto.ubicacion }}
+            <span class="producto-card__categoria">
+              {{ obtenerCategoria(producto.idCategoria) }}
             </span>
+            
+            <span class="producto-card__localizacion">
+              {{ producto.ubicacion }}
+            </span>
+            
           </div>
 
           <button class="producto-card__boton">Saber más</button>
