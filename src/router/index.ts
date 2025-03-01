@@ -7,6 +7,8 @@ import EventoDetalleView from '@/views/EventoDetalleView.vue'
 import aboutUsView from '@/views/AboutUsView.vue'
 import AdminPageView from '@/views/AdminPageView.vue'
 import ProductoView from '@/views/ProductoView.vue'
+import OrganizadorPageView from '@/views/OrganizadorPageView.vue'
+import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
 
 
 
@@ -49,6 +51,16 @@ const router = createRouter({
       name: 'Productos',
       component: ProductoView
       
+    },
+    {
+      path: '/Organizadores',
+      name: 'Organizadores',
+      component: OrganizadorPageView
+    },
+    {
+      path: '/OrganizadorDetalle',
+      name: 'OrganizadorDetalle',
+      component: OrganizadorDetalleView
     }
    /* {
       path: '/about',
