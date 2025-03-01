@@ -25,14 +25,13 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   }
 
   // Obtener un establecimiento por ID (GET: api/Organizador/{id})
-  async function getEstablecimiento(id: number) {
+  async function getOrganizador(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`);
-      if (!response.ok) throw new Error("Error al obtener establecimiento");
+      if (!response.ok) throw new Error("Error al obtener organizador");
 
-      const establecimiento = await response.json();
-      currentOrganizador.value = establecimiento;
-      return establecimiento;
+      currentOrganizador.value = await response.json();
+      return currentOrganizador.value;
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener establecimiento:", error);
@@ -99,7 +98,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     errorMessage,
     successMessage,
     findAll,
-    getEstablecimiento,
+    getOrganizador,
     createEstablecimiento,
     updateEstablecimiento,
     deleteEstablecimiento,

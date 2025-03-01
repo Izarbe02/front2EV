@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
-import ProductoView from '@/components/ProductoCard.vue';
+import ProductoCard from '@/components/ProductoCard.vue';
 import Footer from '@/components/Footer.vue';
 
 </script>
@@ -8,7 +8,7 @@ import Footer from '@/components/Footer.vue';
 
 <template>
     <Header/>
-    <ProductoView/>
+    <ProductoCard/>
     <Footer/>
 </template>
 
