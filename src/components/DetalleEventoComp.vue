@@ -1,38 +1,71 @@
 <script setup lang="ts">
-    import { onMounted } from 'vue'
+    import { ref, onMounted, watch } from 'vue'
     import { useEventosStore } from '@/stores/eventos'
+    import { EventoInfoDto } from '@/stores/dtos/eventoInfo.dto'
     import { useRoute } from 'vue-router'
-    const fecha: Date = new Date();
     const eventosStore = useEventosStore()
-    const route = useRoute()
 
-    onMounted(() => {
-    const eventoId = Number(route.params.id)
-       eventosStore.getInfoEvento(eventoId)
-    })
+    
+     const props = defineProps({
+        eventoId: {
+        type: Number,
+        default: null
+        }
+    });
+
+const eventoStore = useEventosStore();
+const evento = ref<EventoInfoDto | null>(null);
+
+// Función para cargar el organizador
+const loadEvento = async (id: number | null) => {
+  if (id !== null) {
+    evento.value = await eventoStore.getInfoEvento(id);
+    console.log("Evento cargado:", evento.value);
+  }
+};
+
+onMounted(() => {
+  loadEvento(props.eventoId);
+});
+
+watch(() => props.eventoId, (newId) => {
+  loadEvento(newId);
+});
+   
 
 
 </script>
 
 <template>
-    <div class="evento-detalle" v-if="eventosStore.eventoInfo">
+     <div class="evento-detalle" v-if="evento">
         <div class="evento-detalle__contenedor">
-            <img :src="eventosStore.eventoInfo.enlace" :alt="eventosStore.eventoInfo.nombreEvento" class="evento-detalle__portada" />
+            <img :src="evento.enlace" :alt="evento.nombreEvento" class="evento-detalle__portada" />
 
             <div class="evento-detalle__contenido">
-                <h1 class="evento-detalle__titulo">{{ eventosStore.eventoInfo.nombreEvento }}</h1>
+                <h1 class="evento-detalle__titulo">{{ evento.nombreEvento }}</h1>
 
                 <div class="evento-detalle__info">
-                    <div class="evento-detalle__categoria">
-                        <span class="evento-detalle__infoLetra">{{ eventosStore.eventoInfo.eventoCategoria }}</span>
+                    <div class="evento-detalle__categorias" v-if="evento.categorias.length">
+                        <span class="evento-detalle__infoLetra">Categorías:</span>
+                        <span v-for="(categoria, index) in evento.categorias" :key="index" class="evento-detalle__categoria">
+                            {{ categoria.nombre }}<span v-if="index < evento.categorias.length - 1">, </span>
+                        </span>
                     </div>
+
+                    <div class="evento-detalle__tematicas" v-if="evento.tematicas.length">
+                        <span class="evento-detalle__infoLetra">Temáticas:</span>
+                        <span v-for="(tematica, index) in evento.tematicas" :key="index" class="evento-detalle__tematica">
+                            {{ tematica.nombre }}<span v-if="index < evento.tematicas.length - 1">, </span>
+                        </span>
+                    </div>
+
                     <div class="evento-detalle__fecha">
-                        📅 {{ new Date(eventosStore.eventoInfo.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                        {{ new Date(eventosStore.eventoInfo.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        📅 {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                        {{ new Date(evento.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
                     </div>
                     <div class="evento-detalle__lugar">
-                        📍 {{ eventosStore.eventoInfo.ubicacion }}
-                        <span class="evento-detalle__direccion">{{ eventosStore.eventoInfo.nombreOrg }}</span>
+                        📍 {{ evento.ubicacion }}
+                        <span class="evento-detalle__direccion">{{ evento.nombreOrg }}</span>
                     </div>
 
                     <div class="evento-detalle__acciones">
@@ -43,7 +76,7 @@
                     <div class="evento-detalle__descripcion">
                         <p class="evento-detalle__subtitulo">Descripción del evento</p>
                         <p class="evento-detalle__descripcion">
-                            {{ eventosStore.eventoInfo.descripcion }}
+                            {{ evento.descripcion }}
                         </p>
                     </div>
                 </div>
@@ -55,6 +88,7 @@
         <p>Cargando evento...</p>
     </div>
 </template>
+
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";

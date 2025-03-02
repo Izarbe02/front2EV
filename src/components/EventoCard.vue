@@ -31,7 +31,7 @@
           </div>
 
           <button class="evento-card__boton">
-            <RouterLink :to="`/EventoDetalle/${evento.id}`" class="evento-card__link">
+            <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__link">
               Saber más
             </RouterLink>
           </button>

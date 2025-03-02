@@ -5,14 +5,14 @@ import DetalleEventoComp from '@/components/DetalleEventoComp.vue'
 import Footer from '@/components/Footer.vue';
 
 const route = useRoute()
-const eventoId = route.params.id
 
+const eventoId = route.query.id ? Number(route.query.id) : null
 </script>
 
 <template>
 
   <Header/>
-  <DetalleEventoComp :eventoId="Number(eventoId)" />
+  <DetalleEventoComp :eventoId="eventoId" />
   <Footer/>
   
 </template>

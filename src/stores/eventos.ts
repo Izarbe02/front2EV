@@ -120,7 +120,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Obtener información detallada de un evento
     async function getInfoEvento(id: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/detalle/${id}`);
+            const response = await fetch(`http://localhost:8888/api/Evento/DetalleEvento?id=${id}`);
             if (!response.ok) throw new Error("Error al obtener detalles del evento");
 
             const eventoInfo = await response.json();
