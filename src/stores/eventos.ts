@@ -2,17 +2,19 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import EventoDto from "@/stores/dtos/evento.dto";
+import EventoBuscadorDto from "./dtos/eventoBuscador.dto";
 import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
 
 export const useEventosStore = defineStore("eventos", () => {
     // Estado reactivo
     const eventos = ref<EventoDto[]>([]);
+    const eventosFiltrados = ref<EventoDto[]>([]);
+    const hayEventosFiltrados = ref<boolean>(false);
     const currentUser = ref<EventoDto | null>(null);
     const eventoInfo = ref<EventoInfoDto | null>(null);
     const errorMessage = ref<string>("");
     const successMessage = ref<string>("");
 
-    const router = useRouter();
 
     // Obtener todos los eventos del backend
     async function findAll() {
@@ -133,13 +135,16 @@ export const useEventosStore = defineStore("eventos", () => {
     // Buscador de eventos
     async function buscadorEvento(busqueda: string) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/buscar?query=${busqueda}`);
+            const response = await fetch(`http://localhost:8888/api/Evento/BuscadorEvento/${busqueda}`);
             if (!response.ok) throw new Error("Error en la búsqueda de eventos");
 
             const data = await response.json();
-            eventos.value = data;
+            eventosFiltrados.value = data;
+            hayEventosFiltrados.value = eventosFiltrados.value.length > 0;
         } catch (error) {
             console.error("Error en la búsqueda de eventos:", error);
+            eventosFiltrados.value = [];
+            hayEventosFiltrados.value = false;
         }
     }
 
@@ -157,6 +162,8 @@ export const useEventosStore = defineStore("eventos", () => {
         getEventoPorOrganizador,
         getEventoPorCategoria,
         getInfoEvento,
-        buscadorEvento
+        buscadorEvento,
+        hayEventosFiltrados,
+        eventosFiltrados
     };
 });
