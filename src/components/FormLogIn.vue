@@ -1,4 +1,4 @@
-<template>
+<template> 
   <v-container class="login">
     <v-sheet class="login__sheet" elevation="8">
       <h2 class="login__title">Ingresar</h2>
@@ -20,12 +20,12 @@
         ></v-text-field>
 
         <a href="#" class="login__forgot-password">¿OLVIDASTE LA CONTRASEÑA?</a>
-        <a href="/register" class="login__register">¿NO ESTÁS REGISTRADO/A?</a>
+        <RouterLink to="/register" class="login__register">¿NO ESTÁS REGISTRADO/A?</RouterLink>
         
-        <v-btn class="login__button" type="submit" block :to="'/Register'" color="red">
+        <v-btn class="login__button" type="submit" block color="red">
           Ingresar
         </v-btn>
-        
+
         <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
           {{ usuariosStore.errorMessage }}
         </v-alert>
@@ -36,8 +36,9 @@
 
 <script lang="ts" setup>
 import { useUsuariosStore } from '@/stores/usuarios';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
 
 const usuariosStore = useUsuariosStore();
 const router = useRouter();
@@ -46,26 +47,37 @@ const username = ref("");
 const contrasenia = ref("");
 
 const usernameRules = [
-  (value: string) => (value.length >= 0) || "Rellena este campo"
+  (value: string) => value.length > 0 || "Rellena este campo"
 ];
 
 const contraseniaRules = [
-  (value: string) => (value.length >= 0) || "Rellena este campo"
+  (value: string) => value.length > 0 || "Rellena este campo"
 ];
 
 const loginUser = async () => {
-  await usuariosStore.loginUser(username.value, contrasenia.value);
+  const usuarioLogin: UsuarioLoginDto = {
+    username: username.value,
+    contrasenia: contrasenia.value,
+  };
 
-  if (usuariosStore.currentUser) {
-    router.push("/homepage");
+  const loginExitoso = await usuariosStore.login(usuarioLogin);
+
+  if (loginExitoso) {
+    router.push("/");
   }
 };
+
+// Redirección automática si ya está logueado
+watchEffect(() => {
+  if (usuariosStore.usuarioLogeado) {
+    router.push("/");
+  }
+});
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
-
 
 .login {
   display: flex;

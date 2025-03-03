@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type UsuarioDto from "@/stores/dtos/usuario.dto.ts";
+import type UsuarioLoginDto from "@/stores/dtos/usuarioLogin.dto";
 
 export const useUsuariosStore = defineStore("usuarios", () => {
 
   const usuarios = ref<UsuarioDto[]>([]);
   const currentUsuario = ref<UsuarioDto | null>(null);
+  const usuarioLogeado = ref<UsuarioDto | null>(null);
+  const tokenLogin = ref<string | null>(null)
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
@@ -92,15 +95,46 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     }
   }
 
+  async function login(usuarioLogin: UsuarioLoginDto) {
+    try {
+      const response = await fetch("http://localhost:8888/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(usuarioLogin),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error al iniciar sesión: ${errorText || response.statusText}`);
+      }
+
+      const data: { token: string; usuario: UsuarioDto } | null = await response.json();
+
+      if (data) {
+        usuarioLogeado.value = data.usuario;
+        tokenLogin.value = data.token;
+        console.log(usuarioLogeado)
+        console.log(tokenLogin)
+        return true;
+      } else {
+        console.warn("Inicio de sesión exitoso, pero no se recibió información del usuario.");
+      }
+    } catch (error) {
+      console.error("Error en login:", error);
+    }
+  }
+
   return {
     usuarios,
     currentUsuario,
     errorMessage,
     successMessage,
+    usuarioLogeado,
     findAll,
     getUsuario,
     createUsuario,
     updateUsuario,
     deleteUsuario,
+    login
   };
 });
