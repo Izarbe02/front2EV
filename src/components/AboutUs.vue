@@ -5,7 +5,7 @@
         <div class="about__block about__card">
       
           <div class="about__image about__image--small">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg" alt="Sobre Nosotros" />
+            <img src="https://humointernacional.com/wp-content/uploads/2024/07/Sal-del-Coche-5-Foto-Adri-G.-Lorenzo-@adriglorenzo-1200x800.jpg" alt="Sobre Nosotros" />
             
           </div>
           <div class="about__content">
@@ -20,7 +20,7 @@
         <h2 class="about__title">Nuestra Visión</h2>
         <div class="about__block about__block--reverse about__card">
           <div class="about__image">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg" alt="Nuestra Visión" />
+            <img src="https://zaragozacomerciojusto.org/wp-content/uploads/2017/01/pantera-rossa.jpg" alt="Nuestra Visión" />
             
           </div>
           <div class="about__content">
@@ -36,7 +36,7 @@
         <h2 class="about__title">Nuestro Compromiso</h2>
         <div class="about__block about__card">
           <div class="about__image">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Sioux-edinburgh80.jpg" alt="Nuestro Compromiso" />
+            <img src="https://i.pinimg.com/736x/d1/a6/e1/d1a6e13363b72972c97cd1f35dd420f5.jpg" alt="Nuestro Compromiso" />
             
           </div>
           <div class="about__content">
