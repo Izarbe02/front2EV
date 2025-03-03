@@ -225,6 +225,7 @@ watch(() => props.eventoId, (newId) => {
         &__portada {
             flex: 1;
             height: 80%;
+            max-width: 400px;
         }
 
         &__info {

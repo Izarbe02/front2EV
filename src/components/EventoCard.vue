@@ -113,7 +113,7 @@ h1 {
 
   &__imagen {
     width: 100%;
-    height: 200px;
+    height: 350px;
     object-fit: cover;
   }
 
@@ -151,12 +151,40 @@ h1 {
     @include boton-rojo;
   }
 
-  @media (min-width: 768px) {
-    .eventos-container__tarjetas {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      margin-bottom: 50px;
+  @media (min-width: 900px) {
+    .evento-detalle {
+        max-width: 80%;
+
+        &__contenedor {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas en escritorio */
+            gap: 20px; /* Espaciado entre columnas */
+            align-items: start;
+        }
+
+        &__portada {
+            max-width: 100%;
+            height: auto;
+        }
+
+        &__contenido {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        &__info {
+            text-align: left;
+        }
+
+        &__acciones {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     }
-  }
+}
+
 }
 </style>
