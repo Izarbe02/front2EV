@@ -12,6 +12,7 @@ export const useEventosStore = defineStore("eventos", () => {
     const hayEventosFiltrados = ref<boolean>(false);
     const currentUser = ref<EventoDto | null>(null);
     const eventoInfo = ref<EventoInfoDto | null>(null);
+    const eventosProximos = ref<EventoDto[]>([]);
     const errorMessage = ref<string>("");
     const successMessage = ref<string>("");
 
@@ -24,6 +25,19 @@ export const useEventosStore = defineStore("eventos", () => {
 
             const data = await response.json();
             eventos.value.splice(0, eventos.value.length, ...data);
+        } catch (error) {
+            console.error("Error al obtener eventos:", error);
+        }
+    }
+
+    async function proximosEventos() {
+        try {
+            const response = await fetch("http://localhost:8888/api/Evento/proximos");
+            if (!response.ok) throw new Error("Error al obtener eventos");
+
+            const data = await response.json();
+            eventosProximos.value = data;
+            eventosProximos.value.splice(0, eventosProximos.value.length, ...data);
         } catch (error) {
             console.error("Error al obtener eventos:", error);
         }
@@ -164,6 +178,8 @@ export const useEventosStore = defineStore("eventos", () => {
         getInfoEvento,
         buscadorEvento,
         hayEventosFiltrados,
-        eventosFiltrados
+        eventosFiltrados,
+        eventosProximos,
+        proximosEventos
     };
 });

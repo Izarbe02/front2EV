@@ -9,6 +9,7 @@ import AdminPageView from '@/views/AdminPageView.vue'
 import ProductoView from '@/views/ProductoView.vue'
 import OrganizadorPageView from '@/views/OrganizadorPageView.vue'
 import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
+import Register from '@/views/RegistroView.vue'
 
 
 
@@ -61,6 +62,11 @@ const router = createRouter({
       path: '/OrganizadorDetalle',
       name: 'OrganizadorDetalle',
       component: OrganizadorDetalleView
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      component: Register
     }
    /* {
       path: '/about',

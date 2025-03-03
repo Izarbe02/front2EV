@@ -1,16 +1,14 @@
-// src/stores/usuarios.ts
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type UsuarioDto from "@/stores/dtos/usuario.dto.ts";
 
 export const useUsuariosStore = defineStore("usuarios", () => {
-  // Estado reactivo
+
   const usuarios = ref<UsuarioDto[]>([]);
   const currentUsuario = ref<UsuarioDto | null>(null);
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
-  // Obtener todos los usuarios (GET: api/Usuario)
   async function findAll() {
     try {
       const response = await fetch("http://localhost:8888/api/Usuario");
@@ -60,6 +58,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
   // Actualizar un usuario (PUT: api/Usuario/{id})
   async function updateUsuario(id: number, usuarioActualizado: UsuarioDto) {
+    console.log(usuarioActualizado)
     try {
       const response = await fetch(`http://localhost:8888/api/Usuario/${id}`, {
         method: "PUT",

@@ -1,71 +1,63 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { useUsuariosStore } from '@/stores/usuarios';
+import type UsuarioDto from '@/dto/UsuarioDto'; // Importa el DTO
 
-import { useUsuariosStore } from '@/stores/usuarios'
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
+const usuariosStore = useUsuariosStore();
 
-const usuariosStore = useUsuariosStore()
-const router = useRouter()
-
+// Variables reactivas para los datos del usuario
 const username = ref("");
+const nombre = ref("");
+const email = ref("");
+const ubicacion = ref("");
 const contrasenia = ref("");
 
-
-const usernameRules = [
-  (value: string) => (value.length >= 0) || "Rellena este campo"
+// Reglas de validación para Vuetify
+const requiredRule = [(v: string) => !!v || "Campo obligatorio"];
+const emailRule = [
+  (v: string) => !!v || "Campo obligatorio",
+  (v: string) => /.+@.+\..+/.test(v) || "Email inválido"
 ];
 
-const contraseniaRules = [
-  (value: string) => (value.length >= 0) || "Rellena este campo"
-];
-
-
-
+// Función para registrar usuario usando el DTO
 const registrarUsuario = async () => {
-  await usuariosStore.RegisterUser(username.value, contrasenia.value);
+  const usuario: UsuarioDto = {
+    id: 0,
+    username: username.value,
+    nombre: nombre.value,
+    email: email.value,
+    ubicacion: ubicacion.value,
+    contrasenia: contrasenia.value,
+    idRol: 3
+  };
 
-  if (usuariosStore.currentUser) {
-    router.push("/homepage");
-  }
+  await usuariosStore.createUsuario(usuario);
 };
-  
-
 </script>
 
-
 <template>
-  <v-sheet class="mx-auto" width="300">
-    <v-form fast-fail @submit.prevent="loginUser">
-      <v-text-field
-        v-model="username"
-        :rules="usernameRules"
-        label="Usuario"
-      ></v-text-field>
+  <v-container>
+    <v-card class="pa-5" max-width="500" elevation="5">
+      <v-card-title class="text-center text-h5">Registro de Usuario</v-card-title>
 
-      <v-text-field
-        v-model="contrasenia"
-        :rules="contraseniaRules"
-        label="Contraseña"
-        type="password"
-      ></v-text-field>
+      <v-form @submit.prevent="registrarUsuario">
+        <v-text-field v-model="username" :rules="requiredRule" label="Usuario"></v-text-field>
+        <v-text-field v-model="nombre" :rules="requiredRule" label="Nombre Completo"></v-text-field>
+        <v-text-field v-model="email" :rules="emailRule" label="Email" type="email"></v-text-field>
+        <v-text-field v-model="ubicacion" :rules="requiredRule" label="Ubicación"></v-text-field>
+        <v-text-field v-model="contrasenia" :rules="requiredRule" label="Contraseña" type="password"></v-text-field>
 
-      <v-btn class="mt-2" type="submit" block color="primary">Iniciar sesión</v-btn>
-
-      <!-- Mensaje de error si las credenciales son incorrectas -->
-      <v-alert v-if="usuariosStore.errorMessage" type="error" class="mt-2">
-        {{ usuariosStore.errorMessage }}
-      </v-alert>
-    </v-form>
-  </v-sheet>
+        <v-btn type="submit" block color="primary" class="mt-4">Registrarse</v-btn>
+      </v-form>
+    </v-card>
+  </v-container>
 </template>
 
-
-
-<style lang="scss">
-@import "@/assets/styles/_variables.scss";
-@import "@/assets/styles/_mixins.scss";
-.mx-auto{
-    margin-top: 15%;
-    margin-bottom: 15%;
+<style scoped>
+.v-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 </style>
