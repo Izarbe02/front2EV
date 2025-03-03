@@ -1,52 +1,93 @@
 <script setup lang="ts">
-  const fecha: Date = new Date();
-</script>
+import { onMounted, computed } from "vue";
+import { useEventosStore } from "@/stores/eventos";
 
+const eventosStore = useEventosStore();
+
+onMounted(() => {
+  eventosStore.findAll();
+});
+
+// Determinar qué eventos mostrar
+const eventosMostrados = computed(() => {
+  return eventosStore.hayEventosFiltrados
+    ? eventosStore.eventosFiltrados
+    : eventosStore.eventos;
+});
+</script>
 
 <template>
   <div class="evento-container">
     <h1 class="titulo">EVENTOS</h1>
+
     <div class="evento-container__tarjetas">
-    <div class="evento-card">
-      <img :src="imagen" alt="Evento" class="evento-card__imagen" />
+      <div v-if="eventosMostrados.length > 0">
+        <div v-for="evento in eventosMostrados" :key="evento.id" class="evento-card">
+          <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
 
-      <div class="evento-card__contenido">
-        <p class="evento-card__titulo">Nombre Evento</p>
+          <div class="evento-card__contenido">
+            <p class="evento-card__titulo">{{ evento.nombre }}</p>
 
-        <div class="evento-card__info">
-          <span class="evento-card__fecha">
-            {{ fecha.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-            {{ fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
-          </span>
-          <span class="evento-card__localizacion">
-            SVG2
-          </span>
+            <div class="evento-card__info">
+              <span class="evento-card__fecha">
+                {{
+                  new Date(evento.fecha_inicio).toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "short",
+                  })
+                }},
+                {{
+                  new Date(evento.fecha_inicio).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                }}
+              </span>
+              <span class="evento-card__localizacion">
+                {{ evento.ubicacion }}
+              </span>
+            </div>
+
+            <button class="evento-card__boton">
+              <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__link">
+                Saber más
+              </RouterLink>
+            </button>
+          </div>
         </div>
+      </div>
 
-        <button class="evento-card__boton">Saber más</button>
+      <div v-else class="evento-container__no-resultados">
+        <p>No se encontraron eventos.</p>
       </div>
     </div>
   </div>
-  </div>
 </template>
-
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
+.evento-container {
+  padding: 2%;
+}
 
-.evento-container{
-    padding: 2%;
-    &__tarjetas{
-      margin-top: 25px;
-    display: grid;
-    gap: 20px;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    margin-bottom: 30px;
-    }
-  }
+.evento-container__tarjetas {
+  margin-top: 25px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  margin-bottom: 30px;
+}
+
+.evento-container__no-resultados {
+  text-align: center;
+  color: #bbb;
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
 
 h1 {
   @include titulo-evento;
@@ -81,8 +122,9 @@ h1 {
   }
 
   &__titulo {
+    font-family: $titulo;
     margin-top: 5%;
-    font-size: 24px;
+    font-size: 30px;
     text-align: center;
     margin-bottom: 30px;
     color: #fff9f9;
@@ -93,6 +135,7 @@ h1 {
   }
 
   &__info {
+    font-family: $first-font;
     font-size: 1.2rem;
     color: #bbb;
     display: flex;
@@ -101,15 +144,15 @@ h1 {
     margin-bottom: 10px;
   }
 
-
   &__boton {
+    font-family: $titulo;
     padding: 8px;
-     border-radius: 5px;
+    border-radius: 5px;
     @include boton-rojo;
-
   }
-  @media (min-width: 768px){
-    .eventos-container__tarjetas{
+
+  @media (min-width: 768px) {
+    .eventos-container__tarjetas {
       grid-template-columns: repeat(3, 1fr);
       gap: 30px;
       margin-bottom: 50px;

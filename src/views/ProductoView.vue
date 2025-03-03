@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
-import OrganizadoresCard from '@/components/OrganizadoresCard.vue';
+import ProductoCard from '@/components/ProductoCard.vue';
 import Footer from '@/components/Footer.vue';
 
 </script>
@@ -8,7 +8,7 @@ import Footer from '@/components/Footer.vue';
 
 <template>
     <Header/>
-    <OrganizadoresCard/>
+    <ProductoCard/>
     <Footer/>
 </template>
 

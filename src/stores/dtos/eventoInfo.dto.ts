@@ -1,3 +1,6 @@
+import type CategoriaEventoDto from "./categoriaEvento.dto";
+import type TematicaDto from "./tematica.dto";
+
 export default class EventoInfoDto {
 constructor(
     public nombreOrg: string,
@@ -6,8 +9,8 @@ constructor(
     public fechaInicio: Date,
     public fechaFin: Date,
     public ubicacion: string,
-    public eventoCategoria: string,
-    public tematica: string,
-    public enlace: string
+    public enlace: string,
+    public categorias: CategoriaEventoDto[],
+    public tematicas: TematicaDto[]
 ) {}
 };
