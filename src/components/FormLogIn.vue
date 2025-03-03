@@ -21,9 +21,11 @@
 
         <a href="#" class="login__forgot-password">¿OLVIDASTE LA CONTRASEÑA?</a>
         <a href="/register" class="login__register">¿NO ESTÁS REGISTRADO/A?</a>
-
-        <v-btn class="login__button" type="submit" block>Ingresar</v-btn>
-
+        
+        <v-btn class="login__button" type="submit" block :to="'/Register'" color="red">
+          Ingresar
+        </v-btn>
+        
         <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
           {{ usuariosStore.errorMessage }}
         </v-alert>
