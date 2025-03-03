@@ -35,28 +35,25 @@ watch(() => props.organizadorId, (newId) => {
 <template>
    <div class="organizador-detalle" v-if="organizador">
         <div class="organizador-detalle__contenedor">
-
-            <div class="organizador-detalle__contenido">
+            
                 <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
+                <div class="organizador-detalle__contenido">
+                    <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
+                    <div class="organizador-detalle__info">
+                        
+                        <div class="organizador-detalle__lugar">
+                            📍 
+                            <span class="organizador-detalle__direccion">{{ organizador.ubicacion }}</span>
+                        </div>
 
-                <div class="organizador-detalle__info">
-                    <div class="organizador-detalle__categoria">
-                        <span class="organizador-detalle__infoLetra">{{ organizador.idCategoria }}</span>
-                    </div>
-                    
-                    <div class="organizador-detalle__lugar">
-                        📍 
-                        <span class="organizador-detalle__direccion">{{ organizador.ubicacion }}</span>
-                    </div>
-
-                    <div class="organizador-detalle__descripcion">
-                        <p class="organizador-detalle__subtitulo">Descripción del organizador</p>
-                        <p class="organizador-detalle__descripcion">
-                            {{ organizador.descripcion }}
-                        </p>
+                        <div class="organizador-detalle__descripcion">
+                            <p class="organizador-detalle__subtitulo">Descripción del organizador</p>
+                            <p class="organizador-detalle__descripcion">
+                                {{ organizador.descripcion }}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
     
@@ -90,7 +87,10 @@ watch(() => props.organizadorId, (newId) => {
         align-items: center;
     }
 
-
+    &__contenido{
+        display: flex;
+        flex-direction: row;
+    }
     &__info {
         font-size: 1.2rem;
         display: flex;

@@ -19,7 +19,7 @@ onMounted(() => {
     <h1 class="titulo">ORGANIZADORES</h1>
     <div class="organizadores-container__tarjetas">
       <div v-for="organizador in organizadores" :key="organizador.id" class="organizador-card">
-
+        <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-card__imagen" />
         <div class="organizador-card__contenido">
           <p class="organizador-card__titulo">{{ organizador.nombre }}</p>
 
