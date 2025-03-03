@@ -8,6 +8,7 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Ubicación</th>
+                    <th>IdRol</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -17,27 +18,37 @@
                     <td>{{ usuario.nombre }}</td>
                     <td>{{ usuario.email }}</td>
                     <td>{{ usuario.ubicacion }}</td>
+                    <td>{{ usuario.idRol }}</td>
                     <td>
-                        <button class="btn-editar" @click="abrirForm(usuario)"><i class="fas fa-pencil-alt"></i></button>
-                        <button class="btn-borrar" @click="borrarUsuario(usuario.id)"><i class="fas fa-trash"></i></button>
+                        <button class="btn-editar" @click="abrirForm(usuario)">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="btn-borrar" @click="borrarUsuario(usuario.id)">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
+
         <div v-if="modalVisible" class="modal">
             <div class="modal-contenido">
                 <h2>Editar Usuario</h2>
+
                 <label>Nombre:</label>
                 <input type="text" v-model="usuarioEditado.nombre" />
-                
+
                 <label>Email:</label>
                 <input type="email" v-model="usuarioEditado.email" />
-                
+
                 <label>Ubicación:</label>
                 <input type="text" v-model="usuarioEditado.ubicacion" />
 
+                <label>IdRol:</label>
+                <input type="number" v-model="idRolEditado" />
+
                 <div class="modal-botones">
-                    <button @click="guardarCambios">Guardar</button>
+                    <button @click="guardarCambios" :disabled="!usuarioEditado">Guardar</button>
                     <button @click="cerrarFormulario">Cancelar</button>
                 </div>
             </div>
@@ -46,14 +57,12 @@
 </template>
 
 <script setup lang="ts">
-
-import { onMounted,ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
 import type UsuarioDto from '@/stores/dtos/usuario.dto';
 
 const modalVisible = ref(false);
 const usuarioEditado = ref<UsuarioDto | null>(null);
-
 
 const store = useUsuariosStore();
 const { usuarios, findAll, deleteUsuario, updateUsuario } = store;
@@ -62,23 +71,36 @@ onMounted(() => {
     findAll();
 });
 
+// Computed property para idRol
+const idRolEditado = computed({
+    get: () => usuarioEditado.value?.idRol ?? 0,
+    set: (value) => {
+        if (usuarioEditado.value) usuarioEditado.value.idRol = Number(value);
+    }
+});
 
 const abrirForm = (usuario: UsuarioDto) => {
     usuarioEditado.value = { ...usuario };
     modalVisible.value = true;
-}
+};
 
 const guardarCambios = async () => {
-    if(usuarioEditado.value) {
-        await updateUsuario(usuarioEditado.value.id, usuarioEditado.value);
-        modalVisible.value = false;
+    if (!usuarioEditado.value) return;
+
+    // Verificar que idRol sea un número válido
+    usuarioEditado.value.idRol = Number(usuarioEditado.value.idRol);
+    if (isNaN(usuarioEditado.value.idRol) || usuarioEditado.value.idRol <= 0) {
+        alert("El rol seleccionado no es válido.");
+        return;
     }
-}
+
+    await updateUsuario(usuarioEditado.value.id, usuarioEditado.value);
+    modalVisible.value = false;
+};
 
 const cerrarFormulario = () => {
     modalVisible.value = false;
-}
-
+};
 
 const borrarUsuario = async (id: number) => {
     if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
@@ -90,7 +112,8 @@ const borrarUsuario = async (id: number) => {
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
-.contenido{
+
+.contenido {
     margin-top: 5%;
     padding: 2%;
     border-radius: 8px;
@@ -99,90 +122,93 @@ const borrarUsuario = async (id: number) => {
     align-items: center;
     justify-content: center;
     background-color: #131313;
-    border: solid 2px#5c5c5c;
-    &__titulo{
-            font-family:$titulo;
-            font-size: 2.3rem;
-            font-weight: bold;
-            color: $color-red;
-            margin-bottom: 4%;
+    border: solid 2px #5c5c5c;
+
+    &__titulo {
+        font-family: $first-font;
+        font-size: 2.3rem;
+        font-weight: bold;
+        color: $color-red;
+        margin-bottom: 4%;
     }
-    &__tabla{
+
+    &__tabla {
         color: white;
         font-size: 1.5rem;
     }
+
     th, td {
-    padding: 12px 18px;
-    text-align: left;
-  }
-  .btn-editar, .btn-borrar {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    margin: 0 15px;
-}
+        padding: 12px 18px;
+        text-align: left;
+    }
 
-.btn-editar {
-    color: #797979;
-}
+    .btn-editar, .btn-borrar {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        margin: 0 15px;
+    }
 
-.btn-editar:hover {
-    color: #c0c0c0;
-}
+    .btn-editar {
+        color: #797979;
+    }
 
-.btn-borrar {
-    color: #bb2231;
-}
+    .btn-editar:hover {
+        color: #c0c0c0;
+    }
 
-.btn-borrar:hover {
-    color: #a71d2a;
-}
+    .btn-borrar {
+        color: #bb2231;
+    }
 
+    .btn-borrar:hover {
+        color: #a71d2a;
+    }
 
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.modal-contenido {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .modal-contenido {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.modal-botones {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
+    .modal-botones {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
 
-.modal-botones button {
-    padding: 8px 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-}
+    .modal-botones button {
+        padding: 8px 12px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+    }
 
-.modal-botones button:first-child {
-    background: #007bff;
-    color: white;
-}
+    .modal-botones button:first-child {
+        background: #007bff;
+        color: white;
+    }
 
-.modal-botones button:last-child {
-    background: #dc3545;
-    color: white;
-}
+    .modal-botones button:last-child {
+        background: #dc3545;
+        color: white;
+    }
 }
 </style>

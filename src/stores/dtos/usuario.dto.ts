@@ -5,6 +5,6 @@ export default interface UsuarioDto {
     email: string;
     ubicacion: string;
     contrasenia: string;
-    idRol: Number;
+    idRol: number;
   }
   
