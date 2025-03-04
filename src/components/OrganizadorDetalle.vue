@@ -104,19 +104,19 @@ watch(
             </div>
 
             <div class="organizador-detalle__eventos">
+                <p class="organizador-detalle__tituloseventos">Nuestros eventos</p>
                 <div v-if="isLoading">
                     <p>⏳ Cargando eventos...</p>
                 </div>
                 
-                <div v-else-if="eventosLocales.length > 0">
+                <div v-else-if="eventosLocales.length > 0" class="organizador-detalle__contenedoreventos">
                     <div v-for="evento in eventosLocales" :key="evento.id" class="evento-card">
                         <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
                         <div class="evento-card__contenido">
                             <p class="evento-card__titulo">{{ evento.nombre }}</p>
                             <div class="evento-card__info">
                                 <span class="evento-card__fecha">
-                                    {{ new Date(evento.fecha_inicio).toLocaleDateString("es-ES", { weekday: "long", day: "2-digit", month: "short" }) }},
-                                    {{ new Date(evento.fecha_inicio).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) }}
+                                    {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
                                 </span>
                                 <span class="evento-card__localizacion">{{ evento.ubicacion }}</span>
                             </div>
@@ -143,16 +143,17 @@ watch(
     color: #fff;
     margin: 5% auto;
     margin-top: 90px;
-    padding: 3%;
+    padding: 2%;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
+    max-width: 100vw;
 
     &__titulo {
         font-family:$titulo;
-        font-size: 1.9rem;
+        font-size: 2.1rem;
         font-weight: bold;
         margin-bottom: 10px;
     }
@@ -164,11 +165,11 @@ watch(
     }
 
     &__portada {
-    width: 370px;
-    height: 340px; 
-    object-fit: cover; 
-    border-radius: 10px;
-    margin-bottom: 20px;
+        width: 370px;
+        height: 340px; 
+        object-fit: cover; 
+        border-radius: 10px;
+        margin-bottom: 20px;
     }
 
     &__contenido{
@@ -201,7 +202,7 @@ watch(
 
     &__subtitulo {
         font-family:$titulo ;
-        font-size: 1.6rem;
+        font-size: 1.7rem;
         color: $color-lightred;
         font-weight: bold;
         text-align: left;
@@ -212,19 +213,56 @@ watch(
         color: #ddd;
         text-align: left;
     }
-    
+    &__eventos{
+        margin-top: 8%;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        overflow: hidden;
+        max-width: 100%;
+    }
+    &__tituloseventos{
+        font-family:$titulo ;
+        font-size: 1.7rem;
+        color: $color-lightred;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 1%;
+    }
+    &__contenedoreventos {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+        max-width: 100%;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+
+        &::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+    }
 .evento-card {
   background-color: #272525;
   border: 2px solid #292929;
   border-radius: 8px;
   color: #fff;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  width: 100%;
-  max-width: 400px;
+  width: 300px;
+  flex-shrink: 0;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 
   &:hover {
     transform: translateY(-3px);
@@ -232,26 +270,26 @@ watch(
   }
 
   &__imagen {
-    width: 100%;
     height: 200px;
     object-fit: cover;
   }
 
   &__contenido {
-    padding: 12px;
+    padding: 2%;
   }
 
   &__titulo {
     font-family: $titulo;
-    margin-top: 5%;
-    font-size: 30px;
+    margin-top: 1%;
+    font-size: 23px;
     text-align: center;
-    margin-bottom: 30px;
     color: #fff9f9;
     text-shadow: 2px 2px 5px rgba(255, 5, 5, 0.7);
     width: 100%;
     padding: 10px;
-    font-weight: 500;
+    word-break: keep-all;   
+    overflow-wrap: break-word;
+    white-space: normal;  
   }
 
   &__info {
@@ -261,7 +299,6 @@ watch(
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-bottom: 10px;
   }
 
   &__boton {
@@ -269,6 +306,11 @@ watch(
     padding: 8px;
     border-radius: 5px;
     @include boton-rojo;
+    
+  }
+  &__link{
+    text-decoration: none;
+    color: $color-lightred;
   }
 }
 }
