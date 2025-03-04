@@ -36,22 +36,22 @@ const loadEventos = async (id: number | null) => {
   if (!id) return;
   console.log("🔄 Eliminando eventos anteriores...");
   
-  eventosLocales.value = []; // 🔥 Forzamos a Vue a detectar el cambio
+  eventosLocales.value = []; 
   isLoading.value = true;
-  await nextTick(); // 🔄 Esperar a que Vue borra la lista antes de cargar la nueva
+  await nextTick(); 
 
   console.log(`📡 Cargando eventos del organizador ${id}...`);
   
   const nuevosEventos = await getEventoPorIdORganizador(id);
   if (!Array.isArray(nuevosEventos)) {
     console.error("❌ Error: `nuevosEventos` no es un array. Se recibió:", nuevosEventos);
-    eventosLocales.value = []; // 🔥 Evitar que Vue intente iterar un `undefined`
+    eventosLocales.value = [];
   } else {
-    eventosLocales.value = [...nuevosEventos]; // 🔥 Ahora sí es seguro hacer spread
+    eventosLocales.value = [...nuevosEventos];
   }
   
   isLoading.value = false;
-  console.log("✅ Eventos cargados correctamente:", eventosLocales.value);
+  console.log("Eventos cargados correctamente:", eventosLocales.value);
 };
 
 
@@ -170,11 +170,13 @@ watch(
         object-fit: cover; 
         border-radius: 10px;
         margin-bottom: 20px;
+        box-shadow: 0px 0px 15px rgba(248, 14, 14, 0.7);
     }
 
     &__contenido{
         display: flex;
         flex-direction: column;
+        
     }
 
     &__info {
@@ -272,6 +274,7 @@ watch(
   &__imagen {
     height: 200px;
     object-fit: cover;
+    
   }
 
   &__contenido {

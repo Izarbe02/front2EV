@@ -67,6 +67,7 @@ const eventosMostrados = computed(() =>
   padding: 2%;
   margin-top: 1%;
 
+
   &__titulo {
     @include titulo-evento;
     text-align: center;
@@ -101,7 +102,9 @@ const eventosMostrados = computed(() =>
 
 .evento-card {
   height: 550px;
-  background-color: $color-darkgray;
+  background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+    background-size: cover;
+
   border: 2px solid $color-gray;
   border-radius: 8px;
   color: #fff;

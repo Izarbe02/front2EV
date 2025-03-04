@@ -3,7 +3,7 @@
     <v-app-bar app class="navbar">
 
       <v-container class="navbar__container">
-
+          <h1 class="navbar__tituloConecta">ZaragozaConecta</h1>
           <div class="navbar__navigation">
               <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
               <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
@@ -41,6 +41,7 @@
         <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
         <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
       </v-list>
+      <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo">
     </v-navigation-drawer>
   </v-layout>
 </template>
@@ -51,7 +52,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   data() {
     return {
-      drawer: false // Estado del menú en móviles
+      drawer: false
     };
   }
 });
@@ -81,7 +82,7 @@ export default defineComponent({
 
   &__menu-button {
     color: $color-lightred;
-    display: block; // Visible en móviles
+    display: block; 
   }
 
   &__logo {
@@ -89,7 +90,7 @@ export default defineComponent({
   }
 
   &__navigation {
-    display: none; // Oculto en móviles
+    display: none; 
   }
 
   &__search {
@@ -101,15 +102,15 @@ export default defineComponent({
     padding: 4px;
   }
 
+   &__tituloConecta{
 
-  &__mobile-link{
+    font-family: $titulo;
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 7px;
     color: red;
+   }
 
-
-
-
-
-  }
 
   &__search-input {
     flex-grow: 1;

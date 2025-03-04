@@ -46,14 +46,14 @@ watch(() => props.eventoId, (newId) => {
 
                 <div class="evento-detalle__info">
                     <div class="evento-detalle__categorias" v-if="evento.categorias.length">
-                        <span class="evento-detalle__infoLetra">Categorías:</span>
+                        <span class="evento-detalle__infoLetra">CATEGORIA     </span>
                         <span v-for="(categoria, index) in evento.categorias" :key="index" class="evento-detalle__categoria">
                             {{ categoria.nombre }}<span v-if="index < evento.categorias.length - 1">, </span>
                         </span>
                     </div>
 
                     <div class="evento-detalle__tematicas" v-if="evento.tematicas.length">
-                        <span class="evento-detalle__infoLetra">Temáticas:</span>
+                        <span class="evento-detalle__infoLetra">TEMATICA      </span>
                         <span v-for="(tematica, index) in evento.tematicas" :key="index" class="evento-detalle__tematica">
                             {{ tematica.nombre }}<span v-if="index < evento.tematicas.length - 1">, </span>
                         </span>
@@ -126,6 +126,7 @@ watch(() => props.eventoId, (newId) => {
         height: auto;
         border-radius: 8px;
         margin-bottom: 5%;
+        box-shadow: 0px 0px 15px rgba(248, 14, 14, 0.7);
     }
 
     &__info {
