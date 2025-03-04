@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useOrganizadoresStore } from "@/stores/organizadores";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
+import { useEventosStore } from "@/stores/eventos";
 
-const route = useRoute();
 const props = defineProps({
   organizadorId: {
     type: Number,
@@ -12,54 +12,125 @@ const props = defineProps({
   }
 });
 
+// Stores
 const organizadorStore = useOrganizadoresStore();
-const organizador = ref<OrganizadorDto | null>(null);
+const eventosStore = useEventosStore();
+const { getEventoPorIdORganizador } = eventosStore;
 
-// Función para cargar el organizador
+// Datos reactivos
+const organizador = ref<OrganizadorDto | null>(null);
+const eventosLocales = ref([]);  
+const isLoading = ref(false);
+const isMounted = ref(false);
+
+
 const loadOrganizador = async (id: number | null) => {
-  if (id !== null) {
-    organizador.value = await organizadorStore.getOrganizador(id);
-    console.log("Organizador cargado:", organizador.value);
-  }
+  if (!id) return;
+  console.log(`📡 Cargando organizador ${id}...`);
+  organizador.value = await organizadorStore.getOrganizador(id);
 };
 
-onMounted(() => {
-  loadOrganizador(props.organizadorId);
+
+
+const loadEventos = async (id: number | null) => {
+  if (!id) return;
+  console.log("🔄 Eliminando eventos anteriores...");
+  
+  eventosLocales.value = []; // 🔥 Forzamos a Vue a detectar el cambio
+  isLoading.value = true;
+  await nextTick(); // 🔄 Esperar a que Vue borra la lista antes de cargar la nueva
+
+  console.log(`📡 Cargando eventos del organizador ${id}...`);
+  
+  const nuevosEventos = await getEventoPorIdORganizador(id);
+  if (!Array.isArray(nuevosEventos)) {
+    console.error("❌ Error: `nuevosEventos` no es un array. Se recibió:", nuevosEventos);
+    eventosLocales.value = []; // 🔥 Evitar que Vue intente iterar un `undefined`
+  } else {
+    eventosLocales.value = [...nuevosEventos]; // 🔥 Ahora sí es seguro hacer spread
+  }
+  
+  isLoading.value = false;
+  console.log("✅ Eventos cargados correctamente:", eventosLocales.value);
+};
+
+
+
+
+onMounted(async () => {
+  if (props.organizadorId !== null) {
+    await loadOrganizador(props.organizadorId);
+    await loadEventos(props.organizadorId);
+  }
+  isMounted.value = true;
 });
 
-watch(() => props.organizadorId, (newId) => {
-  loadOrganizador(newId);
-});
+
+watch(
+  () => props.organizadorId,
+  async (newId, oldId) => {
+    if (!isMounted.value || newId === oldId || newId === null) return;
+    
+    console.log(`🔄 Cambio de organizador detectado: ${newId}`);
+    isLoading.value = true;
+
+    eventosLocales.value = [];
+    await nextTick();
+
+    await loadOrganizador(newId);
+    await loadEventos(newId);
+
+    isLoading.value = false;
+  }
+);
 </script>
 
 <template>
    <div class="organizador-detalle" v-if="organizador">
         <div class="organizador-detalle__contenedor">
-
+            
+            <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
+            
             <div class="organizador-detalle__contenido">
-                <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
-
+                <div class="organizador-detalle__imagen">
+                    <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
+                </div>
                 <div class="organizador-detalle__info">
-                    <div class="organizador-detalle__categoria">
-                        <span class="organizador-detalle__infoLetra">{{ organizador.idCategoria }}</span>
-                    </div>
-                    
-                    <div class="organizador-detalle__lugar">
-                        📍 
-                        <span class="organizador-detalle__direccion">{{ organizador.ubicacion }}</span>
-                    </div>
+                    <p class="organizador-detalle__subtitulo">Información</p>
+                    <p class="organizador-detalle__descripcion">{{ organizador.descripcion }}</p>
+                    <p class="organizador-detalle__direccion">📍{{ organizador.ubicacion }}</p>
+                    <p class="organizador-detalle__descripcion">{{ organizador.email }}</p>
+                </div>
+            </div>
 
-                    <div class="organizador-detalle__descripcion">
-                        <p class="organizador-detalle__subtitulo">Descripción del organizador</p>
-                        <p class="organizador-detalle__descripcion">
-                            {{ organizador.descripcion }}
-                        </p>
+            <div class="organizador-detalle__eventos">
+                <p class="organizador-detalle__tituloseventos">Nuestros eventos</p>
+                <div v-if="isLoading">
+                    <p>⏳ Cargando eventos...</p>
+                </div>
+                
+                <div v-else-if="eventosLocales.length > 0" class="organizador-detalle__contenedoreventos">
+                    <div v-for="evento in eventosLocales" :key="evento.id" class="evento-card">
+                        <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
+                        <div class="evento-card__contenido">
+                            <p class="evento-card__titulo">{{ evento.nombre }}</p>
+                            <div class="evento-card__info">
+                                <span class="evento-card__fecha">
+                                    {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                                </span>
+                                <span class="evento-card__localizacion">{{ evento.ubicacion }}</span>
+                            </div>
+                            <button class="evento-card__boton">
+                                <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__link">
+                                    Saber más
+                                </RouterLink>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
 </template>
 
 <style scoped lang="scss">
@@ -68,18 +139,21 @@ watch(() => props.organizadorId, (newId) => {
 
 .organizador-detalle {
     background: url("@/assets/images/fondo1.jpg") no-repeat center center;
-  background-size: cover;
+    background-size: cover;
     color: #fff;
     margin: 5% auto;
     margin-top: 90px;
-    padding: 3%;
+    padding: 2%;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    max-width: 100vw;
 
     &__titulo {
         font-family:$titulo;
-        font-size: 1.7rem;
+        font-size: 2.1rem;
         font-weight: bold;
         margin-bottom: 10px;
     }
@@ -90,103 +164,198 @@ watch(() => props.organizadorId, (newId) => {
         align-items: center;
     }
 
+    &__portada {
+        width: 370px;
+        height: 340px; 
+        object-fit: cover; 
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    &__contenido{
+        display: flex;
+        flex-direction: column;
+    }
 
     &__info {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        align-items: center;
         border: 2px solid #272525;
         border-radius: 8px;
         padding: 3%;
-   
+        text-align: left;
     }
+
     &__infoLetra{
         font-weight: bold;
         color: $color-lightred;
-        font-family:$first-font ;
+        font-family:$first-font;
     }
+
     &__direccion {
         font-family:$first-font ;
-        font-size: 1.1rem;
+        font-size: 1.4rem;
         color: #bbb;
-    }
-    &__boton {
-        font-family:$first-font ;
-        background-color: #272525;
-        color: #d40202;
-        border: 2px solid #d40202;
-        padding: 10px 50px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s, box-shadow 0.3s;
-
-        &:hover {
-            background-color: #d40202;
-            color: #000;
-            box-shadow: 0px 0px 10px #d40202;
-        }
     }
 
     &__subtitulo {
         font-family:$titulo ;
-        font-size: 1.5rem;
+        font-size: 1.7rem;
         color: $color-lightred;
         font-weight: bold;
         text-align: left;
-        margin-top: 20px;
     }
 
     &__descripcion {
         font-family:$first-font ;
-        font-size: 1.2rem;
         color: #ddd;
         text-align: left;
-        margin-top: 10px;
     }
+    &__eventos{
+        margin-top: 8%;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        overflow: hidden;
+        max-width: 100%;
+    }
+    &__tituloseventos{
+        font-family:$titulo ;
+        font-size: 1.7rem;
+        color: $color-lightred;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 1%;
+    }
+    &__contenedoreventos {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+        max-width: 100%;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+
+        &::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+    }
+.evento-card {
+  background-color: #272525;
+  border: 2px solid #292929;
+  border-radius: 8px;
+  color: #fff;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  width: 300px;
+  flex-shrink: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 0px 15px rgba(92, 92, 92, 0.7);
+  }
+
+  &__imagen {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  &__contenido {
+    padding: 2%;
+  }
+
+  &__titulo {
+    font-family: $titulo;
+    margin-top: 1%;
+    font-size: 23px;
+    text-align: center;
+    color: #fff9f9;
+    text-shadow: 2px 2px 5px rgba(255, 5, 5, 0.7);
+    width: 100%;
+    padding: 10px;
+    word-break: keep-all;   
+    overflow-wrap: break-word;
+    white-space: normal;  
+  }
+
+  &__info {
+    font-family: $first-font;
+    font-size: 1.2rem;
+    color: #bbb;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__boton {
+    font-family: $titulo;
+    padding: 8px;
+    border-radius: 5px;
+    @include boton-rojo;
+    
+  }
+  &__link{
+    text-decoration: none;
+    color: $color-lightred;
+  }
+}
 }
 
 
 @media (min-width: 900px) {
-    .evento-detalle {
-        max-width: 70%;
+    .organizador-detalle {
+        max-width: 80%;
 
         &__titulo {
-        font-size: 1.9rem;
+        font-size: 2rem;
         margin-bottom: 3%;
         }
 
         &__contenedor {
-            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            gap: 5%;
         }
 
 
         &__contenido{
-            flex-direction: column;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            width: 50%;
+            gap: 10%;
         }
 
         &__portada {
-            flex: 1;
-            height: 80%;
+            width: 450px;
+            height: 400px; 
+            object-fit: cover; 
+            border-radius: 10px;
         }
-
+        &__subtitulo{
+            font-size: 1.8rem;
+        }
         &__info {
-            flex: 1;
-            text-align: left;
-            
+            font-size: 1.6rem;
+            width: 450px;
+            height: 300px;
+            display: flex;
+            justify-content: space-between;
         }
-
-        &__acciones {
-            flex-direction: column;
+        &__direccion{
+            font-size: 1.6rem;
         }
 
         &__boton {
