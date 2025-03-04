@@ -8,20 +8,18 @@ onMounted(() => {
   eventosStore.findAll();
 });
 
-// Determinar qué eventos mostrar
-const eventosMostrados = computed(() => {
-  return eventosStore.hayEventosFiltrados
-    ? eventosStore.eventosFiltrados
-    : eventosStore.eventos;
-});
+// Computed para definir qué eventos se mostrarán
+const eventosMostrados = computed(() => 
+  eventosStore.hayEventosFiltrados ? eventosStore.eventosFiltrados : eventosStore.eventos
+);
 </script>
 
 <template>
   <div class="evento-container">
-    <h1 class="titulo">EVENTOS</h1>
+    <h1 class="evento-container__titulo">EVENTOS</h1>
 
     <div class="evento-container__tarjetas">
-      <div v-if="eventosMostrados.length > 0">
+      <template v-if="eventosMostrados.length > 0">
         <div v-for="evento in eventosMostrados" :key="evento.id" class="evento-card">
           <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
 
@@ -44,19 +42,16 @@ const eventosMostrados = computed(() => {
                   })
                 }}
               </span>
-              <span class="evento-card__localizacion">
-                {{ evento.ubicacion }}
-              </span>
+              <span class="evento-card__localizacion">📍
+                {{ evento.ubicacion }}</span>
             </div>
 
-            <button class="evento-card__boton">
-              <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__link">
-                Saber más
-              </RouterLink>
-            </button>
+            <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__boton">
+              Saber más
+            </RouterLink>
           </div>
         </div>
-      </div>
+      </template>
 
       <div v-else class="evento-container__no-resultados">
         <p>No se encontraron eventos.</p>
@@ -64,47 +59,57 @@ const eventosMostrados = computed(() => {
     </div>
   </div>
 </template>
-
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
 .evento-container {
   padding: 2%;
-}
+  margin-top: 1%;
 
-.evento-container__tarjetas {
-  margin-top: 25px;
-  display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr;
-  justify-items: center;
-  margin-bottom: 30px;
-}
+  &__titulo {
+    @include titulo-evento;
+    text-align: center;
+  }
 
-.evento-container__no-resultados {
-  text-align: center;
-  color: #bbb;
-  font-size: 1.2rem;
-  margin-top: 20px;
-}
+  &__tarjetas {
+    margin-top: 25px;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    margin-bottom: 30px;
+  }
 
-h1 {
-  @include titulo-evento;
+  &__no-resultados {
+    text-align: center;
+    color: $color-lightgray;
+    font-size: 1.2rem;
+    margin-top: 20px;
+  }
+
+  @media (min-width: 768px) {
+    margin-top: 5%;
+    
+    &__tarjetas {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+  }
 }
 
 .evento-card {
-  background-color: #272525;
-  border: 2px solid #292929;
+  height: 550px;
+  background-color: $color-darkgray;
+  border: 2px solid $color-gray;
   border-radius: 8px;
   color: #fff;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 430px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: column; 
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   &:hover {
     transform: translateY(-3px);
@@ -113,50 +118,53 @@ h1 {
 
   &__imagen {
     width: 100%;
-    height: 200px;
+    height: 50%;
     object-fit: cover;
   }
 
   &__contenido {
     padding: 12px;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
   }
 
   &__titulo {
-    font-family: $titulo;
-    margin-top: 5%;
-    font-size: 30px;
+    font-family: $first-font;
+    font-size: 38px;
     text-align: center;
-    margin-bottom: 30px;
-    color: #fff9f9;
+    margin-bottom: 15px;
+    color: $color-whitered;
     text-shadow: 2px 2px 5px rgba(255, 5, 5, 0.7);
-    width: 100%;
-    padding: 10px;
-    font-weight: 500;
   }
 
   &__info {
+    margin-left: 10% ;
     font-family: $first-font;
-    font-size: 1.2rem;
-    color: #bbb;
+    font-size: 1.3rem;
+    color: rgb(199, 199, 199);
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-bottom: 10px;
+  
+    margin-top: auto; 
   }
 
   &__boton {
-    font-family: $titulo;
-    padding: 8px;
-    border-radius: 5px;
     @include boton-rojo;
-  }
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    margin-top: auto; 
 
-  @media (min-width: 768px) {
-    .eventos-container__tarjetas {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      margin-bottom: 50px;
+    &:hover {
+      background-color: $color-lightred;
     }
   }
 }
+
 </style>

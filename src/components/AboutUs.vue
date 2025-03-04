@@ -60,7 +60,7 @@
  
   
   &__container {
-    
+
     border: 2px solid $color-red;
     box-shadow: 0 0 10px $color-red;
     background: url("@/assets/images/fondo1.jpg") no-repeat center center;
@@ -70,7 +70,7 @@
     align-items: center;
     gap: 1rem;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 0 ;
     
     @include desktop {
       gap: 4rem;
@@ -136,7 +136,7 @@
     }
     width: 100%;
     max-width: 100%;
-    border: 2px solid $color-red;
+
     
     &--small {
       max-width: 300px;
@@ -144,7 +144,8 @@
     
     img {
       width: 100%;
-      border-radius: 10px;
+      height: 200px;
+   
     }
   }
   
@@ -170,7 +171,7 @@
   &__text {
     font-size: 1.2rem;
     @include desktop {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
     font-family: $first-font;
     color: $color-whitered;

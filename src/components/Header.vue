@@ -19,8 +19,8 @@
         <!-- Logo -->
         
         
-        <!-- Buscador siempre visible -->
-        <div class="navbar__search">
+        <!-- Buscador siempre visible 
+      <div class="navbar__search">
           <v-text-field
             class="navbar__search-input"
             placeholder="Eventos..."
@@ -29,7 +29,8 @@
             hide-details
           />
           <v-btn class="navbar__search-button">Buscar</v-btn>
-        </div>
+       </div>
+       -->
       </v-container>
     </v-app-bar>
 
@@ -100,6 +101,16 @@ export default defineComponent({
     padding: 4px;
   }
 
+
+  &__mobile-link{
+    color: red;
+
+
+
+
+
+  }
+
   &__search-input {
     flex-grow: 1;
     background: $color-darkgray !important;
@@ -118,7 +129,7 @@ export default defineComponent({
     @include boton-rojo;
   }
 
-  // 📌 Menú hamburguesa funcional usando Vuetify
+//menu desp
   &__mobile-menu {
     background: $color-darkgray;
   }
@@ -135,7 +146,7 @@ export default defineComponent({
     }
   }
 
-  // 📌 En pantallas grandes: Mostrar navegación y ocultar menú hamburguesa
+//pantalla grande
   @media (min-width: 768px) {
     .navbar {
       flex-direction: row;
@@ -154,12 +165,12 @@ export default defineComponent({
     }
 
     .navbar__mobile-menu {
-      display: none; // Ocultar menú desplegable en escritorio
+      display: none; 
     }
 
     .navbar__search {
       max-width: 400px;
-      justify-content: flex-end; // Buscador alineado a la derecha
+      justify-content: flex-end; 
     }
 
     .navbar__search-input {
@@ -171,9 +182,9 @@ export default defineComponent({
     }
 
     &__link {
-      font-size: 16px;
+      font-size: 28px;
       font-weight: bold;
-      color: white;
+      color: rgb(255, 255, 255);
       text-transform: none;
       position: relative;
 

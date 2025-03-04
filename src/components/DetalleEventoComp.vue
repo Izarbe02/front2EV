@@ -60,8 +60,11 @@ watch(() => props.eventoId, (newId) => {
                     </div>
 
                     <div class="evento-detalle__fecha">
-                        📅 {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                        {{ new Date(evento.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        📅 Fecha de incicio : <br>{{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }}
+                        {{ new Date(evento.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }} <br>
+                        📅  Fecha de fin : <br>{{ new Date(evento.fechaFin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                        {{ new Date(evento.fechaFin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        
                     </div>
                     <div class="evento-detalle__lugar">
                         📍 {{ evento.ubicacion }}
