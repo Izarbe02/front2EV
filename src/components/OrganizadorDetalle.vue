@@ -38,20 +38,16 @@ watch(() => props.organizadorId, (newId) => {
             
                 <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
                 <div class="organizador-detalle__contenido">
-                    <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
+                    <div class="organizador-detalle__imagen">
+                        <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
+                    </div>
                     <div class="organizador-detalle__info">
-                        
-                        <div class="organizador-detalle__lugar">
-                            📍 
-                            <span class="organizador-detalle__direccion">{{ organizador.ubicacion }}</span>
-                        </div>
-
-                        <div class="organizador-detalle__descripcion">
-                            <p class="organizador-detalle__subtitulo">Descripción del organizador</p>
+                            <p class="organizador-detalle__subtitulo">Información</p>
                             <p class="organizador-detalle__descripcion">
                                 {{ organizador.descripcion }}
                             </p>
-                        </div>
+                            <p class="organizador-detalle__direccion">📍{{ organizador.ubicacion }}</p>
+                            <p class="organizador-detalle__descripcion">{{ organizador.email }}</p>
                     </div>
                 </div>
         </div>
@@ -65,7 +61,7 @@ watch(() => props.organizadorId, (newId) => {
 
 .organizador-detalle {
     background: url("@/assets/images/fondo1.jpg") no-repeat center center;
-  background-size: cover;
+    background-size: cover;
     color: #fff;
     margin: 5% auto;
     margin-top: 90px;
@@ -73,10 +69,12 @@ watch(() => props.organizadorId, (newId) => {
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
 
     &__titulo {
         font-family:$titulo;
-        font-size: 1.7rem;
+        font-size: 1.9rem;
         font-weight: bold;
         margin-bottom: 10px;
     }
@@ -87,106 +85,98 @@ watch(() => props.organizadorId, (newId) => {
         align-items: center;
     }
 
+    &__portada {
+    width: 370px;
+    height: 340px; 
+    object-fit: cover; 
+    border-radius: 10px;
+    margin-bottom: 20px;
+    }
+
     &__contenido{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
     }
+
     &__info {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        align-items: center;
         border: 2px solid #272525;
         border-radius: 8px;
         padding: 3%;
-   
+        text-align: left;
     }
+
     &__infoLetra{
         font-weight: bold;
         color: $color-lightred;
-        font-family:$first-font ;
+        font-family:$first-font;
     }
+
     &__direccion {
         font-family:$first-font ;
-        font-size: 1.1rem;
+        font-size: 1.4rem;
         color: #bbb;
-    }
-    &__boton {
-        font-family:$first-font ;
-        background-color: #272525;
-        color: #d40202;
-        border: 2px solid #d40202;
-        padding: 10px 50px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s, box-shadow 0.3s;
-
-        &:hover {
-            background-color: #d40202;
-            color: #000;
-            box-shadow: 0px 0px 10px #d40202;
-        }
     }
 
     &__subtitulo {
         font-family:$titulo ;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         color: $color-lightred;
         font-weight: bold;
         text-align: left;
-        margin-top: 20px;
     }
 
     &__descripcion {
         font-family:$first-font ;
-        font-size: 1.2rem;
         color: #ddd;
         text-align: left;
-        margin-top: 10px;
     }
 }
 
 
 @media (min-width: 900px) {
-    .evento-detalle {
-        max-width: 70%;
+    .organizador-detalle {
+        max-width: 80%;
 
         &__titulo {
-        font-size: 1.9rem;
+        font-size: 2rem;
         margin-bottom: 3%;
         }
 
         &__contenedor {
-            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            gap: 5%;
         }
 
 
         &__contenido{
-            flex-direction: column;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            width: 50%;
+            gap: 10%;
         }
 
         &__portada {
-            flex: 1;
-            height: 80%;
+            width: 450px;
+            height: 400px; 
+            object-fit: cover; 
+            border-radius: 10px;
         }
-
+        &__subtitulo{
+            font-size: 1.8rem;
+        }
         &__info {
-            flex: 1;
-            text-align: left;
-            
+            font-size: 1.6rem;
+            width: 450px;
+            height: 300px;
+            display: flex;
+            justify-content: space-between;
         }
-
-        &__acciones {
-            flex-direction: column;
+        &__direccion{
+            font-size: 1.6rem;
         }
 
         &__boton {
