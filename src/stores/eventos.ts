@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import EventoDto from "@/stores/dtos/evento.dto";
-import EventoBuscadorDto from "./dtos/eventoBuscador.dto";
 import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
 
 export const useEventosStore = defineStore("eventos", () => {
@@ -133,6 +132,30 @@ export const useEventosStore = defineStore("eventos", () => {
         }
     }
 
+
+    async function getEventoPorIdORganizador(idorganizador: number) {
+        try {
+            console.log(`📡 Solicitando eventos para organizador ${idorganizador}...`);
+            
+            const response = await fetch(`http://localhost:8888/api/Evento/organizadorid/${idorganizador}`);
+            if (!response.ok) throw new Error("Error al obtener eventos por organizador");
+    
+            const data = await response.json();
+            
+            console.log("✅ Eventos recibidos en la API:", data);
+    
+            return Array.isArray(data) ? data : []; // 🔥 SIEMPRE devuelve un array vacío en caso de error
+        } catch (error) {
+            console.error("❌ Error al obtener eventos:", error);
+            return []; // 🔥 Retornamos un array vacío para evitar errores en Vue
+        }
+    }
+    
+    
+    
+    
+    
+    
     // Obtener información detallada de un evento
     async function getInfoEvento(id: number) {
         try {
@@ -180,6 +203,7 @@ export const useEventosStore = defineStore("eventos", () => {
         hayEventosFiltrados,
         eventosFiltrados,
         eventosProximos,
-        proximosEventos
+        proximosEventos,
+        getEventoPorIdORganizador
     };
 });
