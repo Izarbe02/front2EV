@@ -74,6 +74,7 @@ h1 {
   max-width: 370px;
   display: flex;
   flex-direction: column;
+  border: 2px solid #3b0000;
   
   
 

@@ -28,19 +28,9 @@ const eventosMostrados = computed(() =>
 
             <div class="evento-card__info">
               <span class="evento-card__fecha">
-                {{
-                  new Date(evento.fecha_inicio).toLocaleDateString("es-ES", {
-                    weekday: "long",
-                    day: "2-digit",
-                    month: "short",
-                  })
-                }},
-                {{
-                  new Date(evento.fecha_inicio).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                }}
+                {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                {{ new Date(evento.fechaFin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+           
               </span>
               <span class="evento-card__localizacion">📍
                 {{ evento.ubicacion }}</span>
@@ -52,6 +42,8 @@ const eventosMostrados = computed(() =>
           </div>
         </div>
       </template>
+
+      
 
       <div v-else class="evento-container__no-resultados">
         <p>No se encontraron eventos.</p>

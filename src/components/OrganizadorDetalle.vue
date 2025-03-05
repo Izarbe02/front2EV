@@ -3,7 +3,7 @@ import { useRoute } from "vue-router";
 import { useOrganizadoresStore } from "@/stores/organizadores";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 import { useEventosStore } from "@/stores/eventos";
-import type EventoDto from "@/stores/dtos/evento.dto"; // ✅ Importamos correctamente el tipo
+import type EventoDto from "@/stores/dtos/evento.dto"; 
 
 const props = defineProps({
   organizadorId: {
@@ -12,18 +12,18 @@ const props = defineProps({
   }
 });
 
-// Stores
+
 const organizadorStore = useOrganizadoresStore();
 const eventosStore = useEventosStore();
 const { getEventoPorIdORganizador } = eventosStore;
 
-// Datos reactivos
+
 const organizador = ref<OrganizadorDto | null>(null);
-const eventosLocales = ref<EventoDto[]>([]); // ✅ CORREGIDO: Ahora TypeScript sabe que es un array de EventoDto
+const eventosLocales = ref<EventoDto[]>([]); 
 const isLoading = ref(false);
 const isMounted = ref(false);
 
-// Función para formatear la fecha correctamente
+
 const formatearFecha = (fecha: Date | string) => {
   const fechaValida = typeof fecha === "string" ? new Date(fecha) : fecha;
   return fechaValida.toLocaleDateString("es-ES", {
@@ -35,7 +35,6 @@ const formatearFecha = (fecha: Date | string) => {
 
 const loadOrganizador = async (id: number | null) => {
   if (!id) return;
-  console.log(`📡 Cargando organizador ${id}...`);
   organizador.value = (await organizadorStore.getOrganizador(id)) ?? null;
 };
 
@@ -51,7 +50,6 @@ const loadEventos = async (id: number | null) => {
   
   const nuevosEventos = await getEventoPorIdORganizador(id);
   if (!Array.isArray(nuevosEventos)) {
-    console.error("❌ Error: `nuevosEventos` no es un array. Se recibió:", nuevosEventos);
     eventosLocales.value = [];
   } else {
     eventosLocales.value = [...nuevosEventos];
@@ -110,7 +108,7 @@ watch(
             <div class="organizador-detalle__eventos">
                 <p class="organizador-detalle__tituloseventos">Nuestros eventos</p>
                 <div v-if="isLoading">
-                    <p>⏳ Cargando eventos...</p>
+                    <p> Cargando eventos...</p>
                 </div>
                 
                 <div v-else-if="eventosLocales.length > 0" class="organizador-detalle__contenedoreventos">

@@ -57,7 +57,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
-import { EventoDto } from "@/stores/dtos/evento.dto";
+import EventoDto from "@/stores/dtos/evento.dto";
 
 export default defineComponent({
   name: "Homepage",
@@ -138,10 +138,17 @@ export default defineComponent({
       justify-content: center;
     }
   }
-
   &__card {
-    width: 90%;
+    width: 300px; 
+    height: 450px; 
     margin: 0 auto;
+    background-color: rgb(247, 247, 247);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    border-radius: 10px;
+    overflow: hidden; 
+
     @include desktop {
       width: 30%;
       margin: 1%;
@@ -149,24 +156,41 @@ export default defineComponent({
   }
 
   &__card-image {
-    height: 200px;
-    object-fit: cover;
+    width: 500px; 
+    height: 250px; 
+    object-fit: cover; 
   }
 
   &__card-title {
     font-family: $first-font;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: $color-darkgray;
+    padding: 10px;
+    text-align: center;
   }
 
   &__card-text {
-    font-size: 0.9rem;
+    font-size: 1.0rem;
     color: $color-gray;
+    padding: 14px;
+    text-align: center;
+    flex-grow: 1; // ✅ Permite que el texto se expanda si es necesario
   }
 
   &__card-actions {
     display: flex;
     justify-content: center;
+    padding: 10px;
   }
-}
+
+  .evento-card__boton {
+    text-decoration: none;
+    background-color: black;
+    @include boton-rojo;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    width: 80%; // ✅ Hace que el botón ocupe un buen espacio sin verse raro
+  }}
 </style>
