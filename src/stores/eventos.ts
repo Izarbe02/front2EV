@@ -45,7 +45,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Crear un nuevo evento
     async function createEvento(evento: EventoDto) {
         try {
-            const response = await fetch("http://localhost:8888/api/evento", {
+            const response = await fetch("http://localhost:8888/api/Evento", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(evento),
@@ -142,12 +142,12 @@ export const useEventosStore = defineStore("eventos", () => {
     
             const data = await response.json();
             
-            console.log("✅ Eventos recibidos en la API:", data);
+            console.log("Eventos recibidos en la API:", data);
     
-            return Array.isArray(data) ? data : []; // 🔥 SIEMPRE devuelve un array vacío en caso de error
+            return Array.isArray(data) ? data : [];
         } catch (error) {
-            console.error("❌ Error al obtener eventos:", error);
-            return []; // 🔥 Retornamos un array vacío para evitar errores en Vue
+            console.error("Error al obtener eventos:", error);
+            return []; 
         }
     }
     
