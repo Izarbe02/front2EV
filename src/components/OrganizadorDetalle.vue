@@ -1,9 +1,9 @@
-<script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from "vue";
+<script setup lang="ts">import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useOrganizadoresStore } from "@/stores/organizadores";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 import { useEventosStore } from "@/stores/eventos";
+import type EventoDto from "@/stores/dtos/evento.dto"; // ✅ Importamos correctamente el tipo
 
 const props = defineProps({
   organizadorId: {
@@ -19,18 +19,25 @@ const { getEventoPorIdORganizador } = eventosStore;
 
 // Datos reactivos
 const organizador = ref<OrganizadorDto | null>(null);
-const eventosLocales = ref([]);  
+const eventosLocales = ref<EventoDto[]>([]); // ✅ CORREGIDO: Ahora TypeScript sabe que es un array de EventoDto
 const isLoading = ref(false);
 const isMounted = ref(false);
 
+// Función para formatear la fecha correctamente
+const formatearFecha = (fecha: Date | string) => {
+  const fechaValida = typeof fecha === "string" ? new Date(fecha) : fecha;
+  return fechaValida.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+  });
+};
 
 const loadOrganizador = async (id: number | null) => {
   if (!id) return;
   console.log(`📡 Cargando organizador ${id}...`);
-  organizador.value = await organizadorStore.getOrganizador(id);
+  organizador.value = (await organizadorStore.getOrganizador(id)) ?? null;
 };
-
-
 
 const loadEventos = async (id: number | null) => {
   if (!id) return;
@@ -54,9 +61,6 @@ const loadEventos = async (id: number | null) => {
   console.log("Eventos cargados correctamente:", eventosLocales.value);
 };
 
-
-
-
 onMounted(async () => {
   if (props.organizadorId !== null) {
     await loadOrganizador(props.organizadorId);
@@ -64,7 +68,6 @@ onMounted(async () => {
   }
   isMounted.value = true;
 });
-
 
 watch(
   () => props.organizadorId,
@@ -83,6 +86,7 @@ watch(
     isLoading.value = false;
   }
 );
+
 </script>
 
 <template>
@@ -116,7 +120,7 @@ watch(
                             <p class="evento-card__titulo">{{ evento.nombre }}</p>
                             <div class="evento-card__info">
                                 <span class="evento-card__fecha">
-                                    {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                                    {{ new Date(evento.fecha_inicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
                                 </span>
                                 <span class="evento-card__localizacion">{{ evento.ubicacion }}</span>
                             </div>
@@ -138,15 +142,14 @@ watch(
 @import "@/assets/styles/_mixins.scss";
 
 .organizador-detalle {
-    background: url("@/assets/images/fondo1.jpg") no-repeat center center;
-    background-size: cover;
+   
     color: #fff;
     margin: 5% auto;
     margin-top: 90px;
     padding: 2%;
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+   
     display: flex;
     flex-direction: column;
     max-width: 100vw;
@@ -159,6 +162,7 @@ watch(
     }
 
     &__contenedor {
+        
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -171,11 +175,17 @@ watch(
         border-radius: 10px;
         margin-bottom: 20px;
         box-shadow: 0px 0px 15px rgba(248, 14, 14, 0.7);
+       
     }
 
     &__contenido{
         display: flex;
         flex-direction: column;
+        background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+    background-size: cover;
+    border: 2px solid #fc0000;
+    border-radius: 10px;
+    padding: 5%;
         
     }
 
@@ -225,8 +235,8 @@ watch(
     }
     &__tituloseventos{
         font-family:$titulo ;
-        font-size: 1.7rem;
-        color: $color-lightred;
+        font-size: 1.8rem;
+        color: white;
         font-weight: bold;
         text-align: left;
         margin-bottom: 1%;
@@ -234,16 +244,21 @@ watch(
     &__contenedoreventos {
         display: flex;
         flex-wrap: nowrap;
-        gap: 15px;
+        gap: 25px;
         overflow-x: auto;
-        padding: 10px;
+        padding: 20px;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         border-radius: 10px;
         max-width: 100%;
         white-space: nowrap;
         scrollbar-width: thin;
-        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        scrollbar-color: rgba(172, 33, 33, 0.3) transparent;
+        background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+    background-size: cover;
+    border: 2px solid #131313;
+    border-radius: 10px;
+
 
         &::-webkit-scrollbar {
             height: 8px;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref, onMounted, watch } from 'vue'
     import { useEventosStore } from '@/stores/eventos'
-    import { EventoInfoDto } from '@/stores/dtos/eventoInfo.dto'
+    import EventoInfoDto from '@/stores/dtos/eventoInfo.dto'
     import { useRoute } from 'vue-router'
     const eventosStore = useEventosStore()
 
@@ -98,15 +98,16 @@ watch(() => props.eventoId, (newId) => {
 @import "@/assets/styles/_mixins.scss";
 
 .evento-detalle {
-    background: url("@/assets/images/fondo1.jpg") no-repeat center center;
-  background-size: cover;
+
+
     color: #fff;
     margin: 5% auto;
-    margin-top: 90px;
+    margin-top: 150px;
     padding: 3%;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border: 1px solid #361818;
 
     &__titulo {
         font-family:$titulo;
@@ -116,7 +117,12 @@ watch(() => props.eventoId, (newId) => {
     }
 
     &__contenedor {
+        background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+        background-size: cover;
+        padding:10%;
+        border: 1px solid #fc0000;
         display: flex;
+        border-radius: 10px;
         flex-direction: column;
         align-items: center;
     }

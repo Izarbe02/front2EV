@@ -33,7 +33,7 @@
             :key="index"
             class="homepage__card"
           >
-            <v-img :src="event.image" class="homepage__card-image"></v-img>
+            <v-img :src="event.enlace" class="homepage__card-image"></v-img>
             <v-card-title class="homepage__card-title">
               {{ event.nombre }}
             </v-card-title>
@@ -41,7 +41,10 @@
               {{ event.descripcion }}
             </v-card-text>
             <v-card-actions class="homepage__card-actions">
-              <v-btn color="red">Ver Detalles</v-btn>
+             <RouterLink :to="`/EventoDetalle?id=${event.id}`" class="evento-card__boton">
+              Saber más
+            </RouterLink>
+
             </v-card-actions>
           </v-card>
         </div>
