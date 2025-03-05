@@ -6,7 +6,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
+                    <th>Username</th>
                     <th>Email</th>
+                    <th>Contraseña</th>
                     <th>Ubicación</th>
                     <th>IdRol</th>
                     <th>Acciones</th>
@@ -16,7 +18,9 @@
                 <tr v-for="usuario in usuarios" :key="usuario.id">
                     <td>{{ usuario.id }}</td>
                     <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.username }}</td>
                     <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.contrasenia }}</td>
                     <td>{{ usuario.ubicacion }}</td>
                     <td>{{ usuario.idRol }}</td>
                     <td>
@@ -31,15 +35,22 @@
             </tbody>
         </table>
 
+        <button class="btn-crear" @click="abrirFormularioNuevo">Crear Usuario</button>
+        
         <div v-if="modalVisible" class="modal">
             <div class="modal-contenido">
-                <h2>Editar Usuario</h2>
+                <h2>{{ esModoEdicion ? 'Editar Usuario' : 'Crear Usuario' }}</h2>
 
                 <label>Nombre:</label>
                 <input type="text" v-model="usuarioEditado.nombre" />
+                <label>Username:</label>
+                <input type="text" v-model="usuarioEditado.username" />
 
                 <label>Email:</label>
                 <input type="email" v-model="usuarioEditado.email" />
+
+                <label>Contraseña:</label>
+                <input type="text" v-model="usuarioEditado.contrasenia" />
 
                 <label>Ubicación:</label>
                 <input type="text" v-model="usuarioEditado.ubicacion" />
@@ -63,15 +74,16 @@ import type UsuarioDto from '@/stores/dtos/usuario.dto';
 
 const modalVisible = ref(false);
 const usuarioEditado = ref<UsuarioDto | null>(null);
+const esModoEdicion = ref(false)
 
 const store = useUsuariosStore();
-const { usuarios, findAll, deleteUsuario, updateUsuario } = store;
+const { usuarios, findAll, deleteUsuario, updateUsuario, createUsuario } = store;
 
 onMounted(() => {
     findAll();
 });
 
-// Computed property para idRol
+
 const idRolEditado = computed({
     get: () => usuarioEditado.value?.idRol ?? 0,
     set: (value) => {
@@ -81,20 +93,30 @@ const idRolEditado = computed({
 
 const abrirForm = (usuario: UsuarioDto) => {
     usuarioEditado.value = { ...usuario };
+    esModoEdicion.value = true
+    modalVisible.value = true;
+};
+
+const abrirFormularioNuevo = () => {
+    usuarioEditado.value = { id: 0, nombre: '', email: '', ubicacion: '', idRol: 1 };
+    esModoEdicion.value = false;
     modalVisible.value = true;
 };
 
 const guardarCambios = async () => {
     if (!usuarioEditado.value) return;
 
-    // Verificar que idRol sea un número válido
     usuarioEditado.value.idRol = Number(usuarioEditado.value.idRol);
     if (isNaN(usuarioEditado.value.idRol) || usuarioEditado.value.idRol <= 0) {
         alert("El rol seleccionado no es válido.");
         return;
     }
 
-    await updateUsuario(usuarioEditado.value.id, usuarioEditado.value);
+    if (esModoEdicion.value) {
+        await updateUsuario(usuarioEditado.value.id, usuarioEditado.value);
+    } else {
+        await createUsuario(usuarioEditado.value);
+    }
     modalVisible.value = false;
 };
 
@@ -210,5 +232,18 @@ const borrarUsuario = async (id: number) => {
         background: #dc3545;
         color: white;
     }
+}
+.btn-crear {
+    color: $color-lightred;
+    padding: 10px;
+    border: 2px solid #797979;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.btn-crear:hover {
+    background-color: #000000;
 }
 </style>
