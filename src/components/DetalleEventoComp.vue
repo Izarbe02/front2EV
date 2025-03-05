@@ -121,7 +121,7 @@ watch(() => props.eventoId, (newId) => {
         align-items: center;
     }
 
-    &__portada {
+    &__portada{
         width: 100%;
         height: auto;
         border-radius: 8px;
@@ -204,7 +204,7 @@ watch(() => props.eventoId, (newId) => {
 
 @media (min-width: 900px) {
     .evento-detalle {
-        max-width: 70%;
+        max-width: 80%;
 
         &__titulo {
         font-size: 1.9rem;
@@ -228,6 +228,7 @@ watch(() => props.eventoId, (newId) => {
 
         &__portada {
             flex: 1;
+            max-width: 480px;
             height: 80%;
         }
 

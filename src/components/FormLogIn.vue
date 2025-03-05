@@ -84,14 +84,9 @@ watchEffect(() => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding-bottom: 100px;
-  background-color: rgb(14, 14, 14);
-  background: url('@/assets/images/fondo1.jpg') no-repeat center center;
-  background-size: cover;
-  width: 100vw;
-  height: 100vh;
 
   &__sheet {
+    
     padding: 24px;
     border-radius: 8px;
     background: rgba($color-black, 0.9);
@@ -104,21 +99,24 @@ watchEffect(() => {
 
   &__title {
     color: white;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
     margin-bottom: 8px;
   }
 
   &__subtitle {
     color: $color-lightred;
-    font-size: 14px;
+    font-size: 17px;
     margin-bottom: 16px;
   }
 
   &__form {
+    
+  background: url('@/assets/images/fondo1.jpg') no-repeat center center;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    
   }
 
   &__input {
@@ -126,7 +124,7 @@ watchEffect(() => {
     border-bottom: 2px solid $color-red;
     color: white;
     border-radius: 0;
-    font-size: 16px;
+    font-size: 18px;
 
     &::placeholder {
       color: $color-lightred;
@@ -137,7 +135,7 @@ watchEffect(() => {
   &__register {
     display: block;
     color: $color-lightred;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     text-decoration: none;
     margin-top: 8px;

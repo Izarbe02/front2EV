@@ -1,36 +1,23 @@
-<template>
+<template> 
   <v-layout>
     <v-app-bar app class="navbar">
-
       <v-container class="navbar__container">
-          <h1 class="navbar__tituloConecta">ZaragozaConecta</h1>
-          <div class="navbar__navigation">
-              <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
-              <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
-              <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
-          </div>
+        <router-link to="/" class="navbar__tituloConecta">ZaragozaConecta</router-link>
+        >
+
+        
+        <!-- Navegación en pantallas grandes -->
+        <div class="navbar__navigation">
+          <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
+          <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
+          <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
+          <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login"><img src="../assets/Images/group.png" to="/login" alt="Grupo" class="navbar__mobile-logo"></v-btn>
+        </div>
+
         <!-- Botón de menú hamburguesa SOLO en móviles -->
         <v-btn icon class="navbar__menu-button" @click.stop="drawer = !drawer">
           ☰
-
-
         </v-btn>
-
-        <!-- Logo -->
-        
-        
-        <!-- Buscador siempre visible 
-      <div class="navbar__search">
-          <v-text-field
-            class="navbar__search-input"
-            placeholder="Eventos..."
-            dense
-            solo
-            hide-details
-          />
-          <v-btn class="navbar__search-button">Buscar</v-btn>
-       </div>
-       -->
       </v-container>
     </v-app-bar>
 
@@ -40,8 +27,9 @@
         <v-list-item to="/eventos" class="navbar__mobile-link">Eventos</v-list-item>
         <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
         <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
+        <v-list-item to="/login" class="navbar__mobile-link navbar__mobile-login"><img src="../assets/Images/group.png" to="/login" alt="Grupo" class="navbar__mobile-logo"></v-list-item>
       </v-list>
-      <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo">
+      
     </v-navigation-drawer>
   </v-layout>
 </template>
@@ -71,8 +59,6 @@ export default defineComponent({
   left: 0;
   z-index: 10;
   font-family: $first-font;
-  
-
   &__container {
     display: flex;
     align-items: center;
@@ -80,6 +66,13 @@ export default defineComponent({
     width: 100%;
   }
 
+  &__tituloConecta {
+    font-family: $titulo;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: red;
+    text-decoration: none; 
+  }
   &__menu-button {
     color: $color-lightred;
     display: block; 
@@ -93,44 +86,21 @@ export default defineComponent({
     display: none; 
   }
 
-  &__search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-grow: 1;
-    max-width: 300px;
-    padding: 4px;
-  }
-
-   &__tituloConecta{
-
+  &__tituloConecta {
     font-family: $titulo;
     font-size: 2.2rem;
     font-weight: bold;
     margin-bottom: 7px;
     color: red;
-   }
-
-
-  &__search-input {
-    flex-grow: 1;
-    background: $color-darkgray !important;
-    border: 1px solid $color-red;
-    color: white;
-    border-radius: 4px;
-    padding-left: 8px;
-    font-size: 16px;
-
-    &::placeholder {
-      color: white;
-    }
   }
 
-  &__search-button {
+  // Botón de login en desktop
+  &__login-btn {
     @include boton-rojo;
+    display: none; // Ocultar en móvil
   }
 
-//menu desp
+  // Menú de navegación móvil
   &__mobile-menu {
     background: $color-darkgray;
   }
@@ -147,7 +117,13 @@ export default defineComponent({
     }
   }
 
-//pantalla grande
+  &__mobile-login {
+    @include boton-rojo;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  // desktop
   @media (min-width: 768px) {
     .navbar {
       flex-direction: row;
@@ -162,26 +138,20 @@ export default defineComponent({
       display: flex;
       gap: 12px;
       align-items: center;
-      
     }
 
     .navbar__mobile-menu {
       display: none; 
     }
 
-    .navbar__search {
-      max-width: 400px;
-      justify-content: flex-end; 
+    .navbar__login-btn {
+      display: block; 
     }
-
-    .navbar__search-input {
-      font-size: 18px;
-    }
-
-    .navbar__search-button {
-      font-size: 16px;
-    }
-
+    &__navbar__tituloConecta{
+color: inherit;
+    text-decoration: none;
+    
+  }
     &__link {
       font-size: 28px;
       font-weight: bold;
@@ -193,7 +163,7 @@ export default defineComponent({
       &--active {
           color: $color-red;
       }
-  }
+    }
   }
 }
 </style>

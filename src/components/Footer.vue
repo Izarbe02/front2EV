@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const twitterIcon = new URL('@/assets/Images/x.png', import.meta.url).href;
+const youtubeIcon = new URL('@/assets/Images/youtube.png', import.meta.url).href;
+const instagramIcon = new URL('@/assets/Images/instagram.png', import.meta.url).href;
+</script>
+
 <template>
     <v-footer class="footer">
         <v-container class="footer__container">
@@ -24,19 +30,21 @@
                 <v-row justify="center" class="footer__socials">
                     <v-col cols="auto">
                         <v-btn icon class="footer__social-button">
-                            <v-img src="@/assets/images/gorjeo.png" alt="Twitter" class="footer__icon" contain></v-img>
+                            <img src="../assets/Images/x.png" to="/login" alt="ss" class="footer_rrss-logo">
                         </v-btn>
                     </v-col>
                     <v-col cols="auto">
                         <v-btn icon class="footer__social-button">
-                            <v-img src="@/assets/images/youtube.png" alt="YouTube" class="footer__icon" contain></v-img>
+                            <img src="../assets/Images/instagram.png" to="/login" alt="ss" class="footer_rrss-logo">
                         </v-btn>
                     </v-col>
                     <v-col cols="auto">
                         <v-btn icon class="footer__social-button">
-                            <v-img src="@/assets/images/instagram.png" alt="Instagram" class="footer__icon"
-                                contain></v-img>
-                        </v-btn>
+    <a href="https://www.youtube.com/watch?v=Zcb8yPEItwA" target="_blank" rel="noopener noreferrer">
+        <img src="../assets/Images/youtube.png" alt="YouTube" class="footer_rrss-logo">
+    </a>
+</v-btn>
+
                     </v-col>
                 </v-row>
             </div>
@@ -44,18 +52,9 @@
     </v-footer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    name: 'FooterComponent'
-});
-</script>
-
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
-
 
 .footer {
     background: $color-gray;
@@ -93,12 +92,12 @@ export default defineComponent({
     }
 
     &__text {
-        font-size: 14px;
+        font-size: 24px;
         color: $color-lightred;
     }
 
     &__link {
-        font-size: 14px;
+        font-size: 18px;
         color: $color-lightred;
         background: $color-lightgray;
         text-transform: none;
