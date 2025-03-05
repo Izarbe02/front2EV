@@ -2,9 +2,11 @@
   <v-layout>
     <v-app-bar app class="navbar">
       <v-container class="navbar__container">
+        <a href="/">
+          <LogoCanvas :canvasSize="120" />
+        </a>
         <router-link to="/" class="navbar__tituloConecta">ZaragozaConecta</router-link>
-        >
-
+       
         
         <!-- Navegación en pantallas grandes -->
         <div class="navbar__navigation">
@@ -36,8 +38,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import LogoCanvas from "@/components/LogoCanvas.vue";
 export default defineComponent({
+  components: {
+    LogoCanvas
+  },
   data() {
     return {
       drawer: false
@@ -52,13 +57,14 @@ export default defineComponent({
 
 .navbar {
   background: $color-darkgray !important;
-  padding: 10px 16px;
+  padding: 10px 5px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
   font-family: $first-font;
+
   &__container {
     display: flex;
     align-items: center;
@@ -66,20 +72,9 @@ export default defineComponent({
     width: 100%;
   }
 
-  &__tituloConecta {
-    font-family: $titulo;
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: red;
-    text-decoration: none; 
-  }
   &__menu-button {
     color: $color-lightred;
     display: block; 
-  }
-
-  &__logo {
-    height: 40px;
   }
 
   &__navigation {
@@ -88,10 +83,10 @@ export default defineComponent({
 
   &__tituloConecta {
     font-family: $titulo;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    margin-bottom: 7px;
     color: red;
+    text-decoration: none;
   }
 
   // Botón de login en desktop
@@ -147,10 +142,12 @@ export default defineComponent({
     .navbar__login-btn {
       display: block; 
     }
-    &__navbar__tituloConecta{
-color: inherit;
-    text-decoration: none;
-    
+
+    &__tituloConecta{
+      font-weight: bold;
+      color: inherit;
+      text-decoration: none;
+      color: $color-red;
   }
     &__link {
       font-size: 28px;
