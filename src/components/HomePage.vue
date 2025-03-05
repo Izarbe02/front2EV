@@ -12,18 +12,7 @@
           ></v-carousel-item>
         </v-carousel>
       </div>
-
-      <!-- Calendario de eventos -->
-      <div class="homepage__calendar">
-        <v-sheet height="600">
-          <v-calendar
-            ref="calendar"
-            :events="events"
-            color="$color-red"
-          ></v-calendar>
-        </v-sheet>
-      </div>
-
+      <EventCalendar />
       <!-- Tarjetas de próximos eventos -->
       <div class="homepage__events">
         <h2 class="homepage__title">Próximos Eventos</h2>
@@ -55,6 +44,7 @@
 import { defineComponent, onMounted, ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import { EventoDto } from "@/stores/dtos/evento.dto";
+import EventCalendar from "@/components/EventCalendar.vue";
 
 export default defineComponent({
   name: "Homepage",
