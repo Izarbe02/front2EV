@@ -38,6 +38,5 @@ onMounted(async () => {
 .eventos-container__buscador {
   width: 100%;
   max-width: 600px;
-  margin-bottom: 20px;
 }
 </style>

@@ -57,12 +57,12 @@ const eventosMostrados = computed(() =>
 
 .evento-container {
   padding: 2%;
-  margin-top: 1%;
-
 
   &__titulo {
     @include titulo-evento;
     text-align: center;
+    text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
+    margin-top: 1%;
   }
 
   &__tarjetas {
@@ -82,7 +82,7 @@ const eventosMostrados = computed(() =>
   }
 
   @media (min-width: 768px) {
-    margin-top: 5%;
+    margin-top: 1%;
     
     &__tarjetas {
       grid-template-columns: repeat(3, 1fr);

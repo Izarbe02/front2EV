@@ -2,7 +2,7 @@
   <section class="homepage">
     <div class="homepage__container">
 
-      <!-- Carrusel de imágenes -->
+      <!-- Carrusel de imagenes -->
       <div class="homepage__carousel">
         <v-carousel cycle height="400">
           <v-carousel-item
@@ -24,7 +24,7 @@
         </v-sheet>
       </div>
 
-      <!-- Tarjetas de próximos eventos -->
+      <!-- Tarjetas de proximos eventos -->
       <div class="homepage__events">
         <h2 class="homepage__title">Próximos Eventos</h2>
         <div class="homepage__cards">
@@ -33,7 +33,7 @@
             :key="index"
             class="homepage__card"
           >
-            <v-img :src="event.enlace" class="homepage__card-image"></v-img>
+            <img :src="event.enlace" class="homepage__card-image"></img>
             <v-card-title class="homepage__card-title">
               {{ event.nombre }}
             </v-card-title>
@@ -65,7 +65,7 @@ export default defineComponent({
     const store = useEventosStore();
     const events = ref<EventoDto[]>([]);
 
-    // Lista de imágenes del carrusel
+    // Lista de imagenes del carrusel
     const carouselItems = ref([
       { src: "https://imagenes.heraldo.es/files/image_990_auto/files/fp/uploads/imagenes/2024/04/12/con-imagen-afterpunk-y-trajes-hechos-en-casa-toco-john-landis-fans-con-santi-rex-al-frente-al-fondo-luis-linacero.r_d.1371-843.jpeg" },
       { src: "https://cdn.aragonmusical.com/wp-content/uploads/2016/09/Viva-Belgrado-660x330.jpg" },
@@ -76,7 +76,7 @@ export default defineComponent({
       { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/12/principal-izquierda-con-luis-urko-que-luego-montaria-el-mitico-bar-paradis-al-micro-a-la-guitarra-fabian-simon.jpeg" }
     ]);
 
-    // Cargar los próximos eventos al montar el componente
+    // Cargar los proximos eventos al montar el componente
     onMounted(async () => {
       await store.proximosEventos();
       events.value = store.eventosProximos;
@@ -103,6 +103,7 @@ export default defineComponent({
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
+    margin-top: 5%;
   }
 
   &__carousel,
@@ -121,10 +122,9 @@ export default defineComponent({
   }
 
   &__title {
-    font-family: $first-font;
-    color: $color-darkgray;
-    text-align: center;
     @include titulo-evento;
+    text-align: center;
+    text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
   }
 
   &__cards {
@@ -156,8 +156,8 @@ export default defineComponent({
   }
 
   &__card-image {
-    width: 500px; 
-    height: 250px; 
+    width: 100%;
+    height: 50%;
     object-fit: cover; 
   }
 
@@ -174,7 +174,7 @@ export default defineComponent({
     color: $color-gray;
     padding: 14px;
     text-align: center;
-    flex-grow: 1; // ✅ Permite que el texto se expanda si es necesario
+    flex-grow: 1; 
   }
 
   &__card-actions {
@@ -191,6 +191,6 @@ export default defineComponent({
     border-radius: 5px;
     text-align: center;
     display: inline-block;
-    width: 80%; // ✅ Hace que el botón ocupe un buen espacio sin verse raro
+    width: 80%;
   }}
 </style>

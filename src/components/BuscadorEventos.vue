@@ -19,25 +19,30 @@ const buscar = () => {
       placeholder="Buscar eventos..."
       class="buscador__input"
     />
-    <button @click="buscar" class="buscador__boton">🔍 Buscar</button>
+    <button @click="buscar" class="buscador__boton">Buscar</button>
   </div>
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+
 .buscador {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 200px;
+  margin-top: 30%;
+  @media (min-width: 768px) {
+    margin-top: 20%;
+  }
 }
 
 .buscador__input {
   width: 100%;
-  max-width: 350px;
+  max-width: 280px;
   padding: 10px;
-  border: 2px solid #292929;
+  border: none;
   border-radius: 8px;
   font-size: 1rem;
   background-color: #272525;
@@ -50,9 +55,9 @@ const buscar = () => {
 
 .buscador__boton {
   padding: 10px 15px;
-  background-color: #e63946;
-  color: white;
-  border: none;
+  background-color: #000;
+  color: $color-lightred;
+  border: 1px solid $color-red;
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
