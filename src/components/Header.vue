@@ -2,11 +2,12 @@
   <v-layout>
     <v-app-bar app class="navbar">
       <v-container class="navbar__container">
-        <a href="/">
-          <LogoCanvas :canvasSize="120" />
-        </a>
-        <router-link to="/" class="navbar__tituloConecta">ZaragozaConecta</router-link>
-       
+        <div class="navbar__logoZaragozaConecta">
+          <a href="/">
+            <LogoCanvas/>
+          </a>
+          <router-link to="/">ZaragozaConecta</router-link>
+        </div>
         
         <!-- Navegación en pantallas grandes -->
         <div class="navbar__navigation">
@@ -57,7 +58,7 @@ export default defineComponent({
 
 .navbar {
   background: $color-darkgray !important;
-  padding: 10px 5px;
+  padding: 10px 0px;
   width: 100%;
   position: fixed;
   top: 0;
@@ -71,7 +72,19 @@ export default defineComponent({
     justify-content: space-between;
     width: 100%;
   }
-
+  &__logoZaragozaConecta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: $titulo;
+    font-size: 1.6rem;
+    font-weight: bold;
+    
+    a {
+      color: red;
+      text-decoration: none;
+    }
+  }
   &__menu-button {
     color: $color-lightred;
     display: block; 
@@ -81,13 +94,7 @@ export default defineComponent({
     display: none; 
   }
 
-  &__tituloConecta {
-    font-family: $titulo;
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: red;
-    text-decoration: none;
-  }
+
 
   // Botón de login en desktop
   &__login-btn {
@@ -106,6 +113,7 @@ export default defineComponent({
     color: white;
     padding: 12px;
     text-decoration: none;
+    margin-top: 20px;
 
     &:hover {
       background: $color-lightred;
@@ -143,11 +151,13 @@ export default defineComponent({
       display: block; 
     }
 
-    &__tituloConecta{
+    &__logoZaragozaConecta{
       font-weight: bold;
       color: inherit;
       text-decoration: none;
       color: $color-red;
+      font-size: 2rem;
+      gap: 10px;
   }
     &__link {
       font-size: 28px;

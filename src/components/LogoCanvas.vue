@@ -14,7 +14,7 @@
   <script setup lang="ts">
   import { ref, onMounted } from "vue";
   
-  const canvasSize = 160;
+  const canvasSize = 70;
   const logoCanvas = ref<HTMLCanvasElement | null>(null);
   let ctx: CanvasRenderingContext2D | null = null;
   
@@ -22,7 +22,7 @@
   const isAnimating = ref(false);
   const animationProgress = ref(0);
   const animationSpeed = 0.08;
-  const separationDistance = 10;
+  const separationDistance = 7;
   const rotationAngle = ref(0);
   
   
@@ -88,9 +88,9 @@ function drawLogo(progress: number) {
 
     const width = canvasSize;
     const height = canvasSize;
-    const imgScale = 0.8;
+    const imgScale = 1.6;
     const offset = separationDistance * easeInOutQuad(progress);
-    const spacing = width / 10;
+    const spacing = width / 5;
 
     images.value.forEach((img, index) => {
         if (!img) return;
