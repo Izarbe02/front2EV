@@ -68,12 +68,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     max-width: 1200px;
     margin: 0 auto 0 ;
+    margin-top: 15%;
     
     @include desktop {
-      gap: 4rem;
+      gap: 2rem;
+      margin-top: 3%;
     }
   }
   

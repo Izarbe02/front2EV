@@ -7,6 +7,7 @@
           <li @click="setView('ComentariosTable')">Comentarios</li>
           <li @click="setView('TematicaTable')">Tematicas</li>
           <li @click="setView('CategoriaEventoTable')">Categoria Evento</li>
+          <a href="/" class="sidebar__link">Volver a la página principal</a>
         </ul>
       </div>
   </template>
@@ -49,6 +50,19 @@
     background: linear-gradient(to bottom, #000000, #1d1d1d);
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
+
+    &__link{
+      margin-top: 4%;
+      display: flex;
+      align-items: center;
+      gap: 7%;
+      padding: 20px 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: rgb(219, 86, 97);
+      text-decoration: none;
+    }
   }
   
   .sidebar.is-hidden {

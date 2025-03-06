@@ -1,7 +1,6 @@
 <script setup lang="ts">
-const twitterIcon = new URL('@/assets/Images/x.png', import.meta.url).href;
-const youtubeIcon = new URL('@/assets/Images/youtube.png', import.meta.url).href;
-const instagramIcon = new URL('@/assets/Images/instagram.png', import.meta.url).href;
+
+
 </script>
 
 <template>
@@ -22,6 +21,9 @@ const instagramIcon = new URL('@/assets/Images/instagram.png', import.meta.url).
                     </v-col>
                     <v-col cols="auto">
                         <v-btn to="/organizadores" class="footer__link">Organizadores</v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                        <v-btn to="/administrador" class="footer__link">Zona Administrador</v-btn>
                     </v-col>
                 </v-row>
             </div>

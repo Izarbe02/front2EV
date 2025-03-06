@@ -106,8 +106,7 @@ watch(() => props.eventoId, (newId) => {
     padding: 3%;
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border: 1px solid #361818;
+    
 
     &__titulo {
         font-family:$titulo;

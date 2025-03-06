@@ -24,15 +24,6 @@ const isLoading = ref(false);
 const isMounted = ref(false);
 
 
-const formatearFecha = (fecha: Date | string) => {
-  const fechaValida = typeof fecha === "string" ? new Date(fecha) : fecha;
-  return fechaValida.toLocaleDateString("es-ES", {
-    weekday: "long",
-    day: "2-digit",
-    month: "short",
-  });
-};
-
 const loadOrganizador = async (id: number | null) => {
   if (!id) return;
   organizador.value = (await organizadorStore.getOrganizador(id)) ?? null;
@@ -40,13 +31,11 @@ const loadOrganizador = async (id: number | null) => {
 
 const loadEventos = async (id: number | null) => {
   if (!id) return;
-  console.log("🔄 Eliminando eventos anteriores...");
   
   eventosLocales.value = []; 
   isLoading.value = true;
   await nextTick(); 
 
-  console.log(`📡 Cargando eventos del organizador ${id}...`);
   
   const nuevosEventos = await getEventoPorIdORganizador(id);
   if (!Array.isArray(nuevosEventos)) {
@@ -72,7 +61,6 @@ watch(
   async (newId, oldId) => {
     if (!isMounted.value || newId === oldId || newId === null) return;
     
-    console.log(`🔄 Cambio de organizador detectado: ${newId}`);
     isLoading.value = true;
 
     eventosLocales.value = [];
@@ -224,7 +212,7 @@ watch(
         text-align: left;
     }
     &__eventos{
-        margin-top: 8%;
+        margin-top: 5%;
         display: flex;
         flex-direction: column;
         justify-content: left;
