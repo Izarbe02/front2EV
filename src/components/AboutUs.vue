@@ -63,7 +63,7 @@
 
     border: 2px solid $color-red;
     box-shadow: 0 0 10px $color-red;
-    background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+    background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
     background-size: cover;
     display: flex;
     flex-direction: column;

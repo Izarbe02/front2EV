@@ -1,14 +1,13 @@
-docker compose: version: '3.8'
+version: '3.8'
 
 services:
   frontend:
     container_name: 2EvFront
     build: 
       context: .
-      dockerfile: Dockerfile  #¿¿??¿¿??¿¿??¿¿??
+      dockerfile: Dockerfile
     ports:
-      - "5741:80" #¿¿??¿¿??¿¿??¿¿??
+      - "5741:80"
     volumes:
-      # Montar assets para desarrollo si es necesario
       - ./src/assets:/usr/share/nginx/html/src/assets
     restart: always

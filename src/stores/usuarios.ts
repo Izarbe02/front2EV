@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type UsuarioDto from "@/stores/dtos/usuario.dto.ts";
-import type UsuarioLoginDto from "@/stores/dtos/usuarioLogin.dto";
+
 
 export const useUsuariosStore = defineStore("usuarios", () => {
 
@@ -62,6 +62,11 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   // Actualizar un usuario (PUT: api/Usuario/{id})
   async function updateUsuario(id: number, usuarioActualizado: UsuarioDto) {
     console.log(usuarioActualizado)
+
+    if(usuarioActualizado == null){
+      throw new Error("no hay usuario");
+      
+    }
     try {
       const response = await fetch(`http://localhost:8888/api/Usuario/${id}`, {
         method: "PUT",
@@ -95,7 +100,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     }
   }
 
-  async function login(usuarioLogin: UsuarioLoginDto) {
+  async function login(usuarioLogin: UsuarioDto) {
     try {
       const response = await fetch("http://localhost:8888/api/auth/login", {
         method: "POST",
