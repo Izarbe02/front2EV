@@ -116,7 +116,7 @@ watch(() => props.eventoId, (newId) => {
     }
 
     &__contenedor {
-        background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+        background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
         background-size: cover;
         padding:10%;
         border: 1px solid #fc0000;

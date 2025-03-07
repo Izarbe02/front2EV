@@ -89,7 +89,7 @@ const registrarUsuario = async () => {
   }
 
   &__form {
-    background: url('@/assets/images/fondo1.jpg') no-repeat center center;
+    background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
     display: flex;
     flex-direction: column;
     gap: 16px;

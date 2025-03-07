@@ -167,7 +167,7 @@ watch(
     &__contenido{
         display: flex;
         flex-direction: column;
-        background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+        background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
     background-size: cover;
     border: 2px solid #fc0000;
     border-radius: 10px;
@@ -240,7 +240,7 @@ watch(
         white-space: nowrap;
         scrollbar-width: thin;
         scrollbar-color: rgba(172, 33, 33, 0.3) transparent;
-        background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+        background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
     background-size: cover;
     border: 2px solid #131313;
     border-radius: 10px;

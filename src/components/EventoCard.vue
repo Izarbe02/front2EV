@@ -94,7 +94,7 @@ const eventosMostrados = computed(() =>
 
 .evento-card {
   height: 550px;
-  background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+  background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
     background-size: cover;
 
   border: 2px solid $color-gray;
