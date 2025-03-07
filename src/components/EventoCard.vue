@@ -28,8 +28,8 @@ const eventosMostrados = computed(() =>
 
             <div class="evento-card__info">
               <span class="evento-card__fecha">
-                {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                {{ new Date(evento.fechaFin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                {{ new Date(evento.fecha_inicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
+                {{ new Date(evento.fecha_fin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
            
               </span>
               <span class="evento-card__localizacion">📍
