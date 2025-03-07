@@ -1,6 +1,7 @@
-<script setup lang="ts">
+<script setup lang="ts"> 
 import { onMounted, computed } from "vue";
 import { useEventosStore } from "@/stores/eventos";
+import type EventoDto from "@/stores/dtos/evento.dto";
 
 const eventosStore = useEventosStore();
 
@@ -9,9 +10,15 @@ onMounted(() => {
 });
 
 // Computed para definir qué eventos se mostrarán
-const eventosMostrados = computed(() => 
+const eventosMostrados = computed<EventoDto[]>(() => 
   eventosStore.hayEventosFiltrados ? eventosStore.eventosFiltrados : eventosStore.eventos
 );
+
+// Computed para formatear fechas
+const formatearFecha = (fecha: Date | string): string => {
+  const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
+  return fechaObjeto.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' });
+};
 </script>
 
 <template>
@@ -28,12 +35,9 @@ const eventosMostrados = computed(() =>
 
             <div class="evento-card__info">
               <span class="evento-card__fecha">
-                {{ new Date(evento.fecha_inicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                {{ new Date(evento.fecha_fin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-           
+                {{ formatearFecha(evento.fecha_inicio) }} - {{ formatearFecha(evento.fecha_fin) }}
               </span>
-              <span class="evento-card__localizacion">📍
-                {{ evento.ubicacion }}</span>
+              <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
             </div>
 
             <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__boton">
@@ -43,14 +47,13 @@ const eventosMostrados = computed(() =>
         </div>
       </template>
 
-      
-
       <div v-else class="evento-container__no-resultados">
         <p>No se encontraron eventos.</p>
       </div>
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
