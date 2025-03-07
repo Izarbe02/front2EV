@@ -8,17 +8,28 @@ const eventosStore = useEventosStore();
 onMounted(() => {
   eventosStore.findAll();
 });
-
+console.log(eventosStore.eventos)
 // Computed para definir qué eventos se mostrarán
 const eventosMostrados = computed<EventoDto[]>(() => 
   eventosStore.hayEventosFiltrados ? eventosStore.eventosFiltrados : eventosStore.eventos
 );
 
-// Computed para formatear fechas
-const formatearFecha = (fecha: Date | string): string => {
+const formatearFecha = (fecha: Date | string) => {
+  console.log(fecha) 
+  if (!fecha) return "Fecha no disponible";
   const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
-  return fechaObjeto.toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' });
+  if (isNaN(fechaObjeto.getTime())) return "Fecha inválida"; 
+
+  return fechaObjeto.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 };
+
 </script>
 
 <template>
@@ -35,7 +46,8 @@ const formatearFecha = (fecha: Date | string): string => {
 
             <div class="evento-card__info">
               <span class="evento-card__fecha">
-                {{ formatearFecha(evento.fecha_inicio) }} - {{ formatearFecha(evento.fecha_fin) }}
+                {{ formatearFecha(evento.fechaInicio) }} -
+                 {{ formatearFecha(evento.fechaFin) }}
               </span>
               <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
             </div>
