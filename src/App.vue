@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import MetaballBackground from '@/components/MetaballBackground.vue';
+
+import { defineComponent } from 'vue';
+import MetaballBackground from './components/MetaballBackground.vue';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
+
 </script>
 
 <template>

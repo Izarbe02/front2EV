@@ -1,17 +1,35 @@
-<script setup lang="ts">
+<script setup lang="ts"> 
 import { onMounted, computed } from "vue";
 import { useEventosStore } from "@/stores/eventos";
+import type EventoDto from "@/stores/dtos/evento.dto";
 
 const eventosStore = useEventosStore();
 
 onMounted(() => {
   eventosStore.findAll();
 });
-
+console.log(eventosStore.eventos)
 // Computed para definir qué eventos se mostrarán
-const eventosMostrados = computed(() => 
+const eventosMostrados = computed<EventoDto[]>(() => 
   eventosStore.hayEventosFiltrados ? eventosStore.eventosFiltrados : eventosStore.eventos
 );
+
+const formatearFecha = (fecha: Date | string) => {
+  console.log(fecha) 
+  if (!fecha) return "Fecha no disponible";
+  const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
+  if (isNaN(fechaObjeto.getTime())) return "Fecha inválida"; 
+
+  return fechaObjeto.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+};
+
 </script>
 
 <template>
@@ -28,12 +46,10 @@ const eventosMostrados = computed(() =>
 
             <div class="evento-card__info">
               <span class="evento-card__fecha">
-                {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-                {{ new Date(evento.fechaFin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-           
+                {{ formatearFecha(evento.fechaInicio) }} -
+                 {{ formatearFecha(evento.fechaFin) }}
               </span>
-              <span class="evento-card__localizacion">📍
-                {{ evento.ubicacion }}</span>
+              <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
             </div>
 
             <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__boton">
@@ -43,14 +59,13 @@ const eventosMostrados = computed(() =>
         </div>
       </template>
 
-      
-
       <div v-else class="evento-container__no-resultados">
         <p>No se encontraron eventos.</p>
       </div>
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
@@ -94,7 +109,7 @@ const eventosMostrados = computed(() =>
 
 .evento-card {
   height: 550px;
-  background: url("@/assets/images/fondo1.jpg") no-repeat center center;
+  background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
     background-size: cover;
 
   border: 2px solid $color-gray;

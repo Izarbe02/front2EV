@@ -43,6 +43,7 @@
 
                 <label>Nombre:</label>
                 <input type="text" v-model="usuarioEditado.nombre" />
+
                 <label>Username:</label>
                 <input type="text" v-model="usuarioEditado.username" />
 
@@ -53,13 +54,13 @@
                 <input type="text" v-model="usuarioEditado.contrasenia" />
 
                 <label>Ubicación:</label>
-                <input type="text" v-model="usuarioEditado.ubicacion" />
+                <input type="text" v-model="ubicacionEditada" />
 
                 <label>IdRol:</label>
                 <input type="number" v-model="idRolEditado" />
 
                 <div class="modal-botones">
-                    <button @click="guardarCambios" :disabled="!usuarioEditado">Guardar</button>
+                    <button @click="guardarCambios">Guardar</button>
                     <button @click="cerrarFormulario">Cancelar</button>
                 </div>
             </div>
@@ -73,9 +74,7 @@ import { useUsuariosStore } from '@/stores/usuarios';
 import type UsuarioDto from '@/stores/dtos/usuario.dto';
 
 const modalVisible = ref(false);
-const usuarioEditado = ref<UsuarioDto | null>(null);
-const esModoEdicion = ref(false)
-
+const esModoEdicion = ref(false);
 const store = useUsuariosStore();
 const { usuarios, findAll, deleteUsuario, updateUsuario, createUsuario } = store;
 
@@ -83,22 +82,43 @@ onMounted(() => {
     findAll();
 });
 
+// Asegurar que usuarioEditado siempre tiene una estructura válida
+const nuevoUsuario = (): UsuarioDto => ({
+    id: 0,
+    nombre: '',
+    username: '',
+    email: '',
+    contrasenia: '',
+    ubicacion: '',
+    idRol: 1
+});
 
+const usuarioEditado = ref<UsuarioDto>(nuevoUsuario());
+
+// Computed para manejar idRolEditado correctamente
 const idRolEditado = computed({
-    get: () => usuarioEditado.value?.idRol ?? 0,
+    get: () => usuarioEditado.value.idRol ?? 1,
     set: (value) => {
-        if (usuarioEditado.value) usuarioEditado.value.idRol = Number(value);
+        usuarioEditado.value.idRol = Number(value) || 1;
+    }
+});
+
+// Computed para evitar errores con `ubicacion`
+const ubicacionEditada = computed({
+    get: () => usuarioEditado.value?.ubicacion ?? '',
+    set: (value) => {
+        if (usuarioEditado.value) usuarioEditado.value.ubicacion = value;
     }
 });
 
 const abrirForm = (usuario: UsuarioDto) => {
     usuarioEditado.value = { ...usuario };
-    esModoEdicion.value = true
+    esModoEdicion.value = true;
     modalVisible.value = true;
 };
 
 const abrirFormularioNuevo = () => {
-    usuarioEditado.value = { id: 0, nombre: '', email: '', ubicacion: '', idRol: 1 };
+    usuarioEditado.value = nuevoUsuario();
     esModoEdicion.value = false;
     modalVisible.value = true;
 };
@@ -118,6 +138,7 @@ const guardarCambios = async () => {
         await createUsuario(usuarioEditado.value);
     }
     modalVisible.value = false;
+    findAll();
 };
 
 const cerrarFormulario = () => {
@@ -127,6 +148,7 @@ const cerrarFormulario = () => {
 const borrarUsuario = async (id: number) => {
     if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
         await deleteUsuario(id);
+        findAll();
     }
 };
 </script>

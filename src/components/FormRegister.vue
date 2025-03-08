@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
-import type UsuarioDto from '@/dto/UsuarioDto'; // Importa el DTO
+import type UsuarioDto from '@/stores/dtos/usuario.dto'; // Importa el DTO
 
 const usuariosStore = useUsuariosStore();
 
@@ -89,7 +89,7 @@ const registrarUsuario = async () => {
   }
 
   &__form {
-    background: url('@/assets/images/fondo1.jpg') no-repeat center center;
+    background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
     display: flex;
     flex-direction: column;
     gap: 16px;

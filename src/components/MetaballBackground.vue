@@ -5,6 +5,7 @@
   <script setup>
   import { onMounted } from "vue";
   
+  
   onMounted(() => {
     let container = document.getElementById("metaball-container");
     let canvas = document.createElement("canvas");
