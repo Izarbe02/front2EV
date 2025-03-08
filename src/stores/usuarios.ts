@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type UsuarioDto from "@/stores/dtos/usuario.dto.ts";
+import type { UsuarioLoginDto } from "./dtos/usuarioLogin.dto";
 
 
 export const useUsuariosStore = defineStore("usuarios", () => {
@@ -100,7 +101,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     }
   }
 
-  async function login(usuarioLogin: UsuarioDto) {
+  async function login(usuarioLogin: UsuarioLoginDto) {
     try {
       const response = await fetch("http://localhost:8888/api/auth/login", {
         method: "POST",

@@ -19,8 +19,8 @@
             <td>{{ evento.nombre }}</td>
             <td>{{ evento.descripcion }}</td>
             <td>{{ evento.ubicacion }}</td>
-            <td>{{ formatearFecha(evento.fecha_inicio) }}</td>
-            <td>{{ formatearFecha(evento.fecha_fin) }}</td>
+            <td>{{ formatearFecha(evento.fechaInicio) }}</td>
+            <td>{{ formatearFecha(evento.fechaFin) }}</td>
             <td>
               <button class="btn-editar" @click="editarEvento(evento)">
                 <i class="fas fa-pencil-alt"></i>

@@ -12,33 +12,41 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, onMounted } from "vue";
-  
-  const canvasSize = 160;
-  const logoCanvas = ref<HTMLCanvasElement | null>(null);
-  let ctx: CanvasRenderingContext2D | null = null;
-  
-  const images = ref<HTMLImageElement[]>([]);
-  const isAnimating = ref(false);
-  const animationProgress = ref(0);
-  const animationSpeed = 0.08;
-  const separationDistance = 10;
-  const rotationAngle = ref(0);
-  
-  
-  const logoPartsSrc = [
-    new URL('@/assets/Images/part1logo.png', import.meta.url).href,
-    new URL('@/assets/Images/part2logo.png', import.meta.url).href,
-    new URL('@/assets/Images/part3logo.png', import.meta.url).href,
-  ];
-  
-  onMounted(() => {
-  if (logoCanvas.value) {
-    logoCanvas.value.width = canvasSize;
-    logoCanvas.value.height = canvasSize;
-    ctx = logoCanvas.value.getContext("2d");
+  import { ref, onMounted, nextTick } from "vue";
+
+const canvasSize = 160;
+const logoCanvas = ref<HTMLCanvasElement | null>(null);
+const images = ref<HTMLImageElement[]>([]);
+const isAnimating = ref(false);
+const animationProgress = ref(0);
+const animationSpeed = 0.08;
+const separationDistance = 10;
+const rotationAngle = ref(0);
+
+const logoPartsSrc = [
+  new URL("@/assets/Images/part1logo.png", import.meta.url).href,
+  new URL("@/assets/Images/part2logo.png", import.meta.url).href,
+  new URL("@/assets/Images/part3logo.png", import.meta.url).href,
+];
+
+onMounted(async () => {
+  await nextTick(); 
+
+  if (!logoCanvas.value) {
+    console.error("No se encontró el canvas en el DOM");
+    return;
   }
 
+  const ctx = logoCanvas.value.getContext("2d");
+  if (!ctx) {
+    console.error("No se pudo obtener el contexto 2D del canvas");
+    return;
+  }
+
+  logoCanvas.value.width = canvasSize;
+  logoCanvas.value.height = canvasSize;
+
+  // Cargar imágenes
   logoPartsSrc.forEach((src, index) => {
     const img = new Image();
     img.onload = () => {
@@ -55,80 +63,88 @@
   });
 });
 
-  
-  function startAnimation() {
-    isAnimating.value = true;
-    animate(1);
-  }
-  
-  function resetAnimation() {
-    isAnimating.value = true;
-    animate(0);
-  }
-  
-  function animate(targetProgress: number) {
-    if (!isAnimating.value) return;
-
-    animationProgress.value += (targetProgress - animationProgress.value) * animationSpeed;
-    rotationAngle.value += 0.05; // Incrementamos el ángulo de rotación en cada frame
-
-    drawLogo(animationProgress.value);
-
-    if (Math.abs(targetProgress - animationProgress.value) > 0.01) {
-        requestAnimationFrame(() => animate(targetProgress));
-    } else {
-        isAnimating.value = false;
-    }
+function startAnimation() {
+  isAnimating.value = true;
+  animate(1);
 }
-  
+
+function resetAnimation() {
+  isAnimating.value = true;
+  animate(0);
+}
+
+function animate(targetProgress: number) {
+  if (!isAnimating.value) return;
+
+  animationProgress.value += (targetProgress - animationProgress.value) * animationSpeed;
+  rotationAngle.value += 0.05; // Incrementamos el ángulo de rotación en cada frame
+
+  drawLogo(animationProgress.value);
+
+  if (Math.abs(targetProgress - animationProgress.value) > 0.01) {
+    requestAnimationFrame(() => animate(targetProgress));
+  } else {
+    isAnimating.value = false;
+  }
+}
+
 function drawLogo(progress: number) {
-    if (!ctx || images.value.length < 3) return;
+  const ctx = logoCanvas.value?.getContext("2d"); // 🔥 Obtenemos el contexto dinámicamente
 
-    ctx.clearRect(0, 0, canvasSize, canvasSize);
+  if (!ctx) {
+    console.warn("No se pudo obtener el contexto del canvas");
+    return;
+  }
 
-    const width = canvasSize;
-    const height = canvasSize;
-    const imgScale = 0.8;
-    const offset = separationDistance * easeInOutQuad(progress);
-    const spacing = width / 10;
+  if (images.value.length < 3) return;
 
-    images.value.forEach((img, index) => {
-        if (!img) return;
+  ctx.clearRect(0, 0, canvasSize, canvasSize);
 
-        const aspectRatio = img.width / img.height;
-        let imgWidth = (width / 3) * imgScale;
-        let imgHeight = imgWidth / aspectRatio;
+  const width = canvasSize;
+  const height = canvasSize;
+  const imgScale = 0.8;
+  const offset = separationDistance * easeInOutQuad(progress);
+  const spacing = width / 10;
 
-        if (imgHeight > height * imgScale) {
-            imgHeight = height * imgScale;
-            imgWidth = imgHeight * aspectRatio;
-        }
+  images.value.forEach((img, index) => {
+    if (!img) return;
 
-        let xPos = (index === 0) ? width / 2 - imgWidth / 2 :
-                   (index === 1) ? (width / 2 - imgWidth / 2) - spacing - offset :
-                   (width / 2 - imgWidth / 2) + spacing + offset;
+    const aspectRatio = img.width / img.height;
+    let imgWidth = (width / 3) * imgScale;
+    let imgHeight = imgWidth / aspectRatio;
 
-        let yPos = (height - imgHeight) / 2;
+    if (imgHeight > height * imgScale) {
+      imgHeight = height * imgScale;
+      imgWidth = imgHeight * aspectRatio;
+    }
 
-        ctx.save(); // Guardamos el estado del contexto
+    let xPos =
+      index === 0
+        ? width / 2 - imgWidth / 2
+        : index === 1
+        ? width / 2 - imgWidth / 2 - spacing - offset
+        : width / 2 - imgWidth / 2 + spacing + offset;
 
-        if (index === 0) { // Solo giramos la imagen del centro
-            ctx.translate(xPos + imgWidth / 2, yPos + imgHeight / 2); // Movemos el centro de rotación
-            ctx.rotate(rotationAngle.value); // Aplicamos la rotación
-            ctx.translate(-imgWidth / 2, -imgHeight / 2); // Movemos la imagen de vuelta
-        }
+    let yPos = (height - imgHeight) / 2;
 
-        ctx.drawImage(img, index === 0 ? 0 : xPos, index === 0 ? 0 : yPos, imgWidth, imgHeight);
+    ctx.save();
 
-        ctx.restore(); // Restauramos el contexto para que las otras imágenes no se vean afectadas
-    });
+    if (index === 0) {
+      ctx.translate(xPos + imgWidth / 2, yPos + imgHeight / 2);
+      ctx.rotate(rotationAngle.value);
+      ctx.translate(-imgWidth / 2, -imgHeight / 2);
+    }
+
+    ctx.drawImage(img, index === 0 ? 0 : xPos, index === 0 ? 0 : yPos, imgWidth, imgHeight);
+
+    ctx.restore();
+  });
 }
 
+function easeInOutQuad(x: number): number {
+  return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+}
 
-  
-  function easeInOutQuad(x: number): number {
-    return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
-  }
   </script>
   
   <style scoped>

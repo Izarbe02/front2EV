@@ -6,7 +6,8 @@ import Footer from '@/components/Footer.vue';
 
 const route = useRoute()
 
-const eventoId = route.query.id ? Number(route.query.id) : null
+const eventoId = route.query.id ? Number(route.query.id) : undefined;
+
 </script>
 
 <template>

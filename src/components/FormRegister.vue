@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
-import type UsuarioDto from '@/dto/UsuarioDto'; // Importa el DTO
+import type UsuarioDto from '@/stores/dtos/usuario.dto'; // Importa el DTO
 
 const usuariosStore = useUsuariosStore();
 
