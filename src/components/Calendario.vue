@@ -60,7 +60,7 @@
   </script>
   
   <style scoped>
-  /* 📌 Mantiene el diseño original pero hace las celdas más pequeñas */
+  
   .calendar-container {
     display: flex;
     justify-content: center;
@@ -82,20 +82,17 @@
     max-width: 600px;
   }
   
-  /* 📌 🔥 Hace las celdas más pequeñas sin perder el estilo original */
   :deep(.v-calendar-month__day) {
-    min-height: 50px !important; /* 🔥 Reduce la altura de las celdas */
+    min-height: 50px !important;
     height: 50px !important;
     padding: 2px !important;
   }
   
-  /* 📌 🔥 Ajustar el tamaño de los eventos */
   :deep(.v-event) {
     font-size: 10px !important;
     padding: 1px 4px !important;
   }
   
-  /* 📌 🔥 Ajustar los nombres de los días (encabezado) */
   :deep(.v-calendar-weekly__head-weekday) {
     font-size: 12px !important;
     padding: 2px !important;
