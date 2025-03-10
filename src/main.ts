@@ -9,15 +9,19 @@ import router from './router'
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
+import { VCalendar } from "vuetify/labs/VCalendar";
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@fortawesome/fontawesome-free/css/all.css';
 // import vuetify from "./plugins/vuetify";
 
 const vuetify = createVuetify({
-    components,
-    directives,
-  })
+  components: {
+    ...components,
+    VCalendar, // 🔥 REGISTRAR VCalendar
+  },
+  directives,
+});
 
 const app = createApp(App)
 

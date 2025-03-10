@@ -13,17 +13,6 @@
         </v-carousel>
       </div>
 
-      <!-- Calendario de eventos -->
-      <div class="homepage__calendar">
-        <v-sheet height="600">
-          <v-calendar
-            ref="calendar"
-            :events="events"
-            color="$color-red"
-          ></v-calendar>
-        </v-sheet>
-      </div>
-
       <!-- Tarjetas de proximos eventos -->
       <div class="homepage__events">
         <h2 class="homepage__title">Próximos Eventos</h2>

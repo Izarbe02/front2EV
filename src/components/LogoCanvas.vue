@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from "vue";
 
-const canvasSize = 160;
+const canvasSize = 80;
 const logoCanvas = ref<HTMLCanvasElement | null>(null);
 const images = ref<HTMLImageElement[]>([]);
 const isAnimating = ref(false);
@@ -77,7 +77,7 @@ function animate(targetProgress: number) {
 if (!isAnimating.value) return;
 
 animationProgress.value += (targetProgress - animationProgress.value) * animationSpeed;
-rotationAngle.value += 0.05; // Incrementamos el ángulo de rotación en cada frame
+rotationAngle.value += 0.05;
 
 drawLogo(animationProgress.value);
 
@@ -89,7 +89,7 @@ if (Math.abs(targetProgress - animationProgress.value) > 0.01) {
 }
 
 function drawLogo(progress: number) {
-const ctx = logoCanvas.value?.getContext("2d"); // 🔥 Obtenemos el contexto dinámicamente
+const ctx = logoCanvas.value?.getContext("2d"); 
 
 if (!ctx) {
   console.warn("No se pudo obtener el contexto del canvas");
@@ -102,9 +102,9 @@ ctx.clearRect(0, 0, canvasSize, canvasSize);
 
 const width = canvasSize;
 const height = canvasSize;
-const imgScale = 0.8;
+const imgScale = 1.5;
 const offset = separationDistance * easeInOutQuad(progress);
-const spacing = width / 10;
+const spacing = width / 5;
 
 images.value.forEach((img, index) => {
   if (!img) return;

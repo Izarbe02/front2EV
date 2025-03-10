@@ -135,7 +135,6 @@ export const useEventosStore = defineStore("eventos", () => {
 
     async function getEventoPorIdORganizador(idorganizador: number) {
         try {
-            console.log(`📡 Solicitando eventos para organizador ${idorganizador}...`);
             
             const response = await fetch(`http://localhost:8888/api/Evento/organizadorid/${idorganizador}`);
             if (!response.ok) throw new Error("Error al obtener eventos por organizador");

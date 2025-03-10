@@ -108,7 +108,7 @@ const formatearFecha = (fecha: Date | string) => {
 }
 
 .evento-card {
-  height: 550px;
+  height: 600px;
   background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
     background-size: cover;
 
