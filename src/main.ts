@@ -18,7 +18,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 const vuetify = createVuetify({
   components: {
     ...components,
-    VCalendar, // 🔥 REGISTRAR VCalendar
+    VCalendar,
   },
   directives,
 });

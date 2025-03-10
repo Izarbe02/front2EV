@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, nextTick } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from "vue";
 import EventoDto from "@/stores/dtos/evento.dto";
 import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
 
@@ -86,7 +85,7 @@ export const useEventosStore = defineStore("eventos", () => {
 
             if (!response.ok) throw new Error("Error al actualizar evento");
 
-            await findAll(); // Refresca la lista después de actualizar
+            await findAll(); 
         } catch (error) {
             console.error("Error al actualizar evento:", error);
         }
