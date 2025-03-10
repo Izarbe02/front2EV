@@ -2,17 +2,6 @@
   <section class="homepage">
     <div class="homepage__container">
 
-      <!-- Carrusel de imagenes -->
-      <div class="homepage__carousel">
-        <v-carousel cycle height="400">
-          <v-carousel-item
-            v-for="(item, i) in carouselItems"
-            :key="i"
-            :src="item.src"
-          ></v-carousel-item>
-        </v-carousel>
-      </div>
-
       <!-- Tarjetas de proximos eventos -->
       <div class="homepage__events">
         <h2 class="homepage__title">Próximos Eventos</h2>
@@ -54,17 +43,6 @@ export default defineComponent({
     const store = useEventosStore();
     const events = ref<EventoDto[]>([]);
 
-    // Lista de imagenes del carrusel
-    const carouselItems = ref([
-      { src: "https://imagenes.heraldo.es/files/image_990_auto/files/fp/uploads/imagenes/2024/04/12/con-imagen-afterpunk-y-trajes-hechos-en-casa-toco-john-landis-fans-con-santi-rex-al-frente-al-fondo-luis-linacero.r_d.1371-843.jpeg" },
-      { src: "https://cdn.aragonmusical.com/wp-content/uploads/2016/09/Viva-Belgrado-660x330.jpg" },
-      { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/13/jaime-berdejo-alma-de-la-muestra-de-pop-rock-y-otros-rollos-se-toma-un-respiro.jpeg" },
-      { src: "https://cdn.aragonmusical.com/wp-content/uploads/2016/09/Viva-Belgrado-660x330.jpg" },
-      { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/13/cincuenta-grupos-locales-alguno-mas-curtido-otros-totalmente-desconocidos-e-integrados-por-adolescentes-que-solo-habian-actuado-en-colegios-o-institutos-subieron-al-escenario-en-la-muestra-de-pop-rock-y-otros-rollos-zara.jpeg" },
-      { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/13/john-landis-fans-muestra-de-pop-rock-y-otros-rollos-zaragoza-1984.jpeg" },
-      { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/12/principal-izquierda-con-luis-urko-que-luego-montaria-el-mitico-bar-paradis-al-micro-a-la-guitarra-fabian-simon.jpeg" }
-    ]);
-
     // Cargar los proximos eventos al montar el componente
     onMounted(async () => {
       await store.proximosEventos();
@@ -72,8 +50,7 @@ export default defineComponent({
     });
 
     return {
-      events,
-      carouselItems
+      events
     };
   }
 });
@@ -92,10 +69,9 @@ export default defineComponent({
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-    margin-top: 5%;
+    margin-top: 1%;
   }
 
-  &__carousel,
   &__calendar {
     width: 100%;
     max-width: 1200px;

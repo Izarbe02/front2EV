@@ -4,6 +4,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import HomePage from '@/components/HomePage.vue'
 import Calendario from '@/components/Calendario.vue';
+import CarouselHomePage from '@/components/CarouselHomePage.vue';
 </script>
 
 
@@ -11,11 +12,20 @@ import Calendario from '@/components/Calendario.vue';
 
 
  <Header/>
-
- <HomePage/>
+ <div class="carouselContainer">
+    <CarouselHomePage/>
+ </div>
  <Calendario/>
+ <HomePage/>
+ 
 
 <Footer/>
 </template>
 
-<style></style>
+<style scoped lang="scss">
+.carouselContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>

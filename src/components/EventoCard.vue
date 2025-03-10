@@ -30,8 +30,9 @@ const formatearFecha = (fecha: Date | string) => {
   });
 };
 
-</script>
+let fechaActual = new Date();
 
+</script>
 <template>
   <div class="evento-container">
     <h1 class="evento-container__titulo">EVENTOS</h1>
@@ -39,7 +40,13 @@ const formatearFecha = (fecha: Date | string) => {
     <div class="evento-container__tarjetas">
       <template v-if="eventosMostrados.length > 0">
         <div v-for="evento in eventosMostrados" :key="evento.id" class="evento-card">
-          <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
+          <!-- Contenedor de la imagen con "acabado" -->
+          <div class="evento-card__imagen-container">
+            <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
+            <div v-if="new Date(evento.fechaFin) < fechaActual" class="evento-card__acabado">
+              <h3>Acabado</h3>
+            </div>
+          </div>
 
           <div class="evento-card__contenido">
             <p class="evento-card__titulo">{{ evento.nombre }}</p>
@@ -47,7 +54,7 @@ const formatearFecha = (fecha: Date | string) => {
             <div class="evento-card__info">
               <span class="evento-card__fecha">
                 {{ formatearFecha(evento.fechaInicio) }} -
-                 {{ formatearFecha(evento.fechaFin) }}
+                {{ formatearFecha(evento.fechaFin) }}
               </span>
               <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
             </div>
@@ -65,6 +72,7 @@ const formatearFecha = (fecha: Date | string) => {
     </div>
   </div>
 </template>
+
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
@@ -106,19 +114,17 @@ const formatearFecha = (fecha: Date | string) => {
     }
   }
 }
-
 .evento-card {
   height: 600px;
   background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
-    background-size: cover;
-
+  background-size: cover;
   border: 2px solid $color-gray;
   border-radius: 8px;
   color: #fff;
   width: 100%;
   max-width: 430px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   &:hover {
@@ -126,15 +132,35 @@ const formatearFecha = (fecha: Date | string) => {
     box-shadow: 0px 0px 15px rgba(92, 92, 92, 0.7);
   }
 
-  &__imagen {
+  &__imagen-container {
+    position: relative; /* Permite posicionar el "Acabado" dentro */
     width: 100%;
     height: 50%;
+  }
+
+  &__imagen {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+  }
+
+  &__acabado {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    background: rgba(255, 0, 0, 0.8); 
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-family: $first-font;
   }
 
   &__contenido {
     padding: 12px;
-    flex-grow: 1; 
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
@@ -149,15 +175,14 @@ const formatearFecha = (fecha: Date | string) => {
   }
 
   &__info {
-    margin-left: 10% ;
+    margin-left: 10%;
     font-family: $first-font;
     font-size: 1.3rem;
     color: rgb(199, 199, 199);
     display: flex;
     flex-direction: column;
     gap: 4px;
-  
-    margin-top: auto; 
+    margin-top: auto;
   }
 
   &__boton {
@@ -169,12 +194,13 @@ const formatearFecha = (fecha: Date | string) => {
     border-radius: 5px;
     font-weight: bold;
     transition: background 0.3s ease;
-    margin-top: auto; 
+    margin-top: auto;
 
     &:hover {
       background-color: $color-lightred;
     }
   }
 }
+
 
 </style>

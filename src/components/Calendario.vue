@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="calendario">
     <v-row justify="space-around">
       <v-date-picker
         v-model="date"
@@ -42,3 +42,11 @@ const allowedDates = (val: unknown): boolean => {
   return eventosDias.value.has(fechaStr);
 };
 </script>
+
+<style scoped lang="scss">
+.calendario{
+  margin-top: 3%;
+  
+}
+
+</style>

@@ -26,8 +26,10 @@
   
   <style scoped lang="scss">
   .carousel {
+    
     width: 100%;
     max-width: 1200px;
+    margin-top: 7%;
   }
   </style>
   
