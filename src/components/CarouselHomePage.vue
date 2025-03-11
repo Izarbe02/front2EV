@@ -1,35 +1,165 @@
 <template>
-    <div class="carousel">
-      <v-carousel cycle height="400">
-        <v-carousel-item
-          v-for="(item, i) in items"
-          :key="i"
-          :src="item.src"
-        ></v-carousel-item>
-      </v-carousel>
-    </div>
-  </template>
+  <div class="carousel">
+    <v-carousel cycle height="400" hide-delimiters>
+      <template v-slot:prev="{ props }">
+        <v-btn
+          class="carousel__button carousel__button--prev"
+          @click="props.onClick"
+        >
+          ❮
+        </v-btn>
+      </template>
+
+      <!-- Botón Siguiente -->
+      <template v-slot:next="{ props }">
+        <v-btn
+          class="carousel__button carousel__button--next"
+          @click="props.onClick"
+        >
+          ❯
+        </v-btn>
+      </template>
+
+      <v-carousel-item v-for="(item, i) in items" :key="i">
+        <div class="carousel__item">
+
+          <v-img :src="item.src" cover class="carousel__image"></v-img>
+
+          <div class="carousel__text">
+            {{ item.text }}
+          </div>
+
+          <v-btn 
+            class="carousel__buttonVerMas"
+            color="primary"
+            variant="flat"
+            :to="item.url"
+          >
+            Ver más
+          </v-btn>
+        </div>
+      </v-carousel-item>
+    </v-carousel>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+
+const items = ref([
+{
+    src: "https://i.pinimg.com/736x/dd/23/a9/dd23a956a354682773e16b759b133226.jpg",
+    url: "/eventos",
+    text: "Visita nuestros eventos",
+  },
+  {
+    src: "https://cdn.aragonmusical.com/wp-content/uploads/2016/09/Viva-Belgrado-660x330.jpg",
+    url: "/organizadores",
+    text: "Conoce nuestros organizadores",
+  },
+  {
+    src: "https://i.pinimg.com/736x/fc/5e/5a/fc5e5a9fb83a8b202cc4ac90252cb770.jpg",
+    url: "/aboutus",
+    text: "Sobre nosotros",
+  }
   
-  <script setup lang="ts">
-  import { ref } from "vue";
-  
-  const items = ref([
-    { src: "https://imagenes.heraldo.es/files/image_990_auto/files/fp/uploads/imagenes/2024/04/12/con-imagen-afterpunk-y-trajes-hechos-en-casa-toco-john-landis-fans-con-santi-rex-al-frente-al-fondo-luis-linacero.r_d.1371-843.jpeg" },
-    { src: "https://cdn.aragonmusical.com/wp-content/uploads/2016/09/Viva-Belgrado-660x330.jpg" },
-    { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/13/jaime-berdejo-alma-de-la-muestra-de-pop-rock-y-otros-rollos-se-toma-un-respiro.jpeg" },
-    { src: "https://cdn.aragonmusical.com/wp-content/uploads/2016/09/Viva-Belgrado-660x330.jpg" },
-    { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/13/cincuenta-grupos-locales-alguno-mas-curtido-otros-totalmente-desconocidos-e-integrados-por-adolescentes-que-solo-habian-actuado-en-colegios-o-institutos-subieron-al-escenario-en-la-muestra-de-pop-rock-y-otros-rollos-zara.jpeg" },
-    { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/13/john-landis-fans-muestra-de-pop-rock-y-otros-rollos-zaragoza-1984.jpeg" },
-    { src: "https://imagenes.heraldo.es/files/image_990_auto/uploads/imagenes/2024/04/12/principal-izquierda-con-luis-urko-que-luego-montaria-el-mitico-bar-paradis-al-micro-a-la-guitarra-fabian-simon.jpeg" }
-  ]);
-  </script>
-  
-  <style scoped lang="scss">
-  .carousel {
-    
-    width: 100%;
+]);
+</script>
+
+<style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+
+.carousel {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 21%;
+  @media (min-width: 768px){
     max-width: 1200px;
     margin-top: 7%;
   }
-  </style>
-  
+}
+
+.carousel__item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.carousel__text {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6); 
+  color: $color-red;
+  padding: 2px 8px;
+  font-size: 180%;
+  font-weight: bold;
+  border-radius: 5px;
+  font-family: $first-font;
+  @media (min-width: 768px) {
+    padding: 8px 12px;
+    font-size: 200%;
+    top: 10px;
+    left: 10px;
+  }
+}
+
+
+.carousel__buttonVerMas {
+  position: absolute;
+  bottom: 6%;
+  left: 6%;
+  background-color: #000000e1 !important;
+  color: $color-lightred !important;
+  border: 2px solid $color-red;
+  border-radius: 7px !important;
+  font-family: $first-font;
+  font-size: 110%;
+  @media (min-width: 768px) {
+    font-size: 120%;
+    bottom: 6%;
+    left: 6%;
+    transform: translateX(-50%);
+  }
+}
+
+/* --------------------------------------------------------- */
+.carousel__button {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0) !important;
+  color: rgba($color: #c5c5c5, $alpha: 1.0) !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+  box-shadow: none !important;
+}
+/* Botón Anterior */
+.carousel__button--prev {
+  left: 10px;
+}
+
+/* Botón Siguiente */
+.carousel__button--next {
+  right: 10px;
+}
+
+
+/* Efecto hover */
+.carousel__button:hover {
+  background-color: rgba(0, 0, 0, 0.918) !important;
+  color: $color-lightred !important;
+}
+</style>
