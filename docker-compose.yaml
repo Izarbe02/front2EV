@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: 2EvFront
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5741:80"
+    volumes:
+      - ./src/assets:/usr/share/nginx/html/src/assets
+    restart: always

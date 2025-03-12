@@ -1,0 +1,60 @@
+@mixin boton-rojo {
+    background: transparent;
+    border: 1px solid $color-red;
+    color: $color-lightred;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 16px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background: $color-red;
+        color: white;
+    }
+
+    &:active {
+        box-shadow: 0 0 10px 3px rgba($color-red, 0.7);
+    }
+}
+
+
+@mixin boton-gris {
+    background: $color-darkgray;
+    border: 1px solid $color-darkgray;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 16px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background: lighten($color-darkgray, 10%);
+    }
+
+    &:active {
+        box-shadow: 0 0 10px 3px rgba($color-darkgray, 0.7);
+    }
+}
+
+@mixin titulo-evento {
+    margin-top: 5%;
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #d40202;
+    text-shadow: 1px 1px 1px rgba(187, 187, 187, 0.7);
+    width: 100%;
+    padding: 10px;
+    font-weight: 700;
+    font-family: $titulo;
+}
+
+
+@mixin desktop {
+    @media (min-width: 1024px) {
+      @content;
+    }
+  }
+  
