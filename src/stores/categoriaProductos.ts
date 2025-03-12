@@ -13,7 +13,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
   // Obtener todas las categorías (GET: api/CategoriaProducto)
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/CategoriaProducto");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto");
       if (!response.ok) throw new Error("Error al obtener categorías");
       
       const data = await response.json();
@@ -27,7 +27,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
   // Obtener una categoría por ID (GET: api/CategoriaProducto/{id})
   async function getCategoria(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/CategoriaProducto/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto/${id}`);
       if (!response.ok) throw new Error("Error al obtener la categoría");
       
       const data = await response.json();
@@ -42,7 +42,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
   // Crear una nueva categoría (POST: api/CategoriaProducto)
   async function createCategoria(categoria: CategoriaProductoDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/CategoriaProducto", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(categoria),
@@ -61,7 +61,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
   // Actualizar una categoría (PUT: api/CategoriaProducto/{id})
   async function updateCategoria(id: number, updatedCategoria: CategoriaProductoDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/CategoriaProducto/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedCategoria),
@@ -79,7 +79,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
   // Eliminar una categoría (DELETE: api/CategoriaProducto/{id})
   async function deleteCategoria(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/CategoriaProducto/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar la categoría");

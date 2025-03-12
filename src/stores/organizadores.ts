@@ -13,7 +13,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Obtener todos los establecimientos (GET: api/Organizador)
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/Organizador");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Organizador");
       if (!response.ok) throw new Error("Error al obtener establecimientos");
 
       const data = await response.json();
@@ -27,7 +27,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Obtener un establecimiento por ID (GET: api/Organizador/{id})
   async function getOrganizador(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`);
       if (!response.ok) throw new Error("Error al obtener organizador");
 
       currentOrganizador.value = await response.json();
@@ -41,7 +41,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Crear un nuevo establecimiento (POST: api/Organizador)
   async function createEstablecimiento(establecimiento: OrganizadorDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Organizador", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Organizador", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(establecimiento),
@@ -60,7 +60,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Actualizar un establecimiento (PUT: api/Organizador/{id})
   async function updateEstablecimiento(id: number, updatedEstablecimiento: OrganizadorDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedEstablecimiento),
@@ -79,7 +79,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Eliminar un establecimiento (DELETE: api/Organizador/{id})
   async function deleteEstablecimiento(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar establecimiento");

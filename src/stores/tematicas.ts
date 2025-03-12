@@ -13,7 +13,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
   // Obtener todas las tematicas (GET: api/Tematica)
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/Tematica");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Tematica");
       if (!response.ok) throw new Error("Error al obtener tematicas");
       const data = await response.json();
       tematicas.value.splice(0, tematicas.value.length, ...data);
@@ -26,7 +26,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
   // Obtener una tematica por ID (GET: api/Tematica/{id})
   async function getTematica(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Tematica/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Tematica/${id}`);
       if (!response.ok) throw new Error("Error al obtener la tematica");
       const data = await response.json();
       currentTematica.value = data;
@@ -40,7 +40,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
   // Crear una nueva tematica (POST: api/Tematica)
   async function createTematica(tematica: TematicaDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Tematica", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Tematica", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tematica),
@@ -58,7 +58,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
   // Actualizar una tematica (PUT: api/Tematica/{id})
   async function updateTematica(id: number, updatedTematica: TematicaDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Tematica/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Tematica/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedTematica),
@@ -75,7 +75,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
   // Eliminar una tematica (DELETE: api/Tematica/{id})
   async function deleteTematica(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Tematica/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Tematica/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar la tematica");

@@ -11,7 +11,7 @@ export const useProductosStore = defineStore("productos", () => {
 
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/Producto");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Producto");
       if (!response.ok) throw new Error("Error al obtener productos");
       
       const data = await response.json();
@@ -24,7 +24,7 @@ export const useProductosStore = defineStore("productos", () => {
 
   async function getProducto(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Producto/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Producto/${id}`);
       if (!response.ok) throw new Error("Error al obtener el producto");
       
       const producto = await response.json();
@@ -38,7 +38,7 @@ export const useProductosStore = defineStore("productos", () => {
 
   async function createProducto(producto: ProductoDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Producto", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Producto", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(producto),
@@ -56,7 +56,7 @@ export const useProductosStore = defineStore("productos", () => {
 
   async function updateProducto(id: number, productoActualizado: ProductoDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Producto/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Producto/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productoActualizado),
@@ -74,7 +74,7 @@ export const useProductosStore = defineStore("productos", () => {
 
   async function deleteProducto(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Producto/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Producto/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el producto");
