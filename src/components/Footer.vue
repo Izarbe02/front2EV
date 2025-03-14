@@ -25,6 +25,9 @@
                     <v-col cols="auto">
                         <v-btn to="/administrador" class="footer__link">Zona Administrador</v-btn>
                     </v-col>
+                    <v-col cols="auto">
+                        <v-btn to="/establecimientos" class="footer__link">establecimientos(autoria)</v-btn>
+                    </v-col>
                 </v-row>
             </div>
 
