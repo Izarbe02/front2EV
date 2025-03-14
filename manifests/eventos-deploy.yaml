@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: eventos
-        image: guillermocarrion/docker-frontend-eventos:04
+        image: guillermocarrion/docker-frontend-eventos:05
         imagePullPolicy: Always
         ports:
         - containerPort: 80

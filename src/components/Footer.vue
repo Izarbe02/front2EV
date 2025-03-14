@@ -8,7 +8,7 @@
         <v-container class="footer__container">
             <div class="footer__section footer__section--top">
                 <v-img src="/logo.png" alt="Logo" class="footer__logo" contain></v-img>
-                <span class="footer__text">&copy; 2025 Mi Empresa. Todos los derechos reservados.</span>
+                <span class="footer__text">&copy; 2025 Mi Empresa. Examen Guillermo Carrion</span>
             </div>
 
             <div class="footer__section footer__section--middle">
