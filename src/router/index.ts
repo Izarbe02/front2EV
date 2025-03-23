@@ -10,6 +10,7 @@ import ProductoView from '@/views/ProductoView.vue'
 import OrganizadorPageView from '@/views/OrganizadorPageView.vue'
 import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
 import Register from '@/views/RegistroView.vue'
+import PatrocinadoresView from '@/views/PatrocinadoresView.vue'
 
 
 
@@ -67,6 +68,11 @@ const router = createRouter({
       path: '/Register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/Patrocinadores',
+      name: 'Patrocinadores',
+      component: PatrocinadoresView
     }
    /* {
       path: '/about',
