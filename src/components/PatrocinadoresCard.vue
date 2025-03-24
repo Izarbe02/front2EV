@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useOrganizadoresStore } from "@/stores/organizadores";
+import { usePatrocinadorStore } from "@/stores/patrocinadores.ts";
 
 
-const store = useOrganizadoresStore();
-const { organizadores, findAll } = store;
+const store = usePatrocinadorStore();
+const { patrocinadores, findAll } = store;
 
 
 // Cargar productos al montar el componente
@@ -15,24 +15,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="organizadores-container">
-    <h1 class="titulo">ORGANIZADORES</h1>
-    <div class="organizadores-container__tarjetas">
-      <div v-for="organizador in organizadores" :key="organizador.id" class="organizador-card">
-        <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-card__imagen" />
-        <div class="organizador-card__contenido">
-          <p class="organizador-card__titulo">{{ organizador.nombre }}</p>
+  <div class="patrocinadores-container">
+    <h1 class="titulo">Patrocinadores</h1>
+    <div class="patrocinadores-container__tarjetas">
+      <div v-for="patrocinador in patrocinadores" :key="patrocinador.id" class="patrocinador-card">
+        <img :src="patrocinador.logo" :alt="patrocinador.nombre" class="patrocinador-card__imagen" />
+        <div class="patrocinador-card__contenido">
+          <p class="patrocinador-card__titulo">{{ patrocinador.nombre }}</p>
 
-          <div class="organizador-card__info">
+          <div class="patrocinador-card__info">
             
-            <span class="organizador-card__localizacion">
-              {{ organizador.ubicacion }}
+            <span class="patrocinador-card__localizacion">
+              {{ patrocinador.contacto }}
             </span>
-            
+          
           </div>
-
-          <button class="organizador-card__boton">
-            <RouterLink :to="`/OrganizadorDetalle?id=${organizador.id}`" class="organizador-card__link">
+          <button class="patrocinador-card__boton">
+            <RouterLink :to="`/patrocinadorDetalle?id=${patrocinador.id}`" class="patrocinador-card__link">
                 Saber más
             </RouterLink>
           </button>
@@ -46,7 +45,7 @@ onMounted(() => {
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
-.organizadores-container {
+.patrocinadores-container {
   padding: 2%;
   margin-top: 17%;
 
@@ -65,7 +64,7 @@ h1 {
   text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
 }
 
-.organizador-card {
+.patrocinador-card {
   background-color: #272525;
   border: 2px solid #292929;
   border-radius: 8px;
@@ -133,7 +132,7 @@ h1 {
 
 }
 @media (min-width: 768px) {
-  .organizadores-container{
+  .patrocinadores-container{
     margin-top: 10px;
         &__tarjetas {
             grid-template-columns: repeat(3, 1fr) !important;

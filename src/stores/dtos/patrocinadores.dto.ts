@@ -1,9 +1,8 @@
-export default interface PostDto {
+export default interface PatrocinadorDto {
     id: number;
-    titulo: string;
     nombre: string;
     descripcion: string;
-    nombreLogo: string;
+    logo: string;
     contacto: string;
     idOrganizador: number;
     }

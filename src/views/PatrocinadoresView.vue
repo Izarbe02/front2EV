@@ -13,7 +13,7 @@ const organizadorId = route.query.id ? Number(route.query.id) : undefined;
 
 <template>
     <Header/>
-
+    <PatrocinadoresCard/>
     <Footer/>
 </template>
 
