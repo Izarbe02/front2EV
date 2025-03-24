@@ -11,7 +11,7 @@ import OrganizadorPageView from '@/views/OrganizadorPageView.vue'
 import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
 import Register from '@/views/RegistroView.vue'
 import PatrocinadoresView from '@/views/PatrocinadoresView.vue'
-
+import PatrocinadorFormView from '@/views/PatrocinadorFormView.vue'
 
 
 const router = createRouter({
@@ -73,6 +73,11 @@ const router = createRouter({
       path: '/Patrocinadores',
       name: 'Patrocinadores',
       component: PatrocinadoresView
+    },
+    {
+      path: '/PatrocinadorForm',
+      name: 'PatrocinadorForm',
+      component: PatrocinadorFormView
     }
    /* {
       path: '/about',
@@ -86,3 +91,5 @@ const router = createRouter({
 })
 
 export default router
+
+
