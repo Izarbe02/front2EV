@@ -12,6 +12,7 @@ import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
 import Register from '@/views/RegistroView.vue'
 import PatrocinadoresView from '@/views/PatrocinadoresView.vue'
 import PatrocinadorFormView from '@/views/PatrocinadorFormView.vue'
+import PatrocinadorCreateFormView from '@/views/PatrocinadorCreateFormView.vue'
 
 
 const router = createRouter({
@@ -78,6 +79,11 @@ const router = createRouter({
       path: '/PatrocinadorForm',
       name: 'PatrocinadorForm',
       component: PatrocinadorFormView
+    },
+    {
+      path: '/PatrocinadorCreateFormView',
+      name: 'PatrocinadorCreateFormView',
+      component: PatrocinadorCreateFormView
     }
    /* {
       path: '/about',

@@ -17,6 +17,11 @@ onMounted(() => {
 <template>
   <div class="patrocinadores-container">
     <h1 class="titulo">Patrocinadores</h1>
+    <button class="patrocinador-card__boton">
+            <RouterLink :to="`/patrocinadorCreateForm`" class="patrocinador-card__link">
+                Crear 
+            </RouterLink>
+          </button>
     <div class="patrocinadores-container__tarjetas">
       <div v-for="patrocinador in patrocinadores" :key="patrocinador.id" class="patrocinador-card">
         <img :src="patrocinador.logo" :alt="patrocinador.nombre" class="patrocinador-card__imagen" />
@@ -31,8 +36,8 @@ onMounted(() => {
           
           </div>
           <button class="patrocinador-card__boton">
-            <RouterLink :to="`/patrocinadorDetalle?id=${patrocinador.id}`" class="patrocinador-card__link">
-                Saber más
+            <RouterLink :to="`/patrocinadorForm?id=${patrocinador.id}`" class="patrocinador-card__link">
+                Editar
             </RouterLink>
           </button>
         </div>

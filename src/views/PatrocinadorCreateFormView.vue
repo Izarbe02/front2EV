@@ -6,14 +6,14 @@ import Footer from '@/components/Footer.vue';
 
 
 const route = useRoute()
-const patrocinadorId = route.query.id ? Number(route.query.id) : undefined;
+
 
 </script>
 
 
 <template>
     <Header/>
-    <PatrocinadorForm/>
+    <PatrocinadorForm />
     <Footer/>
 </template>
 
