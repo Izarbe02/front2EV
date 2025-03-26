@@ -12,6 +12,15 @@ onMounted(() => {
   findAll();
 });
 
+
+const deletePatrocinador = async (patrocinadorId: number ) => {
+
+
+ 
+  await store.deletePatrocinador(patrocinadorId);
+ 
+};
+
 </script>
 
 <template>
@@ -36,10 +45,13 @@ onMounted(() => {
           
           </div>
           <button class="patrocinador-card__boton">
-            <RouterLink :to="`/patrocinadorForm?id=${patrocinador.id}`" class="patrocinador-card__link">
+            <RouterLink :to="`/PatrocinadorUpdateForm?id=${patrocinador.id}`" class="patrocinador-card__link">
                 Editar
             </RouterLink>
           </button>
+          <v-btn class="patrocinador-card__boton" @click="deletePatrocinador(patrocinador.id)">
+                Borrar
+          </v-btn>
         </div>
       </div>
     </div>

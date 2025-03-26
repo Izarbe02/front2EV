@@ -40,8 +40,9 @@ export const usePatrocinadorStore = defineStore("patrocinadores", () => {
   // Crear un nuevo patrocinador (Patrocinador: api/Patrocinador)
   async function createPatrocinador(patrocinador: PatrocinadorDto) {
     try {
+     console.log(patrocinador)
       const response = await fetch("http://localhost:8888/api/Patrocinador", {
-        method: "Patrocinador",
+        method: "POST", // <- Aquí estaba el problema
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patrocinador),
       });
@@ -54,7 +55,7 @@ export const usePatrocinadorStore = defineStore("patrocinadores", () => {
       console.error("Error al crear el patrocinador:", error);
     }
   }
-
+  
   // Actualizar un patrocinador (PUT: api/Patrocinador/{id})
   async function updatePatrocinador(id: number, updatedPatrocinador: PatrocinadorDto) {
     try {

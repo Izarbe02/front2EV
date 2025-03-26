@@ -11,7 +11,7 @@ import OrganizadorPageView from '@/views/OrganizadorPageView.vue'
 import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
 import Register from '@/views/RegistroView.vue'
 import PatrocinadoresView from '@/views/PatrocinadoresView.vue'
-import PatrocinadorFormView from '@/views/PatrocinadorFormView.vue'
+import PatrocinadorUpdateFormView from '@/views/PatrocinadorUpdateFormView.vue'
 import PatrocinadorCreateFormView from '@/views/PatrocinadorCreateFormView.vue'
 
 
@@ -76,9 +76,9 @@ const router = createRouter({
       component: PatrocinadoresView
     },
     {
-      path: '/PatrocinadorForm',
-      name: 'PatrocinadorForm',
-      component: PatrocinadorFormView
+      path: '/PatrocinadorUpdateForm',
+      name: 'PatrocinadorUpdateForm',
+      component: PatrocinadorUpdateFormView
     },
     {
       path: '/PatrocinadorCreateFormView',

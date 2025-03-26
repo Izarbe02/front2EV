@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import Header from '@/components/Header.vue';
-import PatrocinadorForm from '@/components/PatrocinadorForm.vue';
+import PatrocinadorUpdateForm from '@/components/PatrocinadorUpdateForm.vue';
 import Footer from '@/components/Footer.vue';
 
 
@@ -13,7 +13,7 @@ const patrocinadorId = route.query.id ? Number(route.query.id) : undefined;
 
 <template>
     <Header/>
-    <PatrocinadorForm/>
+    <PatrocinadorUpdateForm :patrocinadorId="patrocinadorId"/>
     <Footer/>
 </template>
 
