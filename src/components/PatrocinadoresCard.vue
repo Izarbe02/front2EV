@@ -18,7 +18,7 @@ onMounted(() => {
   <div class="patrocinadores-container">
     <h1 class="titulo">Patrocinadores</h1>
     <button class="patrocinador-card__boton">
-            <RouterLink :to="`/patrocinadorCreateForm`" class="patrocinador-card__link">
+            <RouterLink :to="`/PatrocinadorCreateFormView`" class="patrocinador-card__link">
                 Crear 
             </RouterLink>
           </button>

@@ -26,7 +26,7 @@ export const usePatrocinadorStore = defineStore("patrocinadores", () => {
   // Obtener un patrocinador por ID (GET: api/Patrocinador/{id})
   async function getPatrocinador(id: number) {
     try {
-      const response = await fetch(`http://localhatrocinador:8888/api/Patrocinador/${id}`);
+      const response = await fetch(`http://localhost:8888/api/Patrocinador/${id}`);
       if (!response.ok) throw new Error("Error al obtener el patrocinador");
       const data = await response.json();
       currentPatrocinador.value = data;
@@ -40,7 +40,7 @@ export const usePatrocinadorStore = defineStore("patrocinadores", () => {
   // Crear un nuevo patrocinador (Patrocinador: api/Patrocinador)
   async function createPatrocinador(patrocinador: PatrocinadorDto) {
     try {
-      const response = await fetch("http://localhatrocinador:8888/api/Patrocinador", {
+      const response = await fetch("http://localhost:8888/api/Patrocinador", {
         method: "Patrocinador",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patrocinador),
@@ -58,7 +58,7 @@ export const usePatrocinadorStore = defineStore("patrocinadores", () => {
   // Actualizar un patrocinador (PUT: api/Patrocinador/{id})
   async function updatePatrocinador(id: number, updatedPatrocinador: PatrocinadorDto) {
     try {
-      const response = await fetch(`http://localhatrocinador:8888/api/Patrocinador/${id}`, {
+      const response = await fetch(`http://localhost:8888/api/Patrocinador/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedPatrocinador),
@@ -75,7 +75,7 @@ export const usePatrocinadorStore = defineStore("patrocinadores", () => {
   // Eliminar un patrocinador (DELETE: api/Patrocinador/{id})
   async function deletePatrocinador(id: number) {
     try {
-      const response = await fetch(`http://localhatrocinador:8888/api/Patrocinador/${id}`, {
+      const response = await fetch(`http://localhost:8888/api/Patrocinador/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el patrocinador");

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import Header from '@/components/Header.vue';
-import PatrocinadorForm from '@/components/PatrocinadorForm.vue';
+import PatrocinadorCreateForm from '@/components/PatrocinadorCreateForm.vue';
 import Footer from '@/components/Footer.vue';
 
 
@@ -13,7 +13,7 @@ const route = useRoute()
 
 <template>
     <Header/>
-    <PatrocinadorForm />
+    <PatrocinadorCreateForm />
     <Footer/>
 </template>
 
