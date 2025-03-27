@@ -6,7 +6,7 @@ import type PatrocinadorDto from '@/stores/dtos/patrocinadores.dto';
 
 
 const router = useRouter(); 
-
+//de url se obtiene el id del patrocinador
 const props = defineProps({
   patrocinadorId: {
     type: Number,

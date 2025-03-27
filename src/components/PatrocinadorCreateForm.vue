@@ -1,20 +1,27 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePatrocinadorStore } from '@/stores/patrocinadores';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 import type PatrocinadorDto from '@/stores/dtos/patrocinadores.dto';
 
-const patrocinadoresStore = usePatrocinadorStore();
 const router = useRouter();
+const patrocinadoresStore = usePatrocinadorStore();
+const organizadoresStore = useOrganizadoresStore();
 
-// Variables reactivas
-const nombre = ref("");
-const descripcion = ref("");
-const logo = ref("");
-const contacto = ref("");
-const idOrganizador = ref("");
+// Variables del formulario
+const nombre = ref('');
+const descripcion = ref('');
+const logo = ref('');
+const contacto = ref('');
+const idOrganizador = ref<number | null>(null);
 
-// Función para registrar patrocinador usando el DTO
+// Cargar organizadores desde el store al montar el componente
+onMounted(() => {
+  organizadoresStore.findAll();
+});
+
+// Función para registrar patrocinador
 const registrarPatrocinadores = async () => {
   const patrocinador: PatrocinadorDto = {
     id: 0,
@@ -22,11 +29,11 @@ const registrarPatrocinadores = async () => {
     descripcion: descripcion.value,
     logo: logo.value,
     contacto: contacto.value,
-    idOrganizador: Number(idOrganizador.value) // cast
+    idOrganizador: idOrganizador.value ?? 0,
   };
 
   await patrocinadoresStore.createPatrocinador(patrocinador);
-  router.push('/Patrocinadores'); // redirige después de guardar
+  router.push('/Patrocinadores');
 };
 </script>
 
@@ -37,15 +44,20 @@ const registrarPatrocinadores = async () => {
       <p class="registro__subtitle">Completa tus datos para registrarte.</p>
 
       <v-form @submit.prevent="registrarPatrocinadores" class="registro__form">
-        <v-text-field v-model="nombre" label="Nombre " class="registro__input"></v-text-field>
-        <v-text-field v-model="descripcion" label="descripcion" type="email" class="registro__input"></v-text-field>
-        <v-text-field v-model="logo" label="logo" class="registro__input"></v-text-field>
-        <v-text-field v-model="contacto" label="contacto" type="password" class="registro__input"></v-text-field>
-        <v-text-field v-model.number="idOrganizador" label="ID del Organizador" type="number" class="registro__input" />
+        <v-text-field v-model="nombre" label="Nombre" class="registro__input" />
+        <v-text-field v-model="descripcion" label="Descripción" class="registro__input" />
+        <v-text-field v-model="logo" label="Logo" class="registro__input" />
+        <v-text-field v-model="contacto" label="Contacto" class="registro__input" />
+
+        <v-select v-model="idOrganizador" :items="organizadoresStore.organizadores" item-title="nombre" item-value="id"
+          label="Selecciona un Organizador" class="registro__input" :return-object="false" />
 
         <v-btn type="submit" block class="registro__button">Registrar</v-btn>
-
       </v-form>
+
+      <div v-if="organizadoresStore.errorMessage" class="registro__error">
+        {{ organizadoresStore.errorMessage }}
+      </div>
     </v-sheet>
   </v-container>
 </template>

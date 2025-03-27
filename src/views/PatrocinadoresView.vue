@@ -6,7 +6,6 @@ import Footer from '@/components/Footer.vue';
 
 
 const route = useRoute()
-const organizadorId = route.query.id ? Number(route.query.id) : undefined;
 
 </script>
 
