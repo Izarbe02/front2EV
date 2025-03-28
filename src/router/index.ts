@@ -10,7 +10,7 @@ import ProductoView from '@/views/ProductoView.vue'
 import OrganizadorPageView from '@/views/OrganizadorPageView.vue'
 import OrganizadorDetalleView from '@/views/OrganizadorDetalleView.vue'
 import Register from '@/views/RegistroView.vue'
-
+import EventosGuardados from '@/views/EventosGuardadosView.vue'
 
 
 const router = createRouter({
@@ -67,6 +67,11 @@ const router = createRouter({
       path: '/Register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/eventosGuardados',
+      name: 'eventosGuardados',
+      component: EventosGuardados
     }
    /* {
       path: '/about',
