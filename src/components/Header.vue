@@ -12,6 +12,7 @@
         <!-- Navegación en pantallas grandes -->
         <div class="navbar__navigation">
           <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
+          <v-btn to="/eventosGuardados" class="navbar__link navbar__link--active">EventosGuardados</v-btn>
           <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
           <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
           <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login"><img src="../assets/Images/group.png" to="/login" alt="Grupo" class="navbar__mobile-logo"></v-btn>

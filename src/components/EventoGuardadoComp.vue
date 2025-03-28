@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useEventosGuardadosStore } from '@/stores/eventosGuardados'
-import type EventoDto from '@/stores/dtos/'
+import type EventoDto from '@/stores/dtos/evento.dto'
 
 const props = defineProps<{ idUsuario: number }>()
 const eventosGuardadosStore = useEventosGuardadosStore()
 const eventos = ref<EventoDto[]>([])
 
 const cargarEventosGuardados = async () => {
-  eventos.value = await eventosGuardadosStore.obtenerEventosGuardados(props.idUsuario)
+  await eventosGuardadosStore.cargarEventosGuardados(props.idUsuario)
+  eventos.value = eventosGuardadosStore.eventosGuardados
 }
 
 const quitarEvento = async (idEvento: number) => {
@@ -44,33 +45,34 @@ onMounted(() => {
 @import '@/assets/styles/_variables.scss';
 
 .eventos-guardados {
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   color: $color-lightred;
 
   &__titulo {
     font-family: $titulo;
-    font-size: 2rem;
+    font-size: 1.8rem;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   &__lista {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   &__vacio {
     text-align: center;
     font-family: $first-font;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    padding: 2rem;
   }
 }
 
 .evento {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   background-color: $color-darkgray;
   padding: 1rem;
   border-radius: 10px;
@@ -78,6 +80,8 @@ onMounted(() => {
 
   &__imagen {
     width: 100%;
+    max-height: 180px;
+    object-fit: cover;
     border-radius: 5px;
   }
 
@@ -89,35 +93,58 @@ onMounted(() => {
 
   &__nombre {
     font-family: $first-font;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: $color-red;
   }
 
   &__descripcion {
     color: white;
     font-family: $first-font;
+    font-size: 0.95rem;
   }
 
   &__fecha,
   &__ubicacion {
     font-family: $first-font;
     color: $color-palidGreen;
+    font-size: 0.9rem;
   }
 
   &__boton-quitar {
     background-color: $color-lightred;
     color: black;
     font-weight: bold;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-family: $first-font;
+    font-size: 0.95rem;
+    align-self: flex-start;
 
     &:hover {
       background-color: $color-red;
       color: white;
     }
+  }
+}
+
+@media (min-width: 768px) {
+  .eventos-guardados__lista {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .evento {
+    width: calc(50% - 1rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .evento {
+    width: calc(33.333% - 1rem);
   }
 }
 </style>
