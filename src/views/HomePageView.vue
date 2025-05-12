@@ -27,5 +27,6 @@ import CarouselHomePage from '@/components/CarouselHomePage.vue';
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 2%;
 }
 </style>
