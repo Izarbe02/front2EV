@@ -1,15 +1,18 @@
 <template>
   <button class="toggle-btn" @click="toggleSidebar">☰</button>
   <div class="sidebar" :class="{ 'is-hidden': !isSidebarOpen }">
-    <ul v-if="vistas.length > 0">
-      <li v-for="vista in vistas" :key="vista" @click="setView(vista)">
+    <ul>
+      <li
+        v-for="vista in vistasFiltradas"
+        :key="vista"
+        @click="setView(vista)"
+      >
         {{ nombres[vista] || vista }}
       </li>
 
       <router-link to="/" class="sidebar__link">Volver a la página principal</router-link>
       <button class="sidebar__logout" @click="handleLogout">Cerrar sesión</button>
     </ul>
-    <p v-else class="sidebar__cargando">Cargando menú...</p>
   </div>
 </template>
 
@@ -40,20 +43,19 @@ const handleLogout = () => {
   router.push('/');
 };
 
-// Traducciones de vistas
+// Traducción de nombres para mostrar en el menú
 const nombres: Record<string, string> = {
   UsuariosTable: 'Usuarios',
   EventosTable: 'Eventos',
   ComentariosTable: 'Comentarios',
   TematicaTable: 'Temáticas',
-  CategoriaEventoTable: 'Categoría Evento'
+  CategoriaEventoTable: 'Categoría Evento',
+  EventosGuardados: 'Eventos guardados',
 };
 
-// Fallback: si no hay permisos aún, usar todos para evitar render vacío
-const vistas = computed(() =>
-  props.vistasPermitidas.length > 0
-    ? props.vistasPermitidas
-    : Object.keys(nombres)
+// Filtramos solo las vistas reconocidas y traducibles
+const vistasFiltradas = computed(() =>
+  props.vistasPermitidas.filter((v) => Object.keys(nombres).includes(v))
 );
 </script>
 
@@ -110,12 +112,6 @@ const vistas = computed(() =>
       color: gray;
       border-radius: 5px;
     }
-  }
-
-  &__cargando {
-    color: white;
-    font-size: 1rem;
-    padding: 20px;
   }
 }
 
