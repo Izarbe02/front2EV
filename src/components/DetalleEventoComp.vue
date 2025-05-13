@@ -293,6 +293,95 @@ function formatFecha(fecha: string): string {
     text-align: left;
     margin-top: 10px;
   }
+
+  // SOLO ESTILOS DE COMENTARIOS:
+  &__comentarios {
+    margin-top: 2rem;
+    text-align: left;
+    padding: 1rem;
+  }
+
+  &__comentarios-titulo {
+    font-family: $first-font;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: $color-darkgray;
+    margin-bottom: 1rem;
+  }
+
+  &__comentarios-vacio {
+    font-style: italic;
+    color: $color-lightgray;
+    margin-bottom: 1rem;
+  }
+
+  &__comentario {
+    background-color: $color-whitered;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__comentario-autor {
+    font-weight: bold;
+    color: $color-darkGreen;
+    margin-bottom: 0.3rem;
+  }
+
+  &__comentario-texto {
+    margin: 0.5rem 0;
+    color: $color-darkgray;
+  }
+
+  &__comentario-fecha {
+    font-size: 0.85rem;
+    color: $color-lightgray;
+  }
+
+  &__comentario-formulario {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__comentario-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid $color-lightgray;
+    font-family: $first-font;
+    font-size: 1rem;
+  }
+
+  &__comentario-boton {
+    align-self: flex-end;
+    background-color: $color-darkGreen;
+    color: $color-black;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $color-green;
+    }
+
+    &:disabled {
+      background-color: $color-lightgray;
+      cursor: not-allowed;
+    }
+  }
+
+  &__comentarios-login {
+    margin-top: 1rem;
+    font-style: italic;
+    color: $color-lightgray;
+  }
 }
 
 @media (min-width: 900px) {
