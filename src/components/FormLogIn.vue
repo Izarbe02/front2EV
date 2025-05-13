@@ -7,7 +7,7 @@
         <v-text-field
           v-model="username"
           :rules="usernameRules"
-          label="Email"
+          label="Username"
           class="login__input"
         ></v-text-field>
 
@@ -45,7 +45,7 @@ const router = useRouter();
 
 const username = ref("");
 const contrasenia = ref("");
-
+console.log(useUsuariosStore.usuarioLogeado)
 const usernameRules = [
   (value: string) => value.length > 0 || "Rellena este campo"
 ];
@@ -67,12 +67,7 @@ const loginUser = async () => {
   }
 };
 
-// Redirección automática si ya está logueado
-watchEffect(() => {
-  if (usuariosStore.usuarioLogeado) {
-    router.push("/");
-  }
-});
+
 </script>
 
 <style lang="scss" scoped>

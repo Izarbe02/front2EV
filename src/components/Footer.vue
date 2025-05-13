@@ -1,127 +1,182 @@
-<script setup lang="ts">
-
-
-</script>
-
 <template>
-    <v-footer class="footer">
-        <v-container class="footer__container">
-            <div class="footer__section footer__section--top">
-                <v-img src="/logo.png" alt="Logo" class="footer__logo" contain></v-img>
-                <span class="footer__text">&copy; 2025 Mi Empresa. Todos los derechos reservados.</span>
-            </div>
-
-            <div class="footer__section footer__section--middle">
-                <v-row justify="center" class="footer__links">
-                    <v-col cols="auto">
-                        <v-btn to="/aboutUs" class="footer__link">About us</v-btn>
-                    </v-col>
-                    <v-col cols="auto">
-                        <v-btn to="/eventos" class="footer__link">Eventos</v-btn>
-                    </v-col>
-                    <v-col cols="auto">
-                        <v-btn to="/organizadores" class="footer__link">Organizadores</v-btn>
-                    </v-col>
-                    <v-col cols="auto">
-                        <v-btn to="/administrador" class="footer__link">Zona Administrador</v-btn>
-                    </v-col>
-                </v-row>
-            </div>
-
-            <div class="footer__section footer__section--bottom">
-                <v-row justify="center" class="footer__socials">
-                    <v-col cols="auto">
-                        <v-btn icon class="footer__social-button">
-                            <img src="../assets/Images/x.png" to="/login" alt="ss" class="footer_rrss-logo">
-                        </v-btn>
-                    </v-col>
-                    <v-col cols="auto">
-                        <v-btn icon class="footer__social-button">
-                            <img src="../assets/Images/instagram.png" to="/login" alt="ss" class="footer_rrss-logo">
-                        </v-btn>
-                    </v-col>
-                    <v-col cols="auto">
-                        <v-btn icon class="footer__social-button">
-    <a href="https://www.youtube.com/watch?v=Zcb8yPEItwA" target="_blank" rel="noopener noreferrer">
-        <img src="../assets/Images/youtube.png" alt="YouTube" class="footer_rrss-logo">
-    </a>
-</v-btn>
-
-                    </v-col>
-                </v-row>
-            </div>
+    <v-layout>
+      <v-app-bar app class="navbar">
+        <v-container class="navbar__container">
+          <div class="navbar__logoZaragozaConecta">
+            <a href="/">
+              <LogoCanvas />
+            </a>
+            <router-link to="/">ZaragozaConecta</router-link>
+          </div>
+  
+          <!-- Navegación en pantallas grandes -->
+          <div class="navbar__navigation">
+            <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
+            <v-btn to="/eventosGuardados" class="navbar__link navbar__link--active">EventosGuardados</v-btn>
+            <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
+            <v-btn to="/administrador" class="navbar__link">Gestión</v-btn>
+            <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
+            <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login">
+              <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
+            </v-btn>
+          </div>
+  
+          <!-- Botón de menú hamburguesa SOLO en móviles -->
+          <v-btn icon class="navbar__menu-button" @click.stop="drawer = !drawer">
+            ☰
+          </v-btn>
         </v-container>
-    </v-footer>
-</template>
-
-<style lang="scss" scoped>
-@import "@/assets/styles/_variables.scss";
-@import "@/assets/styles/_mixins.scss";
-
-.footer {
-    background: $color-gray;
-    padding: 16px 0;
-    display: flex;
+      </v-app-bar>
+  
+      <!-- Menú hamburguesa SOLO en móviles -->
+      <v-navigation-drawer v-model="drawer" temporary class="navbar__mobile-menu">
+        <v-list>
+          <v-list-item to="/eventos" class="navbar__mobile-link">Eventos</v-list-item>
+          <v-list-item to="/eventosGuardados" class="navbar__mobile-link">EventosGuardados</v-list-item>
+          <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
+          <v-list-item to="/administrador" class="navbar__mobile-link">Gestión</v-list-item>
+          <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
+          <v-list-item to="/login" class="navbar__mobile-link navbar__mobile-login">
+            <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+    </v-layout>
+  </template>
+  
+  <script lang="ts">
+  import { defineComponent } from 'vue';
+  import LogoCanvas from "@/components/LogoCanvas.vue";
+  
+  export default defineComponent({
+    components: {
+      LogoCanvas
+    },
+    data() {
+      return {
+        drawer: false
+      };
+    }
+  });
+  </script>
+  
+  <style lang="scss" scoped>
+  @import "@/assets/styles/_variables.scss";
+  @import "@/assets/styles/_mixins.scss";
+  
+  .navbar {
+    background: $color-darkgray !important;
+    padding: 10px 0px;
     width: 100%;
-    position: relative;
-    bottom: 0;
+    position: fixed;
+    top: 0;
     left: 0;
-
+    z-index: 10;
     font-family: $first-font;
-
+  
     &__container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+  
+    &__logoZaragozaConecta {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-family: $titulo;
+      font-size: 1.6rem;
+      font-weight: bold;
+  
+      a {
+        color: red;
+        text-decoration: none;
+      }
+    }
+  
+    &__menu-button {
+      color: $color-lightred;
+      display: block;
+    }
+  
+    &__navigation {
+      display: none;
+    }
+  
+    &__login-btn {
+      @include boton-rojo;
+      display: none;
+    }
+  
+    &__mobile-menu {
+      background: $color-darkgray;
+    }
+  
+    &__mobile-link {
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      padding: 12px;
+      text-decoration: none;
+      margin-top: 20px;
+  
+      &:hover {
+        background: $color-lightred;
+      }
+    }
+  
+    &__mobile-login {
+      @include boton-rojo;
+      text-align: center;
+      margin-top: 10px;
+    }
+  
+    @media (min-width: 768px) {
+      .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+  
+      .navbar__menu-button {
+        display: none;
+      }
+  
+      .navbar__navigation {
         display: flex;
-        flex-direction: column;
+        gap: 12px;
         align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 16px;
-    }
-
-    &__section {
-        width: 100%;
-    }
-
-    &__links,
-    &__socials {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-    }
-
-    &__logo {
-        height: 40px;
-    }
-
-    &__text {
-        font-size: 24px;
-        color: $color-lightred;
-    }
-
-    &__link {
-        font-size: 18px;
-        color: $color-lightred;
-        background: $color-lightgray;
+      }
+  
+      .navbar__mobile-menu {
+        display: none;
+      }
+  
+      .navbar__login-btn {
+        display: block;
+      }
+  
+      &__logoZaragozaConecta {
+        font-weight: bold;
+        color: $color-red;
+        text-decoration: none;
+        font-size: 2rem;
+        gap: 10px;
+      }
+  
+      &__link {
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
         text-transform: none;
-
-        &:hover {
-            color: $color-whitered;
+        position: relative;
+  
+        &:hover,
+        &--active {
+          color: $color-red;
         }
+      }
     }
-
-    &__social-button {
-        @include boton-gris;
-    }
-
-    @media (max-width: 768px) {
-        .footer {
-            padding: 12px 0;
-        }
-
-        .footer__text,
-        .footer__link {
-            font-size: 12px;
-        }
-    }
-}
-</style>
+  }
+  </style>
+  

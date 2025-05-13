@@ -95,7 +95,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   }
 
   async function login(usuarioLogin: UsuarioLoginDto) {
-    try {
+    try { console.log(usuarioLogin)
       const response = await fetch("http://localhost:8888/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -126,6 +126,14 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     }
   }
 
+  function logout() {
+    usuarioLogeado.value = null;
+    tokenLogin.value = null;
+    localStorage.removeItem("usuarioLogeado");
+    localStorage.removeItem("tokenLogin");
+  }
+  
+
   return {
     usuarios,
     currentUsuario,
@@ -139,5 +147,6 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     updateUsuario,
     deleteUsuario,
     login,
+    logout
   };
 });
