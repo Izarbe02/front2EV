@@ -3,11 +3,14 @@ import { ref, onMounted, watch } from 'vue'
 import { useEventosStore } from '@/stores/eventos'
 import { useEventosGuardadosStore } from '@/stores/eventosGuardados'
 import { useUsuariosStore } from '@/stores/usuarios'
+import { useComentariosStore } from '@/stores/comentarios'
 import EventoInfoDto from '@/stores/dtos/eventoInfo.dto'
+import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
 const usuariosStore = useUsuariosStore()
+const comentariosStore = useComentariosStore()
 
 const props = defineProps({
   eventoId: {
@@ -15,10 +18,10 @@ const props = defineProps({
     default: null
   }
 })
-console.log(usuariosStore.usuarioLogeado);
 
 const evento = ref<EventoInfoDto | null>(null)
 const estaGuardado = ref<boolean>(false)
+const comentarioNuevo = ref<string>("")
 
 const loadEvento = async (id: number | null) => {
   if (id !== null) {
@@ -33,8 +36,6 @@ const loadEvento = async (id: number | null) => {
 
 const onToggleGuardar = async () => {
   const idUsuario = usuariosStore.usuarioLogeado?.id
-  console.log(idUsuario)
-  
   if (!evento.value || !idUsuario) return
   const idEvento = props.eventoId
 
@@ -48,13 +49,42 @@ const onToggleGuardar = async () => {
   estaGuardado.value = eventosGuardadosStore.estaGuardado
 }
 
+const enviarComentario = async () => {
+  if (!usuariosStore.usuarioLogeado || props.eventoId === null) return;
+
+  const nuevoComentario: ComentarioCreateDto = {
+    idUsuario: usuariosStore.usuarioLogeado.id,
+    idEvento: props.eventoId,
+    contenido: comentarioNuevo.value,
+    fecha: new Date().toISOString()
+  }
+
+  await comentariosStore.createComentario(nuevoComentario);
+  comentarioNuevo.value = "";
+  await comentariosStore.fetchComentariosByEvento(props.eventoId); 
+}
+
 onMounted(() => {
   loadEvento(props.eventoId)
+  if (props.eventoId !== null) {
+    comentariosStore.fetchComentariosByEvento(props.eventoId)
+  }
 })
 
-watch(() => props.eventoId, (newId) => {
-  loadEvento(newId)
+watch(() => props.eventoId, async (newId) => {
+  await loadEvento(newId)
+  if (newId !== null) {
+    await comentariosStore.fetchComentariosByEvento(newId)
+  }
 })
+
+function formatFecha(fecha: string): string {
+  return new Date(fecha).toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
 </script>
 
 <template>
@@ -81,7 +111,7 @@ watch(() => props.eventoId, (newId) => {
           </div>
 
           <div class="evento-detalle__fecha">
-            📅 Fecha de incicio : <br>{{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }}
+            📅 Fecha de inicio : <br>{{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }}
             {{ new Date(evento.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }} <br>
             📅 Fecha de fin : <br>{{ new Date(evento.fechaFin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
             {{ new Date(evento.fechaFin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
@@ -107,6 +137,44 @@ watch(() => props.eventoId, (newId) => {
             </p>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Comentarios -->
+    <div class="evento-detalle__comentarios">
+      <h3 class="evento-detalle__comentarios-titulo">Comentarios</h3>
+
+      <div v-if="comentariosStore.comentarios.length === 0" class="evento-detalle__comentarios-vacio">
+        No hay comentarios aún.
+      </div>
+
+      <div
+        v-for="comentario in comentariosStore.comentarios"
+        :key="comentario.id"
+        class="evento-detalle__comentario"
+      >
+        <p class="evento-detalle__comentario-autor">{{ comentario.nombreUsuario }}</p>
+        <p class="evento-detalle__comentario-texto">{{ comentario.contenido }}</p>
+        <p class="evento-detalle__comentario-fecha">{{ formatFecha(comentario.fecha) }}</p>
+      </div>
+
+      <div v-if="usuariosStore.usuarioLogeado" class="evento-detalle__comentario-formulario">
+        <textarea
+          v-model="comentarioNuevo"
+          placeholder="¿Qué opinas sobre este evento?"
+          class="evento-detalle__comentario-textarea"
+        ></textarea>
+        <button
+          class="evento-detalle__comentario-boton"
+          :disabled="comentarioNuevo.trim().length === 0"
+          @click="enviarComentario"
+        >
+          Enviar comentario
+        </button>
+      </div>
+
+      <div v-else class="evento-detalle__comentarios-login">
+        <p>🔒 Inicia sesión para dejar un comentario.</p>
       </div>
     </div>
   </div>
@@ -224,6 +292,95 @@ watch(() => props.eventoId, (newId) => {
     color: #ddd;
     text-align: left;
     margin-top: 10px;
+  }
+
+  // SOLO ESTILOS DE COMENTARIOS:
+  &__comentarios {
+    margin-top: 2rem;
+    text-align: left;
+    padding: 1rem;
+  }
+
+  &__comentarios-titulo {
+    font-family: $first-font;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: $color-darkgray;
+    margin-bottom: 1rem;
+  }
+
+  &__comentarios-vacio {
+    font-style: italic;
+    color: $color-lightgray;
+    margin-bottom: 1rem;
+  }
+
+  &__comentario {
+    background-color: $color-whitered;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__comentario-autor {
+    font-weight: bold;
+    color: $color-darkGreen;
+    margin-bottom: 0.3rem;
+  }
+
+  &__comentario-texto {
+    margin: 0.5rem 0;
+    color: $color-darkgray;
+  }
+
+  &__comentario-fecha {
+    font-size: 0.85rem;
+    color: $color-lightgray;
+  }
+
+  &__comentario-formulario {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__comentario-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid $color-lightgray;
+    font-family: $first-font;
+    font-size: 1rem;
+  }
+
+  &__comentario-boton {
+    align-self: flex-end;
+    background-color: $color-darkGreen;
+    color: $color-black;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $color-green;
+    }
+
+    &:disabled {
+      background-color: $color-lightgray;
+      cursor: not-allowed;
+    }
+  }
+
+  &__comentarios-login {
+    margin-top: 1rem;
+    font-style: italic;
+    color: $color-lightgray;
   }
 }
 

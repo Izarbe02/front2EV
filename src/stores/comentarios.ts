@@ -1,7 +1,7 @@
-
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type ComentarioDto from "@/stores/dtos/comentario.dto";
+import type ComentarioCreateDto from "@/stores/dtos/comentarioCrear.dto";
 
 export const useComentariosStore = defineStore("comentarios", () => {
   // Estado reactivo
@@ -37,8 +37,21 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
+  // Obtener comentarios por ID de evento (GET: api/Comentario/evento/{eventoId})
+  async function fetchComentariosByEvento(eventoId: number) {
+    try {
+      const response = await fetch(`http://localhost:8888/api/Comentario/evento/${eventoId}`);
+      if (!response.ok) throw new Error("Error al obtener comentarios del evento");
+      const data = await response.json();
+      comentarios.value = data;
+    } catch (error: any) {
+      errorMessage.value = error.message;
+      console.error("Error al cargar comentarios:", error);
+    }
+  }
+
   // Crear un comentario (POST: api/Comentario)
-  async function createComentario(comentario: ComentarioDto) {
+  async function createComentario(comentario: ComentarioCreateDto) {
     try {
       const response = await fetch("http://localhost:8888/api/Comentario", {
         method: "POST",
@@ -47,7 +60,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       });
       if (!response.ok) throw new Error("Error al crear el comentario");
       const createdComentario = await response.json();
-      comentarios.value.push(createdComentario);
+      comentarios.value.push(createdComentario); // opcional: usar fetchComentariosByEvento si prefieres recargar
       successMessage.value = "Comentario creado correctamente";
     } catch (error: any) {
       errorMessage.value = error.message;
@@ -77,6 +90,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
     successMessage,
     findAll,
     getComentario,
+    fetchComentariosByEvento,
     createComentario,
     deleteComentario,
   };
