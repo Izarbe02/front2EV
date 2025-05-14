@@ -1,14 +1,23 @@
 <template>
   <div class="zona-admin">
-    <SideBar
-      @changeView="currentView = $event"
-      @logout="handleLogout"
-      :vistasPermitidas="permisosPorRol[rolUsuario] ?? []"
-    />
-    <div class="contenido-admin">
-      <component :is="currentComponent" v-if="vistaPermitida" />
-      <p v-else>No tienes permiso para acceder a esta sección.</p>
-    </div>
+    <template v-if="usuario">
+      <SideBar
+        @changeView="currentView = $event"
+        @logout="handleLogout"
+        :vistasPermitidas="permisosPorRol[rolUsuario] ?? []"
+      />
+      <div class="contenido-admin">
+        <component :is="currentComponent" v-if="vistaPermitida" />
+        <p v-else>No tienes permiso para acceder a esta sección.</p>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="contenido-no-logeado">
+        <p class="mensaje">El usuario debe iniciar sesión.</p>
+        <router-link to="/login" class="boton-login">Ir a iniciar sesión</router-link>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -21,11 +30,13 @@ import SideBar from '@/components/SideBar.vue';
 const store = useUsuariosStore();
 const router = useRouter();
 
+const usuario = computed(() => store.usuarioLogeado);
+console.log(usuario)
 const rolUsuario = computed(() => store.usuarioLogeado?.idRol ?? 3);
-console.log(store.usuarioLogeado)
+
 const currentView = ref<
   'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados'
->('UsuariosTable');
+>('EventosGuardados');
 
 const components = {
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
@@ -37,7 +48,7 @@ const components = {
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
+  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable', 'EventosGuardados'],
   2: ['UsuariosTable', 'EventosTable'],
   3: ['UsuariosTable', 'EventosGuardados']
 };
@@ -53,11 +64,44 @@ function handleLogout() {
   router.push('/');
 }
 </script>
-
 <style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";   
+
 .contenido-admin {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.contenido-no-logeado {
+  width: 100%;
+  height: 100vh;
+  background-color: $color-darkgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .mensaje {
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  .boton-login {
+    background-color: $color-red;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+
+    &:hover {
+      background-color: $color-lightred;
+    }
+  }
 }
 </style>

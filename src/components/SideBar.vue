@@ -43,7 +43,7 @@ const handleLogout = () => {
   router.push('/');
 };
 
-// Traducción de nombres para mostrar en el menú
+
 const nombres: Record<string, string> = {
   UsuariosTable: 'Usuarios',
   EventosTable: 'Eventos',
@@ -53,7 +53,6 @@ const nombres: Record<string, string> = {
   EventosGuardados: 'Eventos guardados',
 };
 
-// Filtramos solo las vistas reconocidas y traducibles
 const vistasFiltradas = computed(() =>
   props.vistasPermitidas.filter((v) => Object.keys(nombres).includes(v))
 );
