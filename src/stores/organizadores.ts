@@ -1,30 +1,39 @@
-
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
+import type { UsuarioLoginDto } from "@/stores/dtos/usuarioLogin.dto";
 
 export const useOrganizadoresStore = defineStore("organizadores", () => {
   // Estado reactivo
   const organizadores = ref<OrganizadorDto[]>([]);
   const currentOrganizador = ref<OrganizadorDto | null>(null);
+
+  const organizadorLogeado = ref<OrganizadorDto | null>(
+    JSON.parse(localStorage.getItem("organizadorLogeado") || "null")
+  );
+
+  const tokenLoginOrganizador = ref<string | null>(
+    localStorage.getItem("tokenLoginOrganizador")
+  );
+
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
-  // Obtener todos los establecimientos (GET: api/Organizador)
+  // Obtener todos los organizadores
   async function findAll() {
     try {
       const response = await fetch("http://localhost:8888/api/Organizador");
-      if (!response.ok) throw new Error("Error al obtener establecimientos");
+      if (!response.ok) throw new Error("Error al obtener organizadores");
 
       const data = await response.json();
       organizadores.value.splice(0, organizadores.value.length, ...data);
     } catch (error: any) {
       errorMessage.value = error.message;
-      console.error("Error al obtener establecimientos:", error);
+      console.error("Error al obtener organizadores:", error);
     }
   }
 
-  // Obtener un establecimiento por ID (GET: api/Organizador/{id})
+  // Obtener uno por ID
   async function getOrganizador(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`);
@@ -34,67 +43,111 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       return currentOrganizador.value;
     } catch (error: any) {
       errorMessage.value = error.message;
-      console.error("Error al obtener establecimiento:", error);
+      console.error("Error al obtener organizador:", error);
     }
   }
 
-  // Crear un nuevo establecimiento (POST: api/Organizador)
-  async function createEstablecimiento(establecimiento: OrganizadorDto) {
+  // Crear nuevo organizador
+  async function createEstablecimiento(organizador: OrganizadorDto) {
     try {
       const response = await fetch("http://localhost:8888/api/Organizador", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(establecimiento),
+        body: JSON.stringify(organizador),
       });
-      if (!response.ok) throw new Error("Error al crear establecimiento");
+      if (!response.ok) throw new Error("Error al crear organizador");
 
-      const createdEstablecimiento = await response.json();
-      organizadores.value.push(createdEstablecimiento);
-      successMessage.value = "Establecimiento creado correctamente";
+      const created = await response.json();
+      organizadores.value.push(created);
+      successMessage.value = "Organizador creado correctamente";
     } catch (error: any) {
       errorMessage.value = error.message;
-      console.error("Error al crear establecimiento:", error);
+      console.error("Error al crear organizador:", error);
     }
   }
 
-  // Actualizar un establecimiento (PUT: api/Organizador/{id})
-  async function updateEstablecimiento(id: number, updatedEstablecimiento: OrganizadorDto) {
+  // Actualizar organizador
+  async function updateEstablecimiento(id: number, updated: OrganizadorDto) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedEstablecimiento),
+        body: JSON.stringify(updated),
       });
-      if (!response.ok) throw new Error("Error al actualizar establecimiento");
+      if (!response.ok) throw new Error("Error al actualizar organizador");
 
-      // Opcional: refrescar la lista actualizando todos los establecimientos
       await findAll();
-      successMessage.value = "Establecimiento actualizado correctamente";
+      // Si el logeado se actualiza, reflejarlo
+      if (organizadorLogeado.value?.id === id) {
+        organizadorLogeado.value = updated;
+        localStorage.setItem("organizadorLogeado", JSON.stringify(updated));
+      }
+
+      successMessage.value = "Organizador actualizado correctamente";
     } catch (error: any) {
       errorMessage.value = error.message;
-      console.error("Error al actualizar establecimiento:", error);
+      console.error("Error al actualizar organizador:", error);
     }
   }
 
-  // Eliminar un establecimiento (DELETE: api/Organizador/{id})
+  // Eliminar organizador
   async function deleteEstablecimiento(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
         method: "DELETE",
       });
-      if (!response.ok) throw new Error("Error al eliminar establecimiento");
+      if (!response.ok) throw new Error("Error al eliminar organizador");
 
-      organizadores.value = organizadores.value.filter(e => e.id !== id);
-      successMessage.value = "Establecimiento eliminado correctamente";
+      organizadores.value = organizadores.value.filter((o) => o.id !== id);
+      successMessage.value = "Organizador eliminado correctamente";
     } catch (error: any) {
       errorMessage.value = error.message;
-      console.error("Error al eliminar establecimiento:", error);
+      console.error("Error al eliminar organizador:", error);
     }
+  }
+
+  // LOGIN organizador
+  async function loginOrganizador(loginDto: UsuarioLoginDto) {
+    try {
+      const response = await fetch("http://localhost:8888/api/auth/login-organizador", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginDto),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error al iniciar sesión: ${errorText || response.statusText}`);
+      }
+
+      const data: { token: string; usuario: OrganizadorDto } = await response.json();
+
+      organizadorLogeado.value = data.usuario;
+      tokenLoginOrganizador.value = data.token;
+
+      localStorage.setItem("organizadorLogeado", JSON.stringify(data.usuario));
+      localStorage.setItem("tokenLoginOrganizador", data.token);
+
+      return true;
+    } catch (error: any) {
+      errorMessage.value = error.message;
+      console.error("Error en login de organizador:", error);
+    }
+  }
+
+  // LOGOUT organizador
+  function logoutOrganizador() {
+    organizadorLogeado.value = null;
+    tokenLoginOrganizador.value = null;
+    localStorage.removeItem("organizadorLogeado");
+    localStorage.removeItem("tokenLoginOrganizador");
   }
 
   return {
     organizadores,
     currentOrganizador,
+    organizadorLogeado,
+    tokenLoginOrganizador,
     errorMessage,
     successMessage,
     findAll,
@@ -102,5 +155,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     createEstablecimiento,
     updateEstablecimiento,
     deleteEstablecimiento,
+    loginOrganizador,
+    logoutOrganizador,
   };
 });
