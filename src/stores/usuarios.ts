@@ -72,7 +72,11 @@ export const useUsuariosStore = defineStore("usuarios", () => {
       if (!response.ok) throw new Error("Error al actualizar el usuario");
 
       await findAll();
+      usuarioLogeado.value = usuarioActualizado;
+      localStorage.setItem("usuarioLogeado", JSON.stringify(usuarioActualizado));
       successMessage.value = "Usuario actualizado correctamente";
+
+
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el usuario:", error);

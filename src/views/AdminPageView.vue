@@ -33,10 +33,9 @@ const router = useRouter();
 const usuario = computed(() => store.usuarioLogeado);
 console.log(usuario)
 const rolUsuario = computed(() => store.usuarioLogeado?.idRol ?? 3);
-
 const currentView = ref<
-  'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados'
->('EventosGuardados');
+  'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados' | 'EditarPerfilUsuario'
+>('EditarPerfilUsuario');
 
 const components = {
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
@@ -45,12 +44,13 @@ const components = {
   TematicaTable: defineAsyncComponent(() => import('@/components/TematicaTable.vue')),
   CategoriaEventoTable: defineAsyncComponent(() => import('@/components/CategoriaEventoTable.vue')),
   EventosGuardados: defineAsyncComponent(() => import('@/components/EventoGuardadoComp.vue')),
+  EditarPerfilUsuario: defineAsyncComponent(() => import('@/components/EditarPerfilUsuario.vue')),
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable', 'EventosGuardados'],
-  2: ['UsuariosTable', 'EventosTable'],
-  3: ['UsuariosTable', 'EventosGuardados']
+  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
+  2: ['EventosTable'],
+  3: ['EventosGuardados', 'EditarPerfilUsuario']
 };
 
 const vistaPermitida = computed(() =>

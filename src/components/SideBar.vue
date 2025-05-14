@@ -51,6 +51,7 @@ const nombres: Record<string, string> = {
   TematicaTable: 'Temáticas',
   CategoriaEventoTable: 'Categoría Evento',
   EventosGuardados: 'Eventos guardados',
+  EditarPerfilUsuario: 'Mi perfil' 
 };
 
 const vistasFiltradas = computed(() =>
@@ -68,8 +69,9 @@ const vistasFiltradas = computed(() =>
   padding: 10px 15px;
   font-size: 18px;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 9999; // debe ser mayor al sidebar
 }
+
 
 .sidebar {
   position: fixed;
@@ -81,6 +83,7 @@ const vistasFiltradas = computed(() =>
   background: linear-gradient(to bottom, #000000, #1d1d1d);
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
+    z-index: 9999; 
 
   &__link {
     margin-top: 4%;
@@ -135,3 +138,26 @@ li {
   }
 }
 </style>
+.sidebar {
+  position: fixed; // <- ya lo tienes
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  padding: 60px 15px;
+  background: linear-gradient(to bottom, #000000, #1d1d1d);
+  z-index: 1000; // <-- esto es lo que garantiza que se superponga
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+
+  @media (min-width: 768px) {
+    position: relative;
+    transform: translateX(0) !important;
+    z-index: auto;
+    height: auto;
+  }
+}
+
+.sidebar.is-hidden {
+  transform: translateX(-100%);
+}
