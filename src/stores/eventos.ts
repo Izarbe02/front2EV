@@ -155,17 +155,32 @@ export const useEventosStore = defineStore("eventos", () => {
     
     
     // Obtener información detallada de un evento
-    async function getInfoEvento(id: number) {
+    async function getInfoEvento(id: number): Promise<EventoInfoDto> {
         try {
             const response = await fetch(`http://localhost:8888/api/Evento/DetalleEvento?id=${id}`);
             if (!response.ok) throw new Error("Error al obtener detalles del evento");
-
-            const eventoInfo = await response.json();
-            return eventoInfo;
+    
+            const data = await response.json();
+    
+            // Mapeo correcto al DTO de frontend
+            return new EventoInfoDto(
+                data.orgId,              // <- este es el que se usará en la URL
+                data.nombreOrg,
+                data.nombreEvento,
+                data.descripcion,
+                new Date(data.fechaInicio),
+                new Date(data.fechaFin),
+                data.ubicacion,
+                data.enlace,
+                data.categorias ?? [],
+                data.tematicas ?? []
+            );
         } catch (error) {
             console.error("Error al obtener detalles del evento:", error);
+            throw error;
         }
     }
+    
 
     // Buscador de eventos
     async function buscadorEvento(busqueda: string) {

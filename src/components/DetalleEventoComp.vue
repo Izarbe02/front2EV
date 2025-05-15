@@ -6,6 +6,8 @@ import { useUsuariosStore } from '@/stores/usuarios'
 import { useComentariosStore } from '@/stores/comentarios'
 import EventoInfoDto from '@/stores/dtos/eventoInfo.dto'
 import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
+import { RouterLink } from 'vue-router';
+
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
@@ -26,6 +28,9 @@ const comentarioNuevo = ref<string>("")
 const loadEvento = async (id: number | null) => {
   if (id !== null) {
     evento.value = await eventosStore.getInfoEvento(id)
+    const data = await response.json();
+console.log("Respuesta cruda del backend:", data);
+
     const idUsuario = usuariosStore.usuarioLogeado?.id
     if (evento.value && idUsuario) {
       await eventosGuardadosStore.comprobarEventoGuardado(idUsuario, id)
@@ -71,6 +76,7 @@ onMounted(() => {
   }
 })
 
+
 watch(() => props.eventoId, async (newId) => {
   await loadEvento(newId)
   if (newId !== null) {
@@ -85,6 +91,8 @@ function formatFecha(fecha: string): string {
     day: 'numeric'
   });
 }
+
+console.log(evento);
 </script>
 
 <template>
@@ -119,7 +127,12 @@ function formatFecha(fecha: string): string {
 
           <div class="evento-detalle__lugar">
             📍 {{ evento.ubicacion }}
-            <span class="evento-detalle__direccion">{{ evento.nombreOrg }}</span>
+            <RouterLink :to="`/OrganizadorDetalle?id=${evento.orgId}`" class="evento-detalle__direccion">
+  {{ evento.nombreOrg }}
+</RouterLink>
+
+
+
           </div>
 
           <div class="evento-detalle__acciones">
@@ -212,6 +225,16 @@ function formatFecha(fecha: string): string {
     border-radius: 10px;
     flex-direction: column;
     align-items: center;
+  }
+  &__direccion {
+    color: $color-lightred;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      text-shadow: 0px 0px 6px rgba(255, 0, 0, 0.6);
+    }
   }
 
   &__portada {
@@ -382,6 +405,8 @@ function formatFecha(fecha: string): string {
     font-style: italic;
     color: $color-lightgray;
   }
+
+
 }
 
 @media (min-width: 900px) {
