@@ -12,7 +12,7 @@
           <!-- Navegación en pantallas grandes -->
           <div class="navbar__navigation">
             <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
-            <v-btn to="/eventosGuardados" class="navbar__link navbar__link--active">EventosGuardados</v-btn>
+            <!--<v-btn to="/eventosGuardados" class="navbar__link navbar__link--active">EventosGuardados</v-btn>-->
             <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
             <v-btn to="/administrador" class="navbar__link">Gestión</v-btn>
             <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
@@ -32,7 +32,7 @@
       <v-navigation-drawer v-model="drawer" temporary class="navbar__mobile-menu">
         <v-list>
           <v-list-item to="/eventos" class="navbar__mobile-link">Eventos</v-list-item>
-          <v-list-item to="/eventosGuardados" class="navbar__mobile-link">EventosGuardados</v-list-item>
+       <!--   <v-list-item to="/eventosGuardados" class="navbar__mobile-link">EventosGuardados</v-list-item>-->
           <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
           <v-list-item to="/administrador" class="navbar__mobile-link">Gestión</v-list-item>
           <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
