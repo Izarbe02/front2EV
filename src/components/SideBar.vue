@@ -1,6 +1,9 @@
 <template>
   <button class="toggle-btn" @click="toggleSidebar">☰</button>
+
   <div class="sidebar" :class="{ 'is-hidden': !isSidebarOpen }">
+    <button class="sidebar__close-btn" @click="isSidebarOpen = false">✕</button>
+
     <ul>
       <li
         v-for="vista in vistasFiltradas"
@@ -36,13 +39,14 @@ const toggleSidebar = () => {
 
 const setView = (view: string) => {
   emit('changeView', view);
+  isSidebarOpen.value = false; // cerrar al seleccionar
 };
 
 const handleLogout = () => {
   store.logout();
   router.push('/');
+  isSidebarOpen.value = false;
 };
-
 
 const nombres: Record<string, string> = {
   UsuariosTable: 'Usuarios',
@@ -72,7 +76,6 @@ const vistasFiltradas = computed(() =>
   z-index: 9999; // debe ser mayor al sidebar
 }
 
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -83,7 +86,23 @@ const vistasFiltradas = computed(() =>
   background: linear-gradient(to bottom, #000000, #1d1d1d);
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
-    z-index: 9999; 
+  z-index: 9999;
+
+  &__close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+
+    &:hover {
+      color: white;
+    }
+  }
 
   &__link {
     margin-top: 4%;
@@ -138,26 +157,3 @@ li {
   }
 }
 </style>
-.sidebar {
-  position: fixed; // <- ya lo tienes
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100vh;
-  padding: 60px 15px;
-  background: linear-gradient(to bottom, #000000, #1d1d1d);
-  z-index: 1000; // <-- esto es lo que garantiza que se superponga
-  transform: translateX(0);
-  transition: transform 0.3s ease-in-out;
-
-  @media (min-width: 768px) {
-    position: relative;
-    transform: translateX(0) !important;
-    z-index: auto;
-    height: auto;
-  }
-}
-
-.sidebar.is-hidden {
-  transform: translateX(-100%);
-}
