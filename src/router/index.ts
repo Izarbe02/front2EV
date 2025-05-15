@@ -72,6 +72,11 @@ const router = createRouter({
       path: '/eventosGuardados',
       name: 'eventosGuardados',
       component: EventosGuardados
+    },
+    {
+      path: '/crearevento',
+      name: 'CrearEvento',
+      component: () => import('@/views/CrearEventoView.vue')
     }
    /* {
       path: '/about',
