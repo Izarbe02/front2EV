@@ -1,24 +1,32 @@
-<script setup lang="ts"> 
-import { onMounted, computed } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, computed } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import type EventoDto from "@/stores/dtos/evento.dto";
+import { RouterLink } from "vue-router";
 
 const eventosStore = useEventosStore();
+const mostrarAcabados = ref(false); // Filtro por eventos acabados
 
 onMounted(() => {
   eventosStore.findAll();
 });
-console.log(eventosStore.eventos)
-// Computed para definir qué eventos se mostrarán
-const eventosMostrados = computed<EventoDto[]>(() => 
-  eventosStore.hayEventosFiltrados ? eventosStore.eventosFiltrados : eventosStore.eventos
-);
+
+const eventosMostrados = computed<EventoDto[]>(() => {
+  const base = eventosStore.hayEventosFiltrados
+    ? eventosStore.eventosFiltrados
+    : eventosStore.eventos;
+
+  return base.filter(evento =>
+    mostrarAcabados.value
+      ? new Date(evento.fechaFin) < new Date()
+      : new Date(evento.fechaFin) >= new Date()
+  );
+});
 
 const formatearFecha = (fecha: Date | string) => {
-  console.log(fecha) 
   if (!fecha) return "Fecha no disponible";
   const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
-  if (isNaN(fechaObjeto.getTime())) return "Fecha inválida"; 
+  if (isNaN(fechaObjeto.getTime())) return "Fecha inválida";
 
   return fechaObjeto.toLocaleDateString("es-ES", {
     weekday: "long",
@@ -30,17 +38,22 @@ const formatearFecha = (fecha: Date | string) => {
   });
 };
 
-let fechaActual = new Date();
-
+const fechaActual = new Date();
 </script>
+
 <template>
   <div class="evento-container">
     <h1 class="evento-container__titulo">EVENTOS</h1>
 
+    <div class="evento-container__filtro">
+      <button class="evento-container__boton-filtro" @click="mostrarAcabados = !mostrarAcabados">
+        {{ mostrarAcabados ? 'Ver eventos activos' : 'Ver eventos acabados' }}
+      </button>
+    </div>
+
     <div class="evento-container__tarjetas">
       <template v-if="eventosMostrados.length > 0">
         <div v-for="evento in eventosMostrados" :key="evento.id" class="evento-card">
-          <!-- Contenedor de la imagen con "acabado" -->
           <div class="evento-card__imagen-container">
             <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
             <div v-if="new Date(evento.fechaFin) < fechaActual" class="evento-card__acabado">
@@ -50,7 +63,6 @@ let fechaActual = new Date();
 
           <div class="evento-card__contenido">
             <p class="evento-card__titulo">{{ evento.nombre }}</p>
-
             <div class="evento-card__info">
               <span class="evento-card__fecha">
                 {{ formatearFecha(evento.fechaInicio) }} -
@@ -58,7 +70,6 @@ let fechaActual = new Date();
               </span>
               <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
             </div>
-
             <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__boton">
               Saber más
             </RouterLink>
@@ -73,7 +84,6 @@ let fechaActual = new Date();
   </div>
 </template>
 
-
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
@@ -86,6 +96,27 @@ let fechaActual = new Date();
     text-align: center;
     text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
     margin-top: 1%;
+  }
+
+  &__filtro {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  &__boton-filtro {
+    background-color: $color-lightred;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: darken($color-lightred, 10%);
+    }
   }
 
   &__tarjetas {
@@ -106,7 +137,7 @@ let fechaActual = new Date();
 
   @media (min-width: 768px) {
     margin-top: 1%;
-    
+
     &__tarjetas {
       grid-template-columns: repeat(3, 1fr);
       gap: 30px;
@@ -114,6 +145,7 @@ let fechaActual = new Date();
     }
   }
 }
+
 .evento-card {
   height: 600px;
   background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
@@ -133,7 +165,7 @@ let fechaActual = new Date();
   }
 
   &__imagen-container {
-    position: relative; /* Permite posicionar el "Acabado" dentro */
+    position: relative;
     width: 100%;
     height: 50%;
   }
@@ -146,9 +178,9 @@ let fechaActual = new Date();
 
   &__acabado {
     position: absolute;
-    top: 10px; 
+    top: 10px;
     right: 10px;
-    background: rgba(255, 0, 0, 0.8); 
+    background: rgba(255, 0, 0, 0.8);
     color: white;
     padding: 5px 10px;
     font-size: 0.9rem;
@@ -201,6 +233,4 @@ let fechaActual = new Date();
     }
   }
 }
-
-
 </style>

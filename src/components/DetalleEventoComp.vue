@@ -28,9 +28,6 @@ const comentarioNuevo = ref<string>("")
 const loadEvento = async (id: number | null) => {
   if (id !== null) {
     evento.value = await eventosStore.getInfoEvento(id)
-    const data = await response.json();
-console.log("Respuesta cruda del backend:", data);
-
     const idUsuario = usuariosStore.usuarioLogeado?.id
     if (evento.value && idUsuario) {
       await eventosGuardadosStore.comprobarEventoGuardado(idUsuario, id)
