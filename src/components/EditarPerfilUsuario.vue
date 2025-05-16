@@ -71,7 +71,7 @@
               id="password" 
               class="perfil__input" 
               type="password" 
-              placeholder="Dejar en blanco para mantener actual" 
+              placeholder="" 
             />
             <button 
               type="button" 
@@ -152,9 +152,9 @@ async function actualizarPerfil() {
     await store.updateUsuario(usuario.id, usuarioActualizado);
 
     mensaje.value = 'Perfil actualizado correctamente.';
-    form.password = ''; // Limpiar el campo de contraseña
+    form.password = ''; 
 
-    // Actualiza el usuario en el store local
+
     store.usuarioLogeado = { ...usuarioActualizado, password: undefined };
   } catch (error) {
     console.error(error);
@@ -234,7 +234,7 @@ async function actualizarPerfil() {
     border: 2px solid rgba($color-lightgray, 0.2);
     border-radius: 6px;
     font-size: 1rem;
-    background-color: rgba(white, 0.05);
+    background-color:white;
     color: white;
     transition: all 0.3s ease;
     
@@ -376,4 +376,46 @@ async function actualizarPerfil() {
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
+@media (min-width: 992px) {
+  .perfil {
+    max-width: 1000px;
+    padding: 3rem;
+
+    &__titulo {
+      font-size: 2.4rem;
+    }
+
+    &__subtitulo {
+      font-size: 1.2rem;
+    }
+
+    &__label {
+      font-size: 1rem;
+    }
+
+    &__input {
+      font-size: 1.1rem;
+      padding: 16px 18px;
+    }
+
+    &__toggle-password {
+      font-size: 0.9rem;
+    }
+
+    &__hint {
+      font-size: 0.9rem;
+    }
+
+    &__boton {
+      font-size: 1.1rem;
+      padding: 14px 24px;
+      min-width: 180px;
+    }
+
+    &__mensaje {
+      font-size: 1.1rem;
+    }
+  }
+}
+
 </style>

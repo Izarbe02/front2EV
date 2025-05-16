@@ -147,7 +147,7 @@ onMounted(() => {
 
 @media (min-width: 1024px) {
   .evento {
-    width: calc(33.333% - 1rem);
+    width: 300px;
   }
 }
 </style>
