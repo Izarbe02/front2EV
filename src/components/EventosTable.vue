@@ -14,7 +14,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="evento in eventos" :key="evento.id">
+          <tr v-if="eventosFiltrados.length === 0">
+  <td colspan="7">No tienes eventos disponibles</td>
+</tr>
+
+          <tr v-for="evento in eventosFiltrados" :key="evento.id">
             <td>{{ evento.id }}</td>
             <td>{{ evento.nombre }}</td>
             <td>{{ evento.descripcion }}</td>
@@ -45,29 +49,75 @@
   <script setup lang="ts">
   import { onMounted, ref, computed } from "vue";
   import { useEventosStore } from "@/stores/eventos";
+  import { useUsuariosStore } from "@/stores/usuarios";
+  import { useOrganizadoresStore } from "@/stores/organizadores";
   import type EventoDto from "@/stores/dtos/evento.dto";
+  import { watchEffect } from "vue";
+
   
   const store = useEventosStore();
   const { eventos, findAll, deleteEvento } = store;
   
-  // Variable para almacenar el evento seleccionado para editar
+  const usuariosStore = useUsuariosStore();
+  const organizadoresStore = useOrganizadoresStore();
+  
+  // Evento seleccionado para editar
   const eventoEditado = ref<EventoDto | null>(null);
   
-  onMounted(() => {
-    findAll();
-  });
+  // ID del organizador logeado (si aplica)
+  const idOrganizadorLogeado = computed(() => organizadoresStore.organizadorLogeado?.id ?? null);
   
-  // Función para asignar un evento a la variable eventoEditado
+  // Rol actual (usuario u organizador)
+  const rolActual = computed(() =>
+    usuariosStore.usuarioLogeado?.idRol ??
+    organizadoresStore.organizadorLogeado?.idRol ??
+    -1
+  );
+  
+  // ✅ Filtrar eventos con verificación defensiva
+  const eventosFiltrados = computed(() => {
+  const lista = eventos ?? [];
+  const rol = rolActual.value;
+  const idOrg = idOrganizadorLogeado.value;
+
+  // Debug opcional:
+  console.log("ROL:", rol);
+  console.log("ID ORG:", idOrg);
+  console.log("EVENTOS DISPONIBLES:", lista.length);
+
+  if (rol === 1) return lista;
+  if (rol === 2 && idOrg !== null) {
+    return lista.filter(e => e.idOrganizador  === idOrg);
+  }
+  return [];
+});
+
+onMounted(async () => {
+  await findAll();
+});
+
+// ⚠️ Asegura que el organizador esté correctamente cargado desde localStorage
+watchEffect(() => {
+  const raw = localStorage.getItem("organizadorLogeado");
+  if (raw && raw !== "undefined" && !organizadoresStore.organizadorLogeado) {
+    try {
+      organizadoresStore.organizadorLogeado = JSON.parse(raw);
+    } catch (e) {
+      console.warn("No se pudo parsear organizadorLogeado:", e);
+    }
+  }
+});
+
+
+  
   const editarEvento = (evento: EventoDto) => {
     eventoEditado.value = evento;
   };
   
-  // Cerrar la edición
   const cerrarEdicion = () => {
     eventoEditado.value = null;
   };
   
-  // Formateo de fechas
   const formatearFecha = (fecha: Date | string): string => {
     const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
     return fechaObjeto.toLocaleDateString("es-ES", {
@@ -83,6 +133,8 @@
     }
   };
   </script>
+  
+
   
   <style scoped lang="scss">
   @import "@/assets/styles/_variables.scss";

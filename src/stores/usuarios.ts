@@ -6,12 +6,24 @@ import type { UsuarioLoginDto } from "./dtos/usuarioLogin.dto";
 export const useUsuariosStore = defineStore("usuarios", () => {
   const usuarios = ref<UsuarioDto[]>([]);
   const currentUsuario = ref<UsuarioDto | null>(null);
-  const usuarioLogeado = ref<UsuarioDto | null>(
-    JSON.parse(localStorage.getItem("usuarioLogeado") || "null")
-  );
+
+  // ✅ Manejo seguro del localStorage
+  let usuarioGuardado: UsuarioDto | null = null;
+  try {
+    const raw = localStorage.getItem("usuarioLogeado");
+    if (raw && raw !== "undefined") {
+      usuarioGuardado = JSON.parse(raw);
+    }
+  } catch (error) {
+    console.warn("Error al parsear usuarioLogeado:", error);
+  }
+
+  const usuarioLogeado = ref<UsuarioDto | null>(usuarioGuardado);
+
   const tokenLogin = ref<string | null>(
     localStorage.getItem("tokenLogin")
   );
+
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
@@ -61,7 +73,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   }
 
   async function updateUsuario(id: number, usuarioActualizado: UsuarioDto) {
-    if (usuarioActualizado == null) throw new Error("no hay usuario");
+    if (!usuarioActualizado) throw new Error("No hay usuario");
 
     try {
       const response = await fetch(`http://localhost:8888/api/Usuario/${id}`, {
@@ -75,8 +87,6 @@ export const useUsuariosStore = defineStore("usuarios", () => {
       usuarioLogeado.value = usuarioActualizado;
       localStorage.setItem("usuarioLogeado", JSON.stringify(usuarioActualizado));
       successMessage.value = "Usuario actualizado correctamente";
-
-
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el usuario:", error);
@@ -99,7 +109,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   }
 
   async function login(usuarioLogin: UsuarioLoginDto) {
-    try { console.log(usuarioLogin)
+    try {
       const response = await fetch("http://localhost:8888/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -125,7 +135,8 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
         return true;
       }
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error.message;
       console.error("Error en login:", error);
     }
   }
@@ -136,7 +147,6 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     localStorage.removeItem("usuarioLogeado");
     localStorage.removeItem("tokenLogin");
   }
-  
 
   return {
     usuarios,

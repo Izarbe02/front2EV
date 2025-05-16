@@ -4,22 +4,22 @@ import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 import type { UsuarioLoginDto } from "@/stores/dtos/usuarioLogin.dto";
 
 export const useOrganizadoresStore = defineStore("organizadores", () => {
-  // Estado reactivo
   const organizadores = ref<OrganizadorDto[]>([]);
   const currentOrganizador = ref<OrganizadorDto | null>(null);
 
-  // ✅ Carga segura del organizador logeado
+  // ✅ Manejo seguro del localStorage (igual que usuarios)
   let organizadorGuardado: OrganizadorDto | null = null;
   try {
     const raw = localStorage.getItem("organizadorLogeado");
     if (raw && raw !== "undefined") {
       organizadorGuardado = JSON.parse(raw);
     }
-  } catch (e) {
-    console.warn("Error al parsear organizadorLogeado:", e);
+  } catch (error) {
+    console.warn("Error al parsear organizadorLogeado:", error);
   }
 
   const organizadorLogeado = ref<OrganizadorDto | null>(organizadorGuardado);
+
   const tokenLoginOrganizador = ref<string | null>(
     localStorage.getItem("tokenLoginOrganizador")
   );
@@ -27,7 +27,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
-  // Obtener todos los organizadores
   async function findAll() {
     try {
       const response = await fetch("http://localhost:8888/api/Organizador");
@@ -41,7 +40,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  // Obtener uno por ID
   async function getOrganizador(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`);
@@ -55,7 +53,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  // Crear nuevo organizador
   async function createEstablecimiento(organizador: OrganizadorDto) {
     try {
       const response = await fetch("http://localhost:8888/api/Organizador", {
@@ -74,7 +71,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  // Actualizar organizador
   async function updateEstablecimiento(id: number, updated: OrganizadorDto) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
@@ -86,7 +82,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
       await findAll();
 
-      // Si el organizador logeado se actualiza
       if (organizadorLogeado.value?.id === id) {
         organizadorLogeado.value = updated;
         localStorage.setItem("organizadorLogeado", JSON.stringify(updated));
@@ -99,7 +94,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  // Eliminar organizador
   async function deleteEstablecimiento(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
@@ -115,7 +109,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  // LOGIN organizador
   async function loginOrganizador(loginDto: UsuarioLoginDto) {
     try {
       const response = await fetch("http://localhost:8888/api/auth/login-organizador", {
@@ -129,12 +122,12 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
         throw new Error(`Error al iniciar sesión: ${errorText || response.statusText}`);
       }
 
-      const data: { token: string; usuario: OrganizadorDto } = await response.json();
+      const data: { token: string; organizador: OrganizadorDto } = await response.json();
 
-      organizadorLogeado.value = data.usuario;
+      organizadorLogeado.value = data.organizador;
       tokenLoginOrganizador.value = data.token;
 
-      localStorage.setItem("organizadorLogeado", JSON.stringify(data.usuario));
+      localStorage.setItem("organizadorLogeado", JSON.stringify(data.organizador));
       localStorage.setItem("tokenLoginOrganizador", data.token);
 
       return true;
@@ -144,7 +137,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  // LOGOUT organizador
   function logoutOrganizador() {
     organizadorLogeado.value = null;
     tokenLoginOrganizador.value = null;

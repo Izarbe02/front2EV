@@ -46,6 +46,8 @@ const estaLogeado = computed(() => usuario.value !== null || organizador.value !
 const rolActivo = computed(() => {
   return usuario.value?.idRol ?? organizador.value?.idRol ?? -1;
 });
+console.log(organizadoresStore.organizadorLogeado);
+
 
 const currentView = ref<
   'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados' | 'EditarPerfilUsuario'
