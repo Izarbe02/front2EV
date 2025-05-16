@@ -1,50 +1,57 @@
 <template>
-    <div class="contenido">
-      <h1 class="contenido__titulo">EVENTOS</h1>
-      <table class="contenido__tabla">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Ubicación</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="eventosFiltrados.length === 0">
-  <td colspan="7">No tienes eventos disponibles</td>
-</tr>
+  <div class="contenido">
+    <h1 class="contenido__titulo">EVENTOS</h1>
+    <table class="contenido__tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Ubicación</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-if="eventosFiltrados.length === 0">
+          <td colspan="7">No tienes eventos disponibles</td>
+        </tr>
 
-          <tr v-for="evento in eventosFiltrados" :key="evento.id">
-            <td>{{ evento.id }}</td>
-            <td>{{ evento.nombre }}</td>
-            <td>{{ evento.descripcion }}</td>
-            <td>{{ evento.ubicacion }}</td>
-            <td>{{ formatearFecha(evento.fechaInicio) }}</td>
-            <td>{{ formatearFecha(evento.fechaFin) }}</td>
-            <td>
-              <button class="btn-editar" @click="editarEvento(evento)">
-                <i class="fas fa-pencil-alt"></i>
-              </button>
-              <button class="btn-borrar" @click="borrarEvento(evento.id)">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <div v-if="eventoEditado" class="modal">
-        <h3>Editar Evento</h3>
-        <p>Nombre: {{ eventoEditado.nombre }}</p>
-        <p>Ubicación: {{ eventoEditado.ubicacion }}</p>
-        <button @click="cerrarEdicion">Cerrar</button>
+        <tr v-for="evento in eventosFiltrados" :key="evento.id">
+          <td>{{ evento.id }}</td>
+          <td>{{ evento.nombre }}</td>
+          <td>{{ evento.descripcion }}</td>
+          <td>{{ evento.ubicacion }}</td>
+          <td>{{ formatearFecha(evento.fechaInicio) }}</td>
+          <td>{{ formatearFecha(evento.fechaFin) }}</td>
+          <td>
+            <button class="btn-editar" @click="editarEvento(evento)">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button class="btn-borrar" @click="borrarEvento(evento.id)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div v-if="eventoEditado" class="contenido__modal">
+      <h3 class="contenido__modal-titulo">Editar Evento</h3>
+      <div class="contenido__modal-campo">
+        <span class="contenido__modal-label">Nombre:</span>
+        <span>{{ eventoEditado.nombre }}</span>
       </div>
+      <div class="contenido__modal-campo">
+        <span class="contenido__modal-label">Ubicación:</span>
+        <span>{{ eventoEditado.ubicacion }}</span>
+      </div>
+      <button class="contenido__modal-boton" @click="cerrarEdicion">Cerrar</button>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script setup lang="ts">
   import { onMounted, ref, computed } from "vue";
@@ -134,74 +141,170 @@ watchEffect(() => {
   };
   </script>
   
-
-  
   <style scoped lang="scss">
   @import "@/assets/styles/_variables.scss";
   @import "@/assets/styles/_mixins.scss";
   
   .contenido {
-    margin-top: 5%;
-    padding: 1.5%;
+    margin-top: 1.5rem;
+    padding: 1rem;
     border-radius: 10px;
+    background-color: $color-darkgray;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background-color: $color-darkgray;
   
     &__titulo {
       font-family: $titulo;
-      font-size: 2.3rem;
+      font-size: 1.8rem;
       font-weight: bold;
-      margin-bottom: 1%;
       color: $color-red;
+      text-align: center;
+      margin-bottom: 1rem;
     }
   
     &__tabla {
+      width: 100%;
+      overflow-x: auto;
       color: white;
-      font-size: 1.4rem;
+      font-size: 0.9rem;
+  
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+      }
+  
+      th,
+      td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid $color-lightgray;
+      }
+  
+      th {
+        background-color: $color-lightgray;
+        font-weight: bold;
+        color: white;
+      }
+  
+      &-acciones {
+        display: flex;
+        gap: 0.5rem;
+      }
     }
   
-    th,
-    td {
-      padding: 15px 20px;
-      text-align: left;
-      line-height: 1.4;
-    }
-  
-    .btn-editar,
-    .btn-borrar {
-      background: none;
+    &__btn {
       border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.6rem;
+      font-size: 1rem;
+      font-weight: bold;
+      font-family: $first-font;
       cursor: pointer;
-      font-size: 1.2rem;
-      margin: 0 15px;
+      transition: all 0.2s ease-in-out;
+  
+      &--editar {
+        background-color: $color-lightgray;
+        color: white;
+  
+        &:hover {
+          background-color: lighten($color-lightgray, 8%);
+        }
+      }
+  
+      &--borrar {
+        background-color: $color-red;
+        color: white;
+  
+        &:hover {
+          background-color: $color-lightred;
+        }
+      }
     }
   
-    .btn-editar {
-      color: #797979;
-    }
+    &__modal {
+      margin-top: 2rem;
+      background: $color-whitered;
+      padding: 1.5rem;
+      border-radius: 10px;
+      color: $color-black;
+      width: 100%;
+      max-width: 500px;
+      margin-inline: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
   
-    .btn-editar:hover {
-      color: #c0c0c0;
-    }
+      &-titulo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: $color-red;
+        text-align: center;
+      }
   
-    .btn-borrar {
-      color: #bb2231;
-    }
+      &-campo {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.1rem;
+        flex-wrap: wrap;
   
-    .btn-borrar:hover {
-      color: #a71d2a;
+        span {
+          word-break: break-word;
+        }
+      }
+  
+      &-label {
+        font-weight: bold;
+        color: $color-darkgray;
+        margin-right: 0.5rem;
+      }
+  
+      &-boton {
+        align-self: center;
+        background-color: $color-red;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        font-family: $first-font;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+  
+        &:hover {
+          background-color: $color-lightred;
+        }
+      }
     }
   }
   
-  .modal {
-    margin-top: 20px;
-    padding: 10px;
-    background: white;
-    color: black;
-    border-radius: 5px;
+  @media (min-width: 768px) {
+    .contenido {
+      padding: 2rem;
+  
+      &__titulo {
+        font-size: 2.4rem;
+      }
+  
+      &__tabla {
+        font-size: 1rem;
+      }
+  
+      &__modal {
+        padding: 2rem;
+  
+        &-titulo {
+          font-size: 1.8rem;
+        }
+  
+        &-campo {
+          font-size: 1.2rem;
+        }
+      }
+    }
   }
   </style>
   
