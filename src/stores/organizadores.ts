@@ -8,10 +8,18 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   const organizadores = ref<OrganizadorDto[]>([]);
   const currentOrganizador = ref<OrganizadorDto | null>(null);
 
-  const organizadorLogeado = ref<OrganizadorDto | null>(
-    JSON.parse(localStorage.getItem("organizadorLogeado") || "null")
-  );
+  // ✅ Carga segura del organizador logeado
+  let organizadorGuardado: OrganizadorDto | null = null;
+  try {
+    const raw = localStorage.getItem("organizadorLogeado");
+    if (raw && raw !== "undefined") {
+      organizadorGuardado = JSON.parse(raw);
+    }
+  } catch (e) {
+    console.warn("Error al parsear organizadorLogeado:", e);
+  }
 
+  const organizadorLogeado = ref<OrganizadorDto | null>(organizadorGuardado);
   const tokenLoginOrganizador = ref<string | null>(
     localStorage.getItem("tokenLoginOrganizador")
   );
@@ -77,7 +85,8 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       if (!response.ok) throw new Error("Error al actualizar organizador");
 
       await findAll();
-      // Si el logeado se actualiza, reflejarlo
+
+      // Si el organizador logeado se actualiza
       if (organizadorLogeado.value?.id === id) {
         organizadorLogeado.value = updated;
         localStorage.setItem("organizadorLogeado", JSON.stringify(updated));
