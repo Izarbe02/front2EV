@@ -1,6 +1,14 @@
 <template>
   <div class="contenido">
     <h1 class="contenido__titulo">EVENTOS</h1>
+
+    <div v-if="rolActual === 1 || rolActual === 2" class="contenido__crear">
+      <button class="contenido__crear-boton" @click="mostrarCrear = !mostrarCrear">
+        {{ mostrarCrear ? 'Cerrar creación' : 'Crear nuevo evento' }}
+      </button>
+      <CrearEvento v-if="mostrarCrear" />
+    </div>
+
     <table class="contenido__tabla">
       <thead>
         <tr>
@@ -26,10 +34,10 @@
           <td>{{ formatearFecha(evento.fechaInicio) }}</td>
           <td>{{ formatearFecha(evento.fechaFin) }}</td>
           <td>
-            <button class="btn-editar" @click="editarEvento(evento)">
+            <button class="contenido__btn contenido__btn--editar" @click="editarEvento(evento)">
               <i class="fas fa-pencil-alt"></i>
             </button>
-            <button class="btn-borrar" @click="borrarEvento(evento.id)">
+            <button class="contenido__btn contenido__btn--borrar" @click="borrarEvento(evento.id)">
               <i class="fas fa-trash"></i>
             </button>
           </td>
@@ -52,49 +60,36 @@
   </div>
 </template>
 
-  
-  <script setup lang="ts">
-  import { onMounted, ref, computed } from "vue";
-  import { useEventosStore } from "@/stores/eventos";
-  import { useUsuariosStore } from "@/stores/usuarios";
-  import { useOrganizadoresStore } from "@/stores/organizadores";
-  import type EventoDto from "@/stores/dtos/evento.dto";
-  import { watchEffect } from "vue";
+<script setup lang="ts">
+import { ref, computed, onMounted, watchEffect } from "vue";
+import { useEventosStore } from "@/stores/eventos";
+import { useUsuariosStore } from "@/stores/usuarios";
+import { useOrganizadoresStore } from "@/stores/organizadores";
+import type EventoDto from "@/stores/dtos/evento.dto";
+import CrearEvento from "@/components/CrearEvento.vue";
 
-  
-  const store = useEventosStore();
-  const { eventos, findAll, deleteEvento } = store;
-  
-  const usuariosStore = useUsuariosStore();
-  const organizadoresStore = useOrganizadoresStore();
-  
-  // Evento seleccionado para editar
-  const eventoEditado = ref<EventoDto | null>(null);
-  
-  // ID del organizador logeado (si aplica)
-  const idOrganizadorLogeado = computed(() => organizadoresStore.organizadorLogeado?.id ?? null);
-  
-  // Rol actual (usuario u organizador)
-  const rolActual = computed(() =>
-    usuariosStore.usuarioLogeado?.idRol ??
-    organizadoresStore.organizadorLogeado?.idRol ??
-    -1
-  );
-  
-  // ✅ Filtrar eventos con verificación defensiva
-  const eventosFiltrados = computed(() => {
+const store = useEventosStore();
+const { eventos, findAll, deleteEvento } = store;
+
+const usuariosStore = useUsuariosStore();
+const organizadoresStore = useOrganizadoresStore();
+
+const eventoEditado = ref<EventoDto | null>(null);
+const mostrarCrear = ref(false);
+
+const idOrganizadorLogeado = computed(() => organizadoresStore.organizadorLogeado?.id ?? null);
+const rolActual = computed(() =>
+  usuariosStore.usuarioLogeado?.idRol ?? organizadoresStore.organizadorLogeado?.idRol ?? -1
+);
+
+const eventosFiltrados = computed(() => {
   const lista = eventos ?? [];
   const rol = rolActual.value;
   const idOrg = idOrganizadorLogeado.value;
 
-  // Debug opcional:
-  console.log("ROL:", rol);
-  console.log("ID ORG:", idOrg);
-  console.log("EVENTOS DISPONIBLES:", lista.length);
-
   if (rol === 1) return lista;
   if (rol === 2 && idOrg !== null) {
-    return lista.filter(e => e.idOrganizador  === idOrg);
+    return lista.filter(e => e.idOrganizador === idOrg);
   }
   return [];
 });
@@ -103,7 +98,6 @@ onMounted(async () => {
   await findAll();
 });
 
-// ⚠️ Asegura que el organizador esté correctamente cargado desde localStorage
 watchEffect(() => {
   const raw = localStorage.getItem("organizadorLogeado");
   if (raw && raw !== "undefined" && !organizadoresStore.organizadorLogeado) {
@@ -115,196 +109,219 @@ watchEffect(() => {
   }
 });
 
+const editarEvento = (evento: EventoDto) => {
+  eventoEditado.value = evento;
+};
 
-  
-  const editarEvento = (evento: EventoDto) => {
-    eventoEditado.value = evento;
-  };
-  
-  const cerrarEdicion = () => {
-    eventoEditado.value = null;
-  };
-  
-  const formatearFecha = (fecha: Date | string): string => {
-    const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
-    return fechaObjeto.toLocaleDateString("es-ES", {
-      weekday: "long",
-      day: "2-digit",
-      month: "short",
-    });
-  };
-  
-  const borrarEvento = async (id: number) => {
-    if (confirm("¿Estás seguro de que quieres eliminar este evento?")) {
-      await deleteEvento(id);
-    }
-  };
-  </script>
-  
-  <style scoped lang="scss">
-  @import "@/assets/styles/_variables.scss";
-  @import "@/assets/styles/_mixins.scss";
-  
-  .contenido {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: 10px;
-    background-color: $color-darkgray;
+const cerrarEdicion = () => {
+  eventoEditado.value = null;
+};
+
+const formatearFecha = (fecha: Date | string): string => {
+  const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
+  return fechaObjeto.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+  });
+};
+
+const borrarEvento = async (id: number) => {
+  if (confirm("¿Estás seguro de que quieres eliminar este evento?")) {
+    await deleteEvento(id);
+  }
+};
+</script>
+
+<style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+@import "@/assets/styles/_mixins.scss";
+
+.contenido {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: $color-darkgray;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__titulo {
+    font-family: $titulo;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: $color-red;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  &__crear {
     width: 100%;
+    margin-bottom: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-  
-    &__titulo {
-      font-family: $titulo;
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: $color-red;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-  
-    &__tabla {
-      width: 100%;
-      overflow-x: auto;
+    gap: 1rem;
+
+    &-boton {
+      background-color: $color-darkGreen;
       color: white;
-      font-size: 0.9rem;
-  
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 600px;
-      }
-  
-      th,
-      td {
-        padding: 0.75rem 1rem;
-        text-align: left;
-        border-bottom: 1px solid $color-lightgray;
-      }
-  
-      th {
-        background-color: $color-lightgray;
-        font-weight: bold;
-        color: white;
-      }
-  
-      &-acciones {
-        display: flex;
-        gap: 0.5rem;
-      }
-    }
-  
-    &__btn {
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 6px;
-      padding: 0.4rem 0.6rem;
-      font-size: 1rem;
       font-weight: bold;
       font-family: $first-font;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
-  
-      &--editar {
-        background-color: $color-lightgray;
-        color: white;
-  
-        &:hover {
-          background-color: lighten($color-lightgray, 8%);
-        }
-      }
-  
-      &--borrar {
-        background-color: $color-red;
-        color: white;
-  
-        &:hover {
-          background-color: $color-lightred;
-        }
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: $color-green;
+        color: $color-black;
       }
     }
-  
-    &__modal {
-      margin-top: 2rem;
-      background: $color-whitered;
-      padding: 1.5rem;
-      border-radius: 10px;
-      color: $color-black;
+  }
+
+  &__tabla {
+    width: 100%;
+    overflow-x: auto;
+    color: white;
+    font-size: 0.9rem;
+
+    table {
       width: 100%;
-      max-width: 500px;
-      margin-inline: auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    th,
+    td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid $color-lightgray;
+    }
+
+    th {
+      background-color: $color-lightgray;
+      font-weight: bold;
+      color: white;
+    }
+
+    &-acciones {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
-  
-      &-titulo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: $color-red;
-        text-align: center;
+      gap: 0.5rem;
+    }
+  }
+
+  &__btn {
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: $first-font;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &--editar {
+      background-color: $color-lightgray;
+      color: white;
+
+      &:hover {
+        background-color: lighten($color-lightgray, 8%);
       }
-  
-      &-campo {
-        display: flex;
-        justify-content: space-between;
-        font-size: 1.1rem;
-        flex-wrap: wrap;
-  
-        span {
-          word-break: break-word;
-        }
-      }
-  
-      &-label {
-        font-weight: bold;
-        color: $color-darkgray;
-        margin-right: 0.5rem;
-      }
-  
-      &-boton {
-        align-self: center;
-        background-color: $color-red;
-        color: white;
-        padding: 0.6rem 1.2rem;
-        border: none;
-        border-radius: 6px;
-        font-weight: bold;
-        font-family: $first-font;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-  
-        &:hover {
-          background-color: $color-lightred;
-        }
+    }
+
+    &--borrar {
+      background-color: $color-red;
+      color: white;
+
+      &:hover {
+        background-color: $color-lightred;
       }
     }
   }
-  
-  @media (min-width: 768px) {
-    .contenido {
+
+  &__modal {
+    margin-top: 2rem;
+    background: $color-whitered;
+    padding: 1.5rem;
+    border-radius: 10px;
+    color: $color-black;
+    width: 100%;
+    max-width: 500px;
+    margin-inline: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &-titulo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: $color-red;
+      text-align: center;
+    }
+
+    &-campo {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      flex-wrap: wrap;
+
+      span {
+        word-break: break-word;
+      }
+    }
+
+    &-label {
+      font-weight: bold;
+      color: $color-darkgray;
+      margin-right: 0.5rem;
+    }
+
+    &-boton {
+      align-self: center;
+      background-color: $color-red;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-family: $first-font;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: $color-lightred;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .contenido {
+    padding: 2rem;
+
+    &__titulo {
+      font-size: 2.4rem;
+    }
+
+    &__tabla {
+      font-size: 1rem;
+    }
+
+    &__modal {
       padding: 2rem;
-  
-      &__titulo {
-        font-size: 2.4rem;
+
+      &-titulo {
+        font-size: 1.8rem;
       }
-  
-      &__tabla {
-        font-size: 1rem;
-      }
-  
-      &__modal {
-        padding: 2rem;
-  
-        &-titulo {
-          font-size: 1.8rem;
-        }
-  
-        &-campo {
-          font-size: 1.2rem;
-        }
+
+      &-campo {
+        font-size: 1.2rem;
       }
     }
   }
-  </style>
-  
+}
+</style>
