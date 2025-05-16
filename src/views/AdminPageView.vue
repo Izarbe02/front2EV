@@ -1,10 +1,10 @@
 <template>
   <div class="zona-admin">
-    <template v-if="usuario">
+    <template v-if="estaLogeado">
       <SideBar
         @changeView="currentView = $event"
         @logout="handleLogout"
-        :vistasPermitidas="permisosPorRol[rolUsuario] ?? []"
+        :vistasPermitidas="permisosPorRol[rolActivo] ?? []"
       />
       <div class="contenido-admin">
         <component :is="currentComponent" v-if="vistaPermitida" />
@@ -25,17 +25,33 @@
 import { ref, computed, defineAsyncComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 import SideBar from '@/components/SideBar.vue';
 
-const store = useUsuariosStore();
+const usuariosStore = useUsuariosStore();
+const organizadoresStore = useOrganizadoresStore();
 const router = useRouter();
 
-const usuario = computed(() => store.usuarioLogeado);
-console.log(usuario)
-const rolUsuario = computed(() => store.usuarioLogeado?.idRol ?? 3);
+const usuario = computed(() => usuariosStore.usuarioLogeado);
+const organizador = computed(() => organizadoresStore.organizadorLogeado);
+
+console.log(usuario);
+
+console.log(organizador);
+
+
+
+const estaLogeado = computed(() => usuario.value !== null || organizador.value !== null);
+
+const rolActivo = computed(() => {
+  return usuario.value?.idRol ?? organizador.value?.idRol ?? -1;
+});
+console.log(organizadoresStore.organizadorLogeado);
+
+
 const currentView = ref<
   'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados' | 'EditarPerfilUsuario'
->('EditarPerfilUsuario');
+>('EventosTable');
 
 const components = {
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
@@ -48,25 +64,27 @@ const components = {
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
-  2: ['EventosTable'],
-  3: ['EventosGuardados', 'EditarPerfilUsuario']
+  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'], // admin
+  2: ['EventosTable'], // organizador
+  3: ['EventosGuardados', 'EditarPerfilUsuario'] // usuario
 };
 
 const vistaPermitida = computed(() =>
-  permisosPorRol[rolUsuario.value]?.includes(currentView.value)
+  permisosPorRol[rolActivo.value]?.includes(currentView.value)
 );
 
 const currentComponent = computed(() => components[currentView.value]);
 
 function handleLogout() {
-  store.logout();
+  usuariosStore.logout();
+  organizadoresStore.logoutOrganizador();
   router.push('/');
 }
 </script>
+
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
-@import "@/assets/styles/_mixins.scss";   
+@import "@/assets/styles/_mixins.scss";
 
 .contenido-admin {
   display: flex;
