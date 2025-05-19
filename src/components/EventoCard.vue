@@ -6,14 +6,27 @@ import { RouterLink } from "vue-router";
 
 const eventosStore = useEventosStore();
 const mostrarAcabados = ref(false);
-
 const fechaInicio = ref("");
 const fechaFin = ref("");
 const fechaActual = new Date();
 
-onMounted(() => {
-  eventosStore.findAll();
+const categorias = ref<{ id: number; nombre: string }[]>([]);
+const categoriaSeleccionada = ref<string>("");
+
+onMounted(async () => {
+  await eventosStore.findAll();
+  await cargarCategorias();
 });
+
+const cargarCategorias = async () => {
+  try {
+    const response = await fetch("http://localhost:8888/api/CategoriaEvento");
+    if (!response.ok) throw new Error("Error al obtener categorías");
+    categorias.value = await response.json();
+  } catch (error) {
+    console.error("Error cargando categorías:", error);
+  }
+};
 
 const eventosMostrados = computed<EventoDto[]>(() => {
   const base = eventosStore.hayEventosFiltrados
@@ -28,17 +41,9 @@ const eventosMostrados = computed<EventoDto[]>(() => {
 });
 
 const formatearFecha = (fecha: Date | string) => {
-  if (!fecha) return "Fecha no disponible";
-  const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
-  if (isNaN(fechaObjeto.getTime())) return "Fecha inválida";
-
-  return fechaObjeto.toLocaleDateString("es-ES", {
-    weekday: "long",
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
+  const fechaObj = typeof fecha === "string" ? new Date(fecha) : fecha;
+  return fechaObj.toLocaleDateString("es-ES", {
+    weekday: "long", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
   });
 };
 
@@ -49,10 +54,10 @@ const filtrarPorRango = async () => {
   }
 
   const inicio = new Date(fechaInicio.value);
-  inicio.setHours(0, 0, 0, 0); // Forzar hora a 00:00
+  inicio.setHours(0, 0, 0, 0);
 
   const fin = new Date(fechaFin.value);
-  fin.setHours(23, 59, 59, 999); // Forzar fin del día
+  fin.setHours(23, 59, 59, 999);
 
   if (inicio > fin) {
     alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
@@ -62,11 +67,18 @@ const filtrarPorRango = async () => {
   await eventosStore.filtrarPorRangoFechas(inicio, fin);
 };
 
+const filtrarPorCategoria = async () => {
+  if (!categoriaSeleccionada.value) return;
+  await eventosStore.getEventoPorCategoria(categoriaSeleccionada.value);
+};
+
 const limpiarFiltro = async () => {
   fechaInicio.value = "";
   fechaFin.value = "";
+  categoriaSeleccionada.value = "";
   await eventosStore.findAll();
 };
+
 </script>
 
 
@@ -75,27 +87,40 @@ const limpiarFiltro = async () => {
     <h1 class="evento-container__titulo">EVENTOS</h1>
 
     <div class="evento-container__filtro">
-  <div class="evento-container__filtro-fechas">
-<label for="fechaInicio" class="evento-container__label">Desde:</label>
-<input type="date" v-model="fechaInicio" class="evento-container__input-fecha" id="fechaInicio" />
+      <div class="evento-container__filtro-fechas">
+        <label for="fechaInicio" class="evento-container__label">Desde:</label>
+        <input type="date" v-model="fechaInicio" class="evento-container__input-fecha" id="fechaInicio" />
 
-<label for="fechaFin" class="evento-container__label">Hasta:</label>
-<input type="date" v-model="fechaFin" class="evento-container__input-fecha" id="fechaFin" />
- </div>
+        <label for="fechaFin" class="evento-container__label">Hasta:</label>
+        <input type="date" v-model="fechaFin" class="evento-container__input-fecha" id="fechaFin" />
 
-  <div class="evento-container__filtro-botones">
-    <button class="evento-container__boton-filtro" @click="filtrarPorRango">
-      Filtrar por fecha
-    </button>
-    <button class="evento-container__boton-filtro" @click="limpiarFiltro">
-      Limpiar filtro
-    </button>
-    <button class="evento-container__boton-filtro" @click="mostrarAcabados = !mostrarAcabados">
-      {{ mostrarAcabados ? 'Ver eventos activos' : 'Ver eventos acabados' }}
-    </button>
-  </div>
-</div>
+        <label for="categoria" class="evento-container__label">Categoría:</label>
+<select
+  id="categoria"
+  v-model="categoriaSeleccionada"
+  @change="filtrarPorCategoria"
+  class="evento-container__input-fecha"
+>
+  <option disabled value="">Selecciona una categoría</option>
+  <option v-for="cat in categorias" :key="cat.id" :value="cat.nombre">
+    {{ cat.nombre }}
+  </option>
+</select>
 
+      </div>
+
+      <div class="evento-container__filtro-botones">
+        <button class="evento-container__boton-filtro" @click="filtrarPorRango">
+          Filtrar por fecha
+        </button>
+        <button class="evento-container__boton-filtro" @click="limpiarFiltro">
+          Limpiar filtro
+        </button>
+        <button class="evento-container__boton-filtro" @click="mostrarAcabados = !mostrarAcabados">
+          {{ mostrarAcabados ? 'Ver eventos activos' : 'Ver eventos acabados' }}
+        </button>
+      </div>
+    </div>
 
     <div class="evento-container__tarjetas">
       <template v-if="eventosMostrados.length > 0">
@@ -110,10 +135,7 @@ const limpiarFiltro = async () => {
           <div class="evento-card__contenido">
             <p class="evento-card__titulo">{{ evento.nombre }}</p>
             <div class="evento-card__info">
-              <span class="evento-card__fecha">
-                {{ formatearFecha(evento.fechaInicio) }} -
-                {{ formatearFecha(evento.fechaFin) }}
-              </span>
+              <span class="evento-card__fecha">{{ formatearFecha(evento.fechaInicio) }} - {{ formatearFecha(evento.fechaFin) }}</span>
               <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
             </div>
             <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__boton">
@@ -128,7 +150,8 @@ const limpiarFiltro = async () => {
       </div>
     </div>
   </div>
-</template><style scoped lang="scss">
+</template>
+<style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
