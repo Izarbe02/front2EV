@@ -202,6 +202,22 @@ export const useEventosStore = defineStore("eventos", () => {
             hayEventosFiltrados.value = false;
         }
     }
+    async function filtrarPorRangoFechas(desde: Date, hasta: Date) {
+        try {
+            const url = `http://localhost:8888/api/evento/filtrar-fechas?desde=${desde.toISOString()}&hasta=${hasta.toISOString()}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Error al filtrar eventos por fechas");
+    
+            const data = await response.json();
+            eventosFiltrados.value = data;
+            hayEventosFiltrados.value = eventosFiltrados.value.length > 0;
+        } catch (error) {
+            console.error("Error al filtrar eventos por rango de fechas:", error);
+            eventosFiltrados.value = [];
+            hayEventosFiltrados.value = false;
+        }
+    }
+    
 
     return {
         eventos,
@@ -222,6 +238,7 @@ export const useEventosStore = defineStore("eventos", () => {
         eventosFiltrados,
         eventosProximos,
         proximosEventos,
-        getEventoPorIdORganizador
+        getEventoPorIdORganizador,
+        filtrarPorRangoFechas
     };
 });

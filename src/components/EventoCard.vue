@@ -5,7 +5,15 @@ import type EventoDto from "@/stores/dtos/evento.dto";
 import { RouterLink } from "vue-router";
 
 const eventosStore = useEventosStore();
-const mostrarAcabados = ref(false); // Filtro por eventos acabados
+const mostrarAcabados = ref(false);
+
+const fechaInicio = ref("");
+const fechaFin = ref("");
+const fechaActual = new Date();
+console.log(fechaActual);
+console.log(fechaFin);
+
+
 
 onMounted(() => {
   eventosStore.findAll();
@@ -38,7 +46,29 @@ const formatearFecha = (fecha: Date | string) => {
   });
 };
 
-const fechaActual = new Date();
+const filtrarPorRango = async () => {
+  if (!fechaInicio.value || !fechaFin.value) {
+    alert("Debes seleccionar ambas fechas.");
+    return;
+  }
+
+  const inicio = new Date(fechaInicio.value);
+  const fin = new Date(fechaFin.value);
+
+  if (inicio > fin) {
+    alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+    return;
+  }
+console.log(fin, inicio);
+
+  await eventosStore.filtrarPorRangoFechas(inicio, fin);
+};
+
+const limpiarFiltro = async () => {
+  fechaInicio.value = "";
+  fechaFin.value = "";
+  await eventosStore.findAll();
+};
 </script>
 
 <template>
@@ -46,10 +76,27 @@ const fechaActual = new Date();
     <h1 class="evento-container__titulo">EVENTOS</h1>
 
     <div class="evento-container__filtro">
-      <button class="evento-container__boton-filtro" @click="mostrarAcabados = !mostrarAcabados">
-        {{ mostrarAcabados ? 'Ver eventos activos' : 'Ver eventos acabados' }}
-      </button>
-    </div>
+  <div class="evento-container__filtro-fechas">
+    <label for="fechaInicio" class="evento-container__label">Desde:</label>
+    <input type="datetime-local" v-model="fechaInicio" class="evento-container__input-fecha" id="fechaInicio" />
+
+    <label for="fechaFin" class="evento-container__label">Hasta:</label>
+    <input type="datetime-local" v-model="fechaFin" class="evento-container__input-fecha" id="fechaFin" />
+  </div>
+
+  <div class="evento-container__filtro-botones">
+    <button class="evento-container__boton-filtro" @click="filtrarPorRango">
+      Filtrar por fecha
+    </button>
+    <button class="evento-container__boton-filtro" @click="limpiarFiltro">
+      Limpiar filtro
+    </button>
+    <button class="evento-container__boton-filtro" @click="mostrarAcabados = !mostrarAcabados">
+      {{ mostrarAcabados ? 'Ver eventos activos' : 'Ver eventos acabados' }}
+    </button>
+  </div>
+</div>
+
 
     <div class="evento-container__tarjetas">
       <template v-if="eventosMostrados.length > 0">
@@ -117,6 +164,15 @@ const fechaActual = new Date();
     &:hover {
       background-color: darken($color-lightred, 10%);
     }
+  }
+
+  &__input-fecha {
+    padding: 6px;
+    margin: 0 10px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    font-family: $first-font;
+    background-color: white;
   }
 
   &__tarjetas {
