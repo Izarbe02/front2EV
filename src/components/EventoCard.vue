@@ -130,7 +130,6 @@ const limpiarFiltro = async () => {
     </div>
   </div>
 </template>
-
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
@@ -148,6 +147,49 @@ const limpiarFiltro = async () => {
   &__filtro {
     margin-bottom: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  &__filtro-fechas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+    }
+  }
+
+  &__filtro-botones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: center;
+      gap: 15px;
+    }
+  }
+
+  &__label {
+    color: white;
+    font-weight: bold;
+    font-family: $first-font;
+  }
+
+  &__input-fecha {
+    padding: 6px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    font-family: $first-font;
+    background-color: white;
+    color: black;
   }
 
   &__boton-filtro {
@@ -164,15 +206,6 @@ const limpiarFiltro = async () => {
     &:hover {
       background-color: darken($color-lightred, 10%);
     }
-  }
-
-  &__input-fecha {
-    padding: 6px;
-    margin: 0 10px;
-    border: 1px solid gray;
-    border-radius: 4px;
-    font-family: $first-font;
-    background-color: white;
   }
 
   &__tarjetas {
