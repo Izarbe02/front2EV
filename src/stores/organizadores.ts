@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
-import type { UsuarioLoginDto } from "@/stores/dtos/usuarioLogin.dto";
+import type UsuarioDto from "@/stores/dtos/usuario.dto";
 
 export const useOrganizadoresStore = defineStore("organizadores", () => {
   const organizadores = ref<OrganizadorDto[]>([]);
   const currentOrganizador = ref<OrganizadorDto | null>(null);
 
-  // ✅ Manejo seguro del localStorage (igual que usuarios)
+  
   let organizadorGuardado: OrganizadorDto | null = null;
   try {
     const raw = localStorage.getItem("organizadorLogeado");
@@ -19,7 +19,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   }
 
   const organizadorLogeado = ref<OrganizadorDto | null>(organizadorGuardado);
-
   const tokenLoginOrganizador = ref<string | null>(
     localStorage.getItem("tokenLoginOrganizador")
   );
@@ -109,32 +108,22 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     }
   }
 
-  async function loginOrganizador(loginDto: UsuarioLoginDto) {
-    try {
-      const response = await fetch("http://localhost:8888/api/auth/login-organizador", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(loginDto),
-      });
+  function guardarComoOrganizador(usuario: UsuarioDto, token: string) {
+    if (
+  usuario.idRol === 2 &&
+  "descripcion" in usuario &&
+  "enlace" in usuario &&
+  "telefono" in usuario &&
+  "idCategoria" in usuario
+) {
+  organizadorLogeado.value = usuario as OrganizadorDto;
+  localStorage.setItem("organizadorLogeado", JSON.stringify(usuario));
+  tokenLoginOrganizador.value = token;
+  localStorage.setItem("tokenLoginOrganizador", token);
+} else {
+  errorMessage.value = "El usuario no tiene datos suficientes de organizador.";
+}
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error al iniciar sesión: ${errorText || response.statusText}`);
-      }
-
-      const data: { token: string; organizador: OrganizadorDto } = await response.json();
-
-      organizadorLogeado.value = data.organizador;
-      tokenLoginOrganizador.value = data.token;
-
-      localStorage.setItem("organizadorLogeado", JSON.stringify(data.organizador));
-      localStorage.setItem("tokenLoginOrganizador", data.token);
-
-      return true;
-    } catch (error: any) {
-      errorMessage.value = error.message;
-      console.error("Error en login de organizador:", error);
-    }
   }
 
   function logoutOrganizador() {
@@ -156,7 +145,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     createEstablecimiento,
     updateEstablecimiento,
     deleteEstablecimiento,
-    loginOrganizador,
-    logoutOrganizador,
+    guardarComoOrganizador,
+    logoutOrganizador
   };
 });

@@ -42,22 +42,27 @@ export const useEventosStore = defineStore("eventos", () => {
     }
 
     // Crear un nuevo evento
-    async function createEvento(evento: EventoDto) {
-        try {
-            const response = await fetch("http://localhost:8888/api/Evento", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(evento),
-            });
+    async function crearEvento(formData: FormData) {
+    try {
+      const response = await fetch("http://localhost:8888/api/evento", {
+        method: "POST",
+        body: formData
+      });
 
-            if (!response.ok) throw new Error("Error al crear evento");
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error al crear evento:", errorText);
+        throw new Error(errorText);
+      }
 
-            const createdEvento = await response.json();
-            eventos.value.push(createdEvento);
-        } catch (error) {
-            console.error("Error al crear evento:", error);
-        }
+      const nuevoEvento = await response.json();
+      eventos.value.push(nuevoEvento); // opcional: solo si manejas eventos cargados
+      return nuevoEvento;
+    } catch (error) {
+      console.error("Error inesperado al crear evento:", error);
+      throw error;
     }
+  }
 
     // Borrar un evento
     async function deleteEvento(id: number) {
@@ -205,7 +210,7 @@ export const useEventosStore = defineStore("eventos", () => {
         successMessage,
         eventoInfo,
         findAll,
-        createEvento,
+        crearEvento,
         deleteEvento,
         updateEvento,
         filtroEvento,

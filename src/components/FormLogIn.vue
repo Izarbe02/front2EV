@@ -1,8 +1,9 @@
-<template> 
+<template>
   <v-container class="login">
     <v-sheet class="login__sheet" elevation="8">
       <h2 class="login__title">Ingresar</h2>
       <p class="login__subtitle">Entrando podrás publicar nuevos eventos.</p>
+
       <v-form fast-fail class="login__form">
         <v-text-field
           v-model="username"
@@ -21,20 +22,17 @@
 
         <a href="#" class="login__forgot-password">¿OLVIDASTE LA CONTRASEÑA?</a>
         <RouterLink to="/register" class="login__register">¿NO ESTÁS REGISTRADO/A?</RouterLink>
-        
+
         <v-btn class="login__button" block color="red" @click="loginUser">
           Ingresar
         </v-btn>
 
-        <v-btn class="login__button_organizador" block @click="loginOrganizador">
+        <v-btn class="login__button_organizador" block @click="loginComoOrganizador">
           Ingresar como organizador
         </v-btn>
 
         <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
           {{ usuariosStore.errorMessage }}
-        </v-alert>
-        <v-alert v-if="organizadoresStore.errorMessage" type="error" class="login__error">
-          {{ organizadoresStore.errorMessage }}
         </v-alert>
       </v-form>
     </v-sheet>
@@ -45,53 +43,51 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
-import { useOrganizadoresStore } from '@/stores/organizadores';
+
 import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
 
 const usuariosStore = useUsuariosStore();
-const organizadoresStore = useOrganizadoresStore();
 const router = useRouter();
 
 const username = ref("");
 const contrasenia = ref("");
 
-const usernameRules = [
-  (value: string) => value.length > 0 || "Rellena este campo"
-];
-
-const contraseniaRules = [
-  (value: string) => value.length > 0 || "Rellena este campo"
-];
+const usernameRules = [(v: string) => !!v || "Campo obligatorio"];
+const contraseniaRules = [(v: string) => !!v || "Campo obligatorio"];
 
 const loginUser = async () => {
-  const usuarioLogin: UsuarioLoginDto = {
+  const dto: UsuarioLoginDto = {
     username: username.value,
     contrasenia: contrasenia.value,
   };
 
-  const loginExitoso = await usuariosStore.login(usuarioLogin);
-
-  if (loginExitoso) {
+  const ok = await usuariosStore.login(dto);
+  if (ok) {
     router.push("/");
   }
 };
 
-const loginOrganizador = async () => {
-  const usuarioLogin: UsuarioLoginDto = {
+const loginComoOrganizador = async () => {
+  const dto: UsuarioLoginDto = {
     username: username.value,
     contrasenia: contrasenia.value,
   };
 
-  const loginExitoso = await organizadoresStore.loginOrganizador(usuarioLogin);
+  const ok = await usuariosStore.login(dto);
 
-  if (loginExitoso) {
+  if (ok && usuariosStore.usuarioLogeado?.idRol === 2) {
+    
+    localStorage.setItem("organizadorLogeado", JSON.stringify(usuariosStore.usuarioLogeado));
+    localStorage.setItem("tokenLoginOrganizador", usuariosStore.tokenLogin ?? "");
     router.push("/");
+  } else {
+    usuariosStore.logout(); 
+    alert("Este usuario no tiene permisos de organizador.");
   }
 };
 </script>
 
-
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
@@ -102,7 +98,6 @@ const loginOrganizador = async () => {
   min-height: 100vh;
 
   &__sheet {
-    
     padding: 24px;
     border-radius: 8px;
     background: rgba($color-black, 0.9);
@@ -127,12 +122,10 @@ const loginOrganizador = async () => {
   }
 
   &__form {
-    
-  background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
+    background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
   }
 
   &__input {
@@ -164,8 +157,8 @@ const loginOrganizador = async () => {
   &__button {
     @include boton-rojo;
   }
-  &__button_organizador {
 
+  &__button_organizador {
     background-color: $color-whitered;
     border: 1px solid $color-red;
     color: $color-lightred;
@@ -176,15 +169,14 @@ const loginOrganizador = async () => {
     transition: all 0.3s ease-in-out;
 
     &:hover {
-
-        color: white;
+      color: white;
     }
 
     &:active {
-        box-shadow: 0 0 10px 3px rgba($color-red, 0.7);
+      box-shadow: 0 0 10px 3px rgba($color-red, 0.7);
     }
-   
   }
+
   &__error {
     background: $color-lightred;
     color: $color-black;
