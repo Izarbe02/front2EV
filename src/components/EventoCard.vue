@@ -10,10 +10,6 @@ const mostrarAcabados = ref(false);
 const fechaInicio = ref("");
 const fechaFin = ref("");
 const fechaActual = new Date();
-console.log(fechaActual);
-console.log(fechaFin);
-
-
 
 onMounted(() => {
   eventosStore.findAll();
@@ -53,13 +49,15 @@ const filtrarPorRango = async () => {
   }
 
   const inicio = new Date(fechaInicio.value);
+  inicio.setHours(0, 0, 0, 0); // Forzar hora a 00:00
+
   const fin = new Date(fechaFin.value);
+  fin.setHours(23, 59, 59, 999); // Forzar fin del día
 
   if (inicio > fin) {
     alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
     return;
   }
-console.log(fin, inicio);
 
   await eventosStore.filtrarPorRangoFechas(inicio, fin);
 };
@@ -71,18 +69,19 @@ const limpiarFiltro = async () => {
 };
 </script>
 
+
 <template>
   <div class="evento-container">
     <h1 class="evento-container__titulo">EVENTOS</h1>
 
     <div class="evento-container__filtro">
   <div class="evento-container__filtro-fechas">
-    <label for="fechaInicio" class="evento-container__label">Desde:</label>
-    <input type="datetime-local" v-model="fechaInicio" class="evento-container__input-fecha" id="fechaInicio" />
+<label for="fechaInicio" class="evento-container__label">Desde:</label>
+<input type="date" v-model="fechaInicio" class="evento-container__input-fecha" id="fechaInicio" />
 
-    <label for="fechaFin" class="evento-container__label">Hasta:</label>
-    <input type="datetime-local" v-model="fechaFin" class="evento-container__input-fecha" id="fechaFin" />
-  </div>
+<label for="fechaFin" class="evento-container__label">Hasta:</label>
+<input type="date" v-model="fechaFin" class="evento-container__input-fecha" id="fechaFin" />
+ </div>
 
   <div class="evento-container__filtro-botones">
     <button class="evento-container__boton-filtro" @click="filtrarPorRango">
@@ -129,8 +128,7 @@ const limpiarFiltro = async () => {
       </div>
     </div>
   </div>
-</template>
-<style scoped lang="scss">
+</template><style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
@@ -181,15 +179,36 @@ const limpiarFiltro = async () => {
     color: white;
     font-weight: bold;
     font-family: $first-font;
+    font-size: 1rem;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
   }
 
   &__input-fecha {
-    padding: 6px;
-    border: 1px solid gray;
+    padding: 6px 10px;
+    border: 2px solid $color-red;
     border-radius: 4px;
     font-family: $first-font;
     background-color: white;
-    color: black;
+    color: $color-black;
+    font-size: 0.95rem;
+
+    &:focus {
+      outline: none;
+      border-color: $color-red;
+      box-shadow: 0 0 5px $color-red;
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      filter: invert(28%) sepia(78%) saturate(6485%) hue-rotate(357deg) brightness(100%) contrast(100%);
+    }
+
+    @media (min-width: 768px) {
+      font-size: 1.15rem;
+      padding: 10px 14px;
+    }
   }
 
   &__boton-filtro {
@@ -205,6 +224,11 @@ const limpiarFiltro = async () => {
 
     &:hover {
       background-color: darken($color-lightred, 10%);
+    }
+
+    @media (min-width: 768px) {
+      font-size: 1.1rem;
+      padding: 12px 24px;
     }
   }
 
