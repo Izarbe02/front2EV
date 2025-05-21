@@ -76,9 +76,14 @@ const limpiarFiltro = async () => {
   fechaInicio.value = "";
   fechaFin.value = "";
   categoriaSeleccionada.value = "";
+
+
+  eventosStore.hayEventosFiltrados = false;
+  eventosStore.eventosFiltrados = [];
+
+
   await eventosStore.findAll();
 };
-
 </script>
 
 
