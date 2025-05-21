@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useEventosStore } from '@/stores/eventos'
 import { useEventosGuardadosStore } from '@/stores/eventosGuardados'
 import { useUsuariosStore } from '@/stores/usuarios'
@@ -7,7 +7,6 @@ import { useComentariosStore } from '@/stores/comentarios'
 import EventoInfoDto from '@/stores/dtos/eventoInfo.dto'
 import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
 import { RouterLink } from 'vue-router';
-
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
@@ -25,10 +24,13 @@ const evento = ref<EventoInfoDto | null>(null)
 const estaGuardado = ref<boolean>(false)
 const comentarioNuevo = ref<string>("")
 
+const usuario = computed(() => usuariosStore.usuarioLogeado)
+const rolActivo = computed(() => usuario.value?.idRol ?? -1)
+
 const loadEvento = async (id: number | null) => {
   if (id !== null) {
     evento.value = await eventosStore.getInfoEvento(id)
-    const idUsuario = usuariosStore.usuarioLogeado?.id
+    const idUsuario = usuario.value?.id
     if (evento.value && idUsuario) {
       await eventosGuardadosStore.comprobarEventoGuardado(idUsuario, id)
       estaGuardado.value = eventosGuardadosStore.estaGuardado
@@ -37,7 +39,7 @@ const loadEvento = async (id: number | null) => {
 }
 
 const onToggleGuardar = async () => {
-  const idUsuario = usuariosStore.usuarioLogeado?.id
+  const idUsuario = usuario.value?.id
   if (!evento.value || !idUsuario) return
   const idEvento = props.eventoId
 
@@ -52,10 +54,10 @@ const onToggleGuardar = async () => {
 }
 
 const enviarComentario = async () => {
-  if (!usuariosStore.usuarioLogeado || props.eventoId === null) return;
+  if (!usuario.value || props.eventoId === null || rolActivo.value === 2) return;
 
   const nuevoComentario: ComentarioCreateDto = {
-    idUsuario: usuariosStore.usuarioLogeado.id,
+    idUsuario: usuario.value.id,
     idEvento: props.eventoId,
     contenido: comentarioNuevo.value,
     fecha: new Date().toISOString()
@@ -63,7 +65,17 @@ const enviarComentario = async () => {
 
   await comentariosStore.createComentario(nuevoComentario);
   comentarioNuevo.value = "";
-  await comentariosStore.fetchComentariosByEvento(props.eventoId); 
+  await comentariosStore.fetchComentariosByEvento(props.eventoId);
+}
+
+const borrarComentario = async (idComentario: number) => {
+  const confirmar = confirm('¿Seguro que deseas borrar este comentario?')
+  if (!confirmar) return
+
+  await comentariosStore.deleteComentario(idComentario)
+  if (props.eventoId !== null) {
+    await comentariosStore.fetchComentariosByEvento(props.eventoId)
+  }
 }
 
 onMounted(() => {
@@ -72,7 +84,6 @@ onMounted(() => {
     comentariosStore.fetchComentariosByEvento(props.eventoId)
   }
 })
-
 
 watch(() => props.eventoId, async (newId) => {
   await loadEvento(newId)
@@ -88,10 +99,7 @@ function formatFecha(fecha: string): string {
     day: 'numeric'
   });
 }
-
-console.log(evento);
 </script>
-
 <template>
   <div class="evento-detalle" v-if="evento">
     <div class="evento-detalle__contenedor">
@@ -103,33 +111,58 @@ console.log(evento);
         <div class="evento-detalle__info">
           <div class="evento-detalle__categorias" v-if="evento.categorias.length">
             <span class="evento-detalle__infoLetra">CATEGORIA</span>
-            <span v-for="(categoria, index) in evento.categorias" :key="index" class="evento-detalle__categoria">
+            <span
+              v-for="(categoria, index) in evento.categorias"
+              :key="index"
+              class="evento-detalle__categoria"
+            >
               {{ categoria.nombre }}<span v-if="index < evento.categorias.length - 1">, </span>
             </span>
           </div>
 
           <div class="evento-detalle__tematicas" v-if="evento.tematicas.length">
             <span class="evento-detalle__infoLetra">TEMATICA</span>
-            <span v-for="(tematica, index) in evento.tematicas" :key="index" class="evento-detalle__tematica">
+            <span
+              v-for="(tematica, index) in evento.tematicas"
+              :key="index"
+              class="evento-detalle__tematica"
+            >
               {{ tematica.nombre }}<span v-if="index < evento.tematicas.length - 1">, </span>
             </span>
           </div>
 
           <div class="evento-detalle__fecha">
-            📅 Fecha de inicio : <br>{{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }}
-            {{ new Date(evento.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }} <br>
-            📅 Fecha de fin : <br>{{ new Date(evento.fechaFin).toLocaleDateString("es-ES", { weekday: 'long', day: '2-digit', month: 'short' }) }},
-            {{ new Date(evento.fechaFin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+            📅 Fecha de inicio : <br />
+            {{ new Date(evento.fechaInicio).toLocaleDateString("es-ES", {
+              weekday: 'long',
+              day: '2-digit',
+              month: 'short'
+            }) }}
+            {{ new Date(evento.fechaInicio).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            }) }}
+            <br />
+            📅 Fecha de fin : <br />
+            {{ new Date(evento.fechaFin).toLocaleDateString("es-ES", {
+              weekday: 'long',
+              day: '2-digit',
+              month: 'short'
+            }) }},
+            {{ new Date(evento.fechaFin).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            }) }}
           </div>
 
           <div class="evento-detalle__lugar">
             📍 {{ evento.ubicacion }}
-            <RouterLink :to="`/OrganizadorDetalle?id=${evento.orgId}`" class="evento-detalle__direccion">
-  {{ evento.nombreOrg }}
-</RouterLink>
-
-
-
+            <RouterLink
+              :to="`/OrganizadorDetalle?id=${evento.orgId}`"
+              class="evento-detalle__direccion"
+            >
+              {{ evento.nombreOrg }}
+            </RouterLink>
           </div>
 
           <div class="evento-detalle__acciones">
@@ -150,11 +183,14 @@ console.log(evento);
       </div>
     </div>
 
-    <!-- Comentarios -->
+    <!-- COMENTARIOS -->
     <div class="evento-detalle__comentarios">
       <h3 class="evento-detalle__comentarios-titulo">Comentarios</h3>
 
-      <div v-if="comentariosStore.comentarios.length === 0" class="evento-detalle__comentarios-vacio">
+      <div
+        v-if="comentariosStore.comentarios.length === 0"
+        class="evento-detalle__comentarios-vacio"
+      >
         No hay comentarios aún.
       </div>
 
@@ -162,13 +198,22 @@ console.log(evento);
         v-for="comentario in comentariosStore.comentarios"
         :key="comentario.id"
         class="evento-detalle__comentario"
+        style="position: relative;"
       >
+        <button
+          v-if="rolActivo === 1 || (rolActivo === 3 && comentario.idUsuario === usuario?.id)"
+          @click="borrarComentario(comentario.id)"
+          class="evento-detalle__comentario-borrar"
+          title="Eliminar comentario"
+        >
+          🗑
+        </button>
         <p class="evento-detalle__comentario-autor">{{ comentario.nombreUsuario }}</p>
         <p class="evento-detalle__comentario-texto">{{ comentario.contenido }}</p>
         <p class="evento-detalle__comentario-fecha">{{ formatFecha(comentario.fecha) }}</p>
       </div>
 
-      <div v-if="usuariosStore.usuarioLogeado" class="evento-detalle__comentario-formulario">
+      <div v-if="usuario && rolActivo !== 2" class="evento-detalle__comentario-formulario">
         <textarea
           v-model="comentarioNuevo"
           placeholder="¿Qué opinas sobre este evento?"
@@ -183,6 +228,10 @@ console.log(evento);
         </button>
       </div>
 
+      <div v-else-if="rolActivo === 2" class="evento-detalle__comentarios-login">
+        <p>🛑 Los organizadores no pueden comentar en eventos.</p>
+      </div>
+
       <div v-else class="evento-detalle__comentarios-login">
         <p>🔒 Inicia sesión para dejar un comentario.</p>
       </div>
@@ -193,6 +242,7 @@ console.log(evento);
     <p>Cargando evento...</p>
   </div>
 </template>
+
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
@@ -403,6 +453,23 @@ console.log(evento);
     color: $color-lightgray;
   }
 
+  .evento-detalle__comentario-borrar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: $color-red;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    color: darken($color-red, 10%);
+    transform: scale(1.2);
+  }
+}
 
 }
 
