@@ -43,11 +43,13 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 
 import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
 
-const usuariosStore = useUsuariosStore();
+const usuariosStore = useUsuariosStore(); 
 const router = useRouter();
+const organizadoresStore = useOrganizadoresStore();
 
 const username = ref("");
 const contrasenia = ref("");
@@ -73,15 +75,15 @@ const loginComoOrganizador = async () => {
     contrasenia: contrasenia.value,
   };
 
-  const ok = await usuariosStore.login(dto);
+  const ok = await organizadoresStore.loginOrganizador(dto);
 
-  if (ok && usuariosStore.usuarioLogeado?.idRol === 2) {
+  if (ok && organizadoresStore.organizadorLogeado?.idRol === 2) {
     
-    localStorage.setItem("organizadorLogeado", JSON.stringify(usuariosStore.usuarioLogeado));
-    localStorage.setItem("tokenLoginOrganizador", usuariosStore.tokenLogin ?? "");
+    localStorage.setItem("organizadorLogeado", JSON.stringify(organizadoresStore.organizadorLogeado));
+    localStorage.setItem("tokenLoginOrganizador", organizadoresStore.tokenLoginOrganizador ?? "");
     router.push("/");
   } else {
-    usuariosStore.logout(); 
+    organizadoresStore.logoutOrganizador(); 
     alert("Este usuario no tiene permisos de organizador.");
   }
 };

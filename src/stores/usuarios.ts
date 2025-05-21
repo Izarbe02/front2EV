@@ -7,7 +7,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   const usuarios = ref<UsuarioDto[]>([]);
   const currentUsuario = ref<UsuarioDto | null>(null);
 
-  // ✅ Manejo seguro del localStorage
+
   let usuarioGuardado: UsuarioDto | null = null;
   try {
     const raw = localStorage.getItem("usuarioLogeado");
