@@ -6,9 +6,9 @@ import { useUsuariosStore } from '@/stores/usuarios'
 import { useComentariosStore } from '@/stores/comentarios'
 import EventoInfoDto from '@/stores/dtos/eventoInfo.dto'
 import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
-import { RouterLink } from 'vue-router';
+import type ComentarioUpdateDto from '@/stores/dtos/comentarioUpdate.dto'
+import { RouterLink } from 'vue-router'
 import Swal from 'sweetalert2'
-
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
@@ -23,8 +23,10 @@ const props = defineProps({
 })
 
 const evento = ref<EventoInfoDto | null>(null)
-const estaGuardado = ref<boolean>(false)
-const comentarioNuevo = ref<string>("")
+const estaGuardado = ref(false)
+const comentarioNuevo = ref('')
+const modoEdicion = ref(false)
+const comentarioEditandoId = ref<number | null>(null)
 
 const usuario = computed(() => usuariosStore.usuarioLogeado)
 const rolActivo = computed(() => usuario.value?.idRol ?? -1)
@@ -56,18 +58,33 @@ const onToggleGuardar = async () => {
 }
 
 const enviarComentario = async () => {
-  if (!usuario.value || props.eventoId === null || rolActivo.value === 2) return;
+  if (!usuario.value || props.eventoId === null || rolActivo.value === 2) return
 
-  const nuevoComentario: ComentarioCreateDto = {
-    idUsuario: usuario.value.id,
-    idEvento: props.eventoId,
-    contenido: comentarioNuevo.value,
-    fecha: new Date().toISOString()
+  if (modoEdicion.value && comentarioEditandoId.value !== null) {
+    const comentarioData: ComentarioUpdateDto = {
+      id: comentarioEditandoId.value,
+      idUsuario: usuario.value.id,
+      idEvento: props.eventoId,
+      contenido: comentarioNuevo.value,
+      fecha: new Date().toISOString()
+    }
+    await comentariosStore.updateComentario(comentarioData)
+    Swal.fire('Comentario actualizado', '', 'success')
+  } else {
+    const comentarioData: ComentarioCreateDto = {
+      idUsuario: usuario.value.id,
+      idEvento: props.eventoId,
+      contenido: comentarioNuevo.value,
+      fecha: new Date().toISOString()
+    }
+    await comentariosStore.createComentario(comentarioData)
+    Swal.fire('Comentario creado', '', 'success')
   }
 
-  await comentariosStore.createComentario(nuevoComentario);
-  comentarioNuevo.value = "";
-  await comentariosStore.fetchComentariosByEvento(props.eventoId);
+  comentarioNuevo.value = ''
+  comentarioEditandoId.value = null
+  modoEdicion.value = false
+  await comentariosStore.fetchComentariosByEvento(props.eventoId)
 }
 
 const borrarComentario = async (idComentario: number) => {
@@ -98,6 +115,12 @@ const borrarComentario = async (idComentario: number) => {
   }
 }
 
+const editarComentario = (comentarioId: number, contenido: string) => {
+  comentarioNuevo.value = contenido
+  comentarioEditandoId.value = comentarioId
+  modoEdicion.value = true
+}
+
 onMounted(() => {
   loadEvento(props.eventoId)
   if (props.eventoId !== null) {
@@ -117,9 +140,10 @@ function formatFecha(fecha: string): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
-  });
+  })
 }
 </script>
+
 <template>
   <div class="evento-detalle" v-if="evento">
     <div class="evento-detalle__contenedor">
@@ -228,6 +252,14 @@ function formatFecha(fecha: string): string {
         >
           🗑
         </button>
+        <button
+          v-if="rolActivo === 1 && comentario.idUsuario === usuario?.id"
+          @click="editarComentario(comentario.id, comentario.contenido)"
+          class="evento-detalle__comentario-editar"
+          title="Editar comentario"
+        >
+          ✏️
+        </button>
         <p class="evento-detalle__comentario-autor">{{ comentario.nombreUsuario }}</p>
         <p class="evento-detalle__comentario-texto">{{ comentario.contenido }}</p>
         <p class="evento-detalle__comentario-fecha">{{ formatFecha(comentario.fecha) }}</p>
@@ -244,7 +276,7 @@ function formatFecha(fecha: string): string {
           :disabled="comentarioNuevo.trim().length === 0"
           @click="enviarComentario"
         >
-          Enviar comentario
+          {{ modoEdicion ? 'Actualizar comentario' : 'Enviar comentario' }}
         </button>
       </div>
 
@@ -527,6 +559,23 @@ function formatFecha(fecha: string): string {
   &:hover {
     color: darken($color-red, 10%);
     transform: scale(1.2);
+  }
+}
+.evento-detalle__comentario-editar {
+  position: absolute;
+  top: 10px;
+  right: 45px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: $color-green;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    color: darken($color-green, 10%);
+    transform: scale(1.15);
   }
 }
 

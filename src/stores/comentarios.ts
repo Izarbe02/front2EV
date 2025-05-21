@@ -4,13 +4,11 @@ import type ComentarioDto from "@/stores/dtos/comentario.dto";
 import type ComentarioCreateDto from "@/stores/dtos/comentarioCrear.dto";
 
 export const useComentariosStore = defineStore("comentarios", () => {
-  // Estado reactivo
   const comentarios = ref<ComentarioDto[]>([]);
   const currentComentario = ref<ComentarioDto | null>(null);
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
-  // Obtener todos los comentarios (GET: api/Comentario)
   async function findAll() {
     try {
       const response = await fetch("http://localhost:8888/api/Comentario");
@@ -23,7 +21,6 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  // Obtener un comentario por ID (GET: api/Comentario/{id})
   async function getComentario(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Comentario/${id}`);
@@ -37,7 +34,6 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  // Obtener comentarios por ID de evento (GET: api/Comentario/evento/{eventoId})
   async function fetchComentariosByEvento(eventoId: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Comentario/evento/${eventoId}`);
@@ -50,7 +46,6 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  // Crear un comentario (POST: api/Comentario)
   async function createComentario(comentario: ComentarioCreateDto) {
     try {
       const response = await fetch("http://localhost:8888/api/Comentario", {
@@ -60,7 +55,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       });
       if (!response.ok) throw new Error("Error al crear el comentario");
       const createdComentario = await response.json();
-      comentarios.value.push(createdComentario); // opcional: usar fetchComentariosByEvento si prefieres recargar
+      comentarios.value.push(createdComentario);
       successMessage.value = "Comentario creado correctamente";
     } catch (error: any) {
       errorMessage.value = error.message;
@@ -68,7 +63,22 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  // Eliminar un comentario (DELETE: api/Comentario/{id})
+  async function updateComentario(comentario: ComentarioDto) {
+    try {
+      const response = await fetch(`http://localhost:8888/api/Comentario/${comentario.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(comentario),
+      });
+      if (!response.ok) throw new Error("Error al actualizar el comentario");
+      successMessage.value = "Comentario actualizado correctamente";
+      await fetchComentariosByEvento(comentario.idEvento);
+    } catch (error: any) {
+      errorMessage.value = error.message;
+      console.error("Error al actualizar el comentario:", error);
+    }
+  }
+
   async function deleteComentario(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Comentario/${id}`, {
@@ -92,6 +102,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
     getComentario,
     fetchComentariosByEvento,
     createComentario,
+    updateComentario,
     deleteComentario,
   };
 });
