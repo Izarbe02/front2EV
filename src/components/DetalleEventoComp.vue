@@ -7,6 +7,8 @@ import { useComentariosStore } from '@/stores/comentarios'
 import EventoInfoDto from '@/stores/dtos/eventoInfo.dto'
 import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
 import { RouterLink } from 'vue-router';
+import Swal from 'sweetalert2'
+
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
@@ -69,12 +71,30 @@ const enviarComentario = async () => {
 }
 
 const borrarComentario = async (idComentario: number) => {
-  const confirmar = confirm('¿Seguro que deseas borrar este comentario?')
-  if (!confirmar) return
+  const result = await Swal.fire({
+    title: '¿Eliminar comentario?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#FF5555',
+    cancelButtonColor: '#aaa',
+    confirmButtonText: 'Sí, borrar',
+    cancelButtonText: 'Cancelar'
+  })
 
-  await comentariosStore.deleteComentario(idComentario)
-  if (props.eventoId !== null) {
-    await comentariosStore.fetchComentariosByEvento(props.eventoId)
+  if (result.isConfirmed) {
+    await comentariosStore.deleteComentario(idComentario)
+    if (props.eventoId !== null) {
+      await comentariosStore.fetchComentariosByEvento(props.eventoId)
+    }
+
+    Swal.fire({
+      title: 'Eliminado',
+      text: 'El comentario ha sido borrado.',
+      icon: 'success',
+      timer: 1500,
+      showConfirmButton: false
+    })
   }
 }
 
@@ -364,76 +384,94 @@ function formatFecha(fecha: string): string {
     margin-top: 10px;
   }
 
-  // SOLO ESTILOS DE COMENTARIOS:
   &__comentarios {
     margin-top: 2rem;
-    text-align: left;
-    padding: 1rem;
+    padding: 2rem;
+    background-color: $color-darkgray;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
   }
 
   &__comentarios-titulo {
     font-family: $first-font;
     font-weight: bold;
-    font-size: 1.3rem;
-    color: $color-darkgray;
+    font-size: 1.6rem;
+    color: $color-lightred;
     margin-bottom: 1rem;
+    text-shadow: 0 0 3px rgba(255, 0, 0, 0.4);
   }
 
   &__comentarios-vacio {
     font-style: italic;
-    color: $color-lightgray;
-    margin-bottom: 1rem;
+    color: #f1f1f1;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
   }
 
   &__comentario {
-    background-color: $color-whitered;
+    background-color: lighten($color-darkgray, 5%);
+    border-left: 5px solid $color-lightred;
     border-radius: 0.75rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.05);
+    position: relative;
   }
 
   &__comentario-autor {
     font-weight: bold;
     color: $color-darkGreen;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.4rem;
+    font-size: 1.1rem;
   }
 
   &__comentario-texto {
-    margin: 0.5rem 0;
-    color: $color-darkgray;
+    color: #f1f1f1;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
   }
 
   &__comentario-fecha {
-    font-size: 0.85rem;
-    color: $color-lightgray;
+    font-size: 0.9rem;
+    color: #f1f1f1;
+    font-style: italic;
   }
 
   &__comentario-formulario {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
   &__comentario-textarea {
     width: 100%;
-    min-height: 80px;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    min-height: 100px;
+    padding: 0.75rem;
+    border-radius: 8px;
     border: 1px solid $color-lightgray;
+    background-color: #1b1b1b;
+    color: #f1f1f1;
     font-family: $first-font;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    resize: vertical;
+
+    &:focus {
+      outline: none;
+      border-color: $color-green;
+      box-shadow: 0 0 6px $color-green;
+    }
   }
 
   &__comentario-boton {
     align-self: flex-end;
     background-color: $color-darkGreen;
-    color: $color-black;
+    color: black;
     border: none;
-    padding: 0.5rem 1.5rem;
+    padding: 0.6rem 1.6rem;
     font-weight: bold;
-    border-radius: 0.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
 
@@ -443,15 +481,36 @@ function formatFecha(fecha: string): string {
 
     &:disabled {
       background-color: $color-lightgray;
+      color: #333;
       cursor: not-allowed;
     }
   }
 
   &__comentarios-login {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     font-style: italic;
-    color: $color-lightgray;
+    color: lighten($color-lightgray, 15%);
+    font-size: 1rem;
   }
+
+  .evento-detalle__comentario-borrar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: $color-red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      color: darken($color-red, 10%);
+      transform: scale(1.15);
+    }
+  }
+
 
   .evento-detalle__comentario-borrar {
   position: absolute;
