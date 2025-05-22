@@ -236,6 +236,7 @@ async function borrarComentario(id: number) {
     margin-top: 0.5rem;
     border-radius: 6px;
     border: none;
+    color: #c0c0c0;
   }
 
   &__acciones {
