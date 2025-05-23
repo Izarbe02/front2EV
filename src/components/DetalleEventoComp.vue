@@ -9,6 +9,7 @@ import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
 import type ComentarioUpdateDto from '@/stores/dtos/comentarioUpdate.dto'
 import { RouterLink } from 'vue-router'
 import Swal from 'sweetalert2'
+import { log } from 'console'
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
@@ -142,6 +143,10 @@ function formatFecha(fecha: string): string {
     day: 'numeric'
   })
 }
+console.log(comentariosStore.comentarios[2]);
+console.log(usuariosStore.currentUsuario);
+
+
 </script>
 
 <template>
@@ -253,7 +258,7 @@ function formatFecha(fecha: string): string {
           🗑
         </button>
         <button
-          v-if="rolActivo === 1 && comentario.idUsuario === usuario?.id"
+          v-if="rolActivo === 3 && comentario.idUsuario === usuario?.id"
           @click="editarComentario(comentario.id, comentario.contenido)"
           class="evento-detalle__comentario-editar"
           title="Editar comentario"

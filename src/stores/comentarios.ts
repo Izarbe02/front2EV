@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type ComentarioDto from "@/stores/dtos/comentario.dto";
 import type ComentarioCreateDto from "@/stores/dtos/comentarioCrear.dto";
+import type ComentarioUpdateDto from '@/stores/dtos/comentarioUpdate.dto'
 
 export const useComentariosStore = defineStore("comentarios", () => {
   const comentarios = ref<ComentarioDto[]>([]);
@@ -63,7 +64,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  async function updateComentario(comentario: ComentarioDto) {
+  async function updateComentario(comentario: ComentarioUpdateDto) {
     try {
       const response = await fetch(`http://localhost:8888/api/Comentario/${comentario.id}`, {
         method: "PUT",
