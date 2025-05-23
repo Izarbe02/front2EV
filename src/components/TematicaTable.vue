@@ -24,6 +24,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="tematicas.length === 0">
+          <td colspan="3">No hay temáticas disponibles</td>
+        </tr>
         <tr v-for="tematica in tematicas" :key="tematica.id">
           <td>{{ tematica.id }}</td>
           <td>{{ tematica.nombre }}</td>
@@ -95,24 +98,24 @@ const resetFormulario = () => {
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
-@import "@/assets/styles/_mixins.scss";
 
 .contenido {
-  margin-top: 5%;
-  padding: 2%;
-  border-radius: 8px;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: $color-darkgray;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #131313;
-  border: solid 2px #5c5c5c;
 
   &__titulo {
     font-family: $titulo;
     font-size: 2.3rem;
     font-weight: bold;
     color: $color-red;
-    margin-bottom: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
   }
 
   &__formulario {
@@ -143,41 +146,58 @@ const resetFormulario = () => {
 
     &:hover {
       background-color: $color-green;
+      color: $color-black;
     }
   }
 
   &__tabla {
+    width: 100%;
+    overflow-x: auto;
     color: white;
-    font-size: 1.5rem;
-  }
+    font-size: 0.95rem;
 
-  th,
-  td {
-    padding: 14px 22px;
-    text-align: left;
-    line-height: 1.8;
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
 
-  .btn-editar,
-  .btn-borrar {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin: 0 10px;
-  }
+    th,
+    td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid $color-lightgray;
+    }
 
-  .btn-editar {
-    color: #797979;
-    &:hover {
-      color: #c0c0c0;
+    th {
+      background-color: $color-lightgray;
+      font-weight: bold;
+      color: white;
     }
   }
+}
 
-  .btn-borrar {
-    color: #bb2231;
-    &:hover {
-      color: #a71d2a;
-    }
+.btn-editar, .btn-borrar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin: 0 15px;
+}
+
+.btn-editar {
+  color: #797979;
+
+  &:hover {
+    color: #c0c0c0;
+  }
+}
+
+.btn-borrar {
+  color: #bb2231;
+
+  &:hover {
+    color: #a71d2a;
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="contenido">
     <h1 class="contenido__titulo">COMENTARIOS</h1>
 
-    <button class="contenido__boton" @click="abrirFormulario()">➕ Añadir Comentario</button>
+    <button class="contenido__boton" @click="abrirFormulario()">Añadir Comentario</button>
 
     <table class="contenido__tabla">
       <thead>
