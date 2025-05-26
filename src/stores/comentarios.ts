@@ -65,6 +65,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
   }
 
   async function updateComentario(comentario: ComentarioUpdateDto) {
+
     try {
       const response = await fetch(`http://localhost:8888/api/Comentario/${comentario.id}`, {
         method: "PUT",
@@ -74,12 +75,13 @@ export const useComentariosStore = defineStore("comentarios", () => {
       if (!response.ok) throw new Error("Error al actualizar el comentario");
       successMessage.value = "Comentario actualizado correctamente";
       await fetchComentariosByEvento(comentario.idEvento);
+
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el comentario:", error);
     }
   }
-
+  // Eliminar un comentario (DELETE: api/Comentario/{id})
   async function deleteComentario(id: number) {
     try {
       const response = await fetch(`http://localhost:8888/api/Comentario/${id}`, {
