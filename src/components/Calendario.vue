@@ -1,59 +1,59 @@
 <template>
   <v-container class="calendario">
-    <v-row justify="space-around">
-      <v-date-picker
-        v-model="date"
-        :allowed-dates="allowedDates"
-        @update:model-value="filtrarEventos"
-      ></v-date-picker>
-    </v-row>
+    <h3 class="calendario__titulo-eventos">Selecciona una fecha para ver sus eventos</h3>
 
-    <div class="calendario__eventos" v-if="eventosSeleccionados.length > 0">
-      <h3 class="calendario__titulo-eventos">Eventos para la fecha seleccionada</h3>
+    <div class="calendario__fila">
+      <div class="calendario__col-calendario">
+        <v-date-picker
+          v-model="date"
+          :allowed-dates="allowedDates"
+          @update:model-value="filtrarEventos"
+        />
+      </div>
 
-      <div class="calendario__cards">
-        <div
-          v-for="evento in eventosSeleccionados"
-          :key="evento.id"
-          class="evento-card"
-        >
-          <div class="evento-card__imagen-container">
-            <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
-            <div
-              v-if="new Date(evento.fechaFin) < fechaActual"
-              class="evento-card__acabado"
-            >
-              <h3>Acabado</h3>
-            </div>
-          </div>
-
-          <div class="evento-card__contenido">
-            <p class="evento-card__titulo">{{ evento.nombre }}</p>
-
-            <div class="evento-card__info">
-              <span class="evento-card__fecha">
-                {{ formatearFecha(evento.fechaInicio) }} -
-                {{ formatearFecha(evento.fechaFin) }}
-              </span>
-              <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
+      <div class="calendario__col-eventos">
+        <div v-if="eventosSeleccionados.length > 0" class="calendario__cards">
+          <div
+            v-for="evento in eventosSeleccionados"
+            :key="evento.id"
+            class="evento-card"
+          >
+            <div class="evento-card__imagen-container">
+              <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
+              <div
+                v-if="new Date(evento.fechaFin) < fechaActual"
+                class="evento-card__acabado"
+              >
+                <h3>Acabado</h3>
+              </div>
             </div>
 
-            <RouterLink
-              :to="`/EventoDetalle?id=${evento.id}`"
-              class="evento-card__boton"
-            >
-              Saber más
-            </RouterLink>
+            <div class="evento-card__contenido">
+              <p class="evento-card__titulo">{{ evento.nombre }}</p>
+
+              <div class="evento-card__info">
+                <span class="evento-card__fecha">
+                  {{ formatearFecha(evento.fechaInicio) }} -
+                  {{ formatearFecha(evento.fechaFin) }}
+                </span>
+                <span class="evento-card__localizacion">📍 {{ evento.ubicacion }}</span>
+              </div>
+
+              <RouterLink
+                :to="`/EventoDetalle?id=${evento.id}`"
+                class="evento-card__boton"
+              >
+                Saber más
+              </RouterLink>
+            </div>
           </div>
+        </div>
+
+        <div v-else class="calendario__sin-eventos">
+          <p>No hay eventos para esta fecha.</p>
         </div>
       </div>
     </div>
-
-    <v-row v-else>
-      <v-col cols="12" class="calendario__sin-eventos">
-        <p>No hay eventos para esta fecha.</p>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -100,7 +100,6 @@ const filtrarEventos = (val: Date) => {
   });
 };
 
-
 const formatearFecha = (fecha: Date | string) => {
   if (!fecha) return "Fecha no disponible";
   const fechaObj = fecha instanceof Date ? fecha : new Date(fecha);
@@ -123,49 +122,66 @@ const formatearFecha = (fecha: Date | string) => {
 
 .calendario__titulo-eventos {
   font-weight: bold;
-  margin: 1rem 0 0.5rem;
+  margin-bottom: 1.5rem;
   color: $color-darkGreen;
   font-size: 1.8rem;
   font-family: $first-font;
   text-align: center;
 }
 
-.calendario__sin-eventos {
-  text-align: center;
-  font-style: italic;
-  color: $color-lightgray;
-  margin-top: 1rem;
-  font-family: $first-font;
-}
-
-.calendario__eventos {
-  width: 100%;
-  max-width: 1200px;
+.calendario__fila {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+  max-width: 1400px;
   margin: 0 auto;
-  margin-top: 1.5rem;
+  padding: 0 5.8rem; // 👈 esto alinea con el carrusel (ajusta si tu carrusel usa otro valor)
+
+  @include desktop {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+
+
+.calendario__col-calendario {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  @include desktop {
+    width: 350px;
+    min-width: 300px;
+  }
+}
+
+.calendario__col-eventos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .calendario__cards {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
 
-  @include desktop {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.calendario__sin-eventos {
+  text-align: center;
+  font-style: italic;
+  color: $color-lightgray;
+  font-family: $first-font;
+  margin-top: 1rem;
 }
 
 .evento-card {
-  width: 300px;
+  width: 280px;
   height: 450px;
-  margin: 0 auto;
   background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
   background-size: cover;
   border: 2px solid $color-gray;
@@ -174,11 +190,6 @@ const formatearFecha = (fecha: Date | string) => {
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
-  @include desktop {
-    width: 30%;
-    margin: 1%;
-  }
 
   &:hover {
     transform: translateY(-3px);
@@ -228,7 +239,6 @@ const formatearFecha = (fecha: Date | string) => {
   }
 
   &__info {
-    margin-left: 10%;
     font-family: $first-font;
     font-size: 1.1rem;
     color: rgb(199, 199, 199);
