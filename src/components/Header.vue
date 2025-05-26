@@ -16,9 +16,7 @@
             <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
             <v-btn to="/administrador" class="navbar__link">Gestión</v-btn>
             <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
-            <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login">
-              <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
-            </v-btn>
+            <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login">Iniciar Sesión</v-btn>
           </div>
   
           <!-- Botón de menú hamburguesa SOLO en móviles -->
@@ -113,18 +111,23 @@
       background: $color-darkgray;
     }
   
-    &__mobile-link {
-      font-size: 16px;
-      font-weight: bold;
+    .navbar__mobile-login {
+      
+      text-align: center;
+      margin-top: 10px;
       color: white;
-      padding: 12px;
-      text-decoration: none;
-      margin-top: 20px;
-  
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      font-family: $first-font;
+      font-size: 23px;
+      background-color: $color-red;
+
       &:hover {
-        background: $color-lightred;
+        background-color: #a70816;
       }
     }
+
   
     &__mobile-login {
       @include boton-rojo;
