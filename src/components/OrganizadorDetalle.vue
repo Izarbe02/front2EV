@@ -109,74 +109,91 @@ watch(
 </script>
 
 
-
 <template>
-  <div class="organizador-detalle" v-if="organizador">
-    <div class="organizador-detalle__contenedor">
-      <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
-
-      <div class="organizador-detalle__contenido">
-        <div class="organizador-detalle__imagen">
-          <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
-        </div>
-        <div class="organizador-detalle__info">
-          <p class="organizador-detalle__subtitulo">Información</p>
-          <p class="organizador-detalle__descripcion">{{ organizador.descripcion }}</p>
-          <p class="organizador-detalle__direccion">📍{{ organizador.ubicacion }}</p>
-          <p class="organizador-detalle__descripcion">{{ organizador.email }}</p>
-        </div>
-      </div>
-
-      <div v-if="usuario && usuario.idRol === 3" class="organizador-detalle__boton">
- <button
-  @click="toggleFollow"
-  :class="['organizador-detalle__boton-boton', sigue ? 'rojo' : 'verde']"
->
-  {{ sigue ? 'Dejar de seguir' : 'Seguir al organizador' }}
-</button>
-
-  <span class="organizador-detalle__boton-contador">
-    {{ usuariosOrganizadoresStore.numSeguidores }} seguidores
-  </span>
-</div>
-
-
-      <div class="organizador-detalle__eventos">
-        <p class="organizador-detalle__tituloseventos">Nuestros eventos</p>
-        <div v-if="isLoading">
-          <p>Cargando eventos...</p>
-        </div>
-
-        <div v-else-if="eventosLocales.length > 0" class="organizador-detalle__contenedoreventos">
-          <div v-for="evento in eventosLocales" :key="evento.id" class="evento-card">
-            <img :src="evento.enlace" :alt="evento.nombre" class="evento-card__imagen" />
-            <div class="evento-card__contenido">
-              <p class="evento-card__titulo">{{ evento.nombre }}</p>
-              <div class="evento-card__info">
-                <span class="evento-card__fecha">
-                  {{
-                    new Date(evento.fechaInicio).toLocaleDateString("es-ES", {
-                      weekday: 'long',
-                      day: '2-digit',
-                      month: 'short'
-                    })
-                  }},
-                </span>
-                <span class="evento-card__localizacion">{{ evento.ubicacion }}</span>
-              </div>
-              <button class="evento-card__boton">
-                <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="evento-card__link">
-                  Saber más
-                </RouterLink>
+    <div class="organizador-detalle" v-if="organizador">
+      <div class="organizador-detalle__contenedor">
+        <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
+  
+        <div class="organizador-detalle__contenido">
+          <div class="organizador-detalle__imagen">
+            <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
+          </div>
+          <div class="organizador-detalle__botonInfo">
+            <div class="organizador-detalle__info">
+              <p class="organizador-detalle__subtitulo">Información</p>
+              <p class="organizador-detalle__descripcion">{{ organizador.descripcion }}</p>
+              <p class="organizador-detalle__direccion">📍{{ organizador.ubicacion }}</p>
+              <p class="organizador-detalle__descripcion">{{ organizador.email }}</p>
+            </div>
+  
+            <div
+              v-if="usuario && usuario.idRol === 3"
+              class="organizador-detalle__boton"
+            >
+              <button
+                @click="toggleFollow"
+                :class="['organizador-detalle__boton-boton', sigue ? 'rojo' : 'verde']"
+              >
+                {{ sigue ? 'Dejar de seguir' : 'Seguir al organizador' }}
               </button>
+  
+              <span class="organizador-detalle__boton-contador">
+                {{ usuariosOrganizadoresStore.numSeguidores }} seguidores
+              </span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="organizador-detalle__eventos">
+          <p class="organizador-detalle__tituloseventos">Nuestros eventos</p>
+          <div v-if="isLoading">
+            <p>Cargando eventos...</p>
+          </div>
+  
+          <div
+            v-else-if="eventosLocales.length > 0"
+            class="organizador-detalle__contenedoreventos"
+          >
+            <div
+              v-for="evento in eventosLocales"
+              :key="evento.id"
+              class="evento-card"
+            >
+              <img
+                :src="evento.enlace"
+                :alt="evento.nombre"
+                class="evento-card__imagen"
+              />
+              <div class="evento-card__contenido">
+                <p class="evento-card__titulo">{{ evento.nombre }}</p>
+                <div class="evento-card__info">
+                  <span class="evento-card__fecha">
+                    {{
+                      new Date(evento.fechaInicio).toLocaleDateString("es-ES", {
+                        weekday: "long",
+                        day: "2-digit",
+                        month: "short"
+                      })
+                    }},
+                  </span>
+                  <span class="evento-card__localizacion">{{ evento.ubicacion }}</span>
+                </div>
+                <button class="evento-card__boton">
+                  <RouterLink
+                    :to="`/EventoDetalle?id=${evento.id}`"
+                    class="evento-card__link"
+                  >
+                    Saber más
+                  </RouterLink>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</template>
-
+  </template>
+  
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
@@ -235,11 +252,18 @@ watch(
     }
 
     &-contador {
-      font-family: $first-font;
-      font-size: 1.2rem;
-      color: $color-lightred;
-    }
-  }
+  font-family: $first-font;
+  font-size: 1.3rem;
+  color: white;
+  background-color: $color-lightred;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin-top: 0.5rem;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.25);
+  font-weight: bold;
+  text-align: center;
+}
+}
 
   &__contenedor {
     display: flex;
@@ -427,6 +451,7 @@ watch(
     }
 
     &__contenido {
+      width: 80%;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
@@ -446,28 +471,33 @@ watch(
 
     &__info {
       font-size: 1.6rem;
-      width: 450px;
+      width: 380px;
       height: 300px;
       display: flex;
       justify-content: space-between;
     }
-
+    &__botonInfo{
+        flex-direction: column;
+    }
     &__direccion {
       font-size: 1.6rem;
     }
 
     &__boton {
-      margin-top: 2rem;
+  margin-top: 2rem;
 
-      &-boton {
-        font-size: 1.1rem;
-        padding: 12px 28px;
-      }
+  &-boton {
+    font-size: 1.1rem;
+    padding: 12px 28px;
+  }
 
-      &-contador {
-        font-size: 1.3rem;
-      }
-    }
+  &-contador {
+    font-size: 1.4rem;
+    padding: 8px 16px;
+  }
+
+}
+
   }
 }
 </style>
