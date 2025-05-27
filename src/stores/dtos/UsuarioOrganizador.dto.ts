@@ -1,5 +1,5 @@
 export interface UsuarioOrganizadorDto {
-    idUsuario: number;
-    idOrganizador: number;
-  }
-  
+  idUsuario: number;
+  idOrganizador: number;
+  fechaSeguimiento?: string; 
+}
