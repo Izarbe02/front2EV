@@ -39,7 +39,7 @@ const toggleSidebar = () => {
 
 const setView = (view: string) => {
   emit('changeView', view);
-  isSidebarOpen.value = false; // cerrar al seleccionar
+  isSidebarOpen.value = false; 
 };
 
 const handleLogout = () => {
@@ -50,6 +50,7 @@ const handleLogout = () => {
 
 const nombres: Record<string, string> = {
   UsuariosTable: 'Usuarios',
+  GestionFollowOrganizador: 'Organizadores seguidos',
   EventosTable: 'Eventos',
   ComentariosTable: 'Comentarios',
   TematicaTable: 'Temáticas',
@@ -73,7 +74,7 @@ const vistasFiltradas = computed(() =>
   padding: 10px 15px;
   font-size: 18px;
   cursor: pointer;
-  z-index: 9999; // debe ser mayor al sidebar
+  z-index: 9999;
 }
 
 .sidebar {

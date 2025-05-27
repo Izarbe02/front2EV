@@ -51,11 +51,11 @@
 import { ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 
-// Accedemos al store correctamente
+
 const eventosStore = useEventosStore();
 const { crearEvento } = eventosStore;
 
-// Cargar organizador desde localStorage
+
 let organizadorLogeado = null;
 try {
   const raw = localStorage.getItem("organizadorLogeado");
