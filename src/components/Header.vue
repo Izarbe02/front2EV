@@ -108,9 +108,24 @@
     }
   
     &__mobile-menu {
+      justify-content: space-between;
       background: $color-darkgray;
     }
-  
+    &__mobile-link{
+      text-align: center;
+      margin-top: 10px;
+      color: white;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      font-family: $first-font;
+      font-size: 23px;
+      background-color: $color-red;
+
+      &:hover {
+        background-color: #a70816;
+      }
+    }
     .navbar__mobile-login {
       
       text-align: center;
