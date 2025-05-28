@@ -6,7 +6,8 @@
       <button class="contenido__crear-boton" @click="mostrarCrear = !mostrarCrear">
         {{ mostrarCrear ? 'Cerrar creación' : 'Crear nuevo evento' }}
       </button>
-      <CrearEvento v-if="mostrarCrear" />
+      <CrearEvento v-if="mostrarCrear" @close="mostrarCrear = false" />
+
     </div>
 
     <table class="contenido__tabla">

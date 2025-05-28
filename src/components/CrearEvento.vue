@@ -1,60 +1,87 @@
 <template>
-  <div class="crear-evento">
-    <h2 class="crear-evento__titulo">Crear nuevo evento</h2>
-    <form @submit.prevent="enviarFormulario" class="crear-evento__form">
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="nombre">Nombre</label>
-        <input v-model="form.nombre" id="nombre" required class="crear-evento__input" />
+  <div class="modal-overlay">
+    <div class="form-tarjeta">
+      <button class="form-tarjeta__cerrar" @click="$emit('close')">✕</button>
+      <h2 class="form-tarjeta__titulo">Crea tu evento</h2>
+
+      <div class="form-tarjeta__preview">
+        <img
+          v-if="previewUrl"
+          :src="previewUrl"
+          alt="Vista previa del evento"
+          class="form-tarjeta__imagen"
+        />
+        <div v-else class="form-tarjeta__placeholder">Imagen del evento</div>
       </div>
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="descripcion">Descripción</label>
-        <textarea v-model="form.descripcion" id="descripcion" required class="crear-evento__input"></textarea>
-      </div>
+      <form @submit.prevent="enviarFormulario" class="form-tarjeta__form">
+        <label class="form-tarjeta__label">Título del evento</label>
+        <input v-model="form.nombre" type="text" required class="form-tarjeta__input" />
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="ubicacion">Ubicación</label>
-        <input v-model="form.ubicacion" id="ubicacion" required class="crear-evento__input" />
-      </div>
+        <label class="form-tarjeta__label">Descripción</label>
+        <textarea v-model="form.descripcion" required class="form-tarjeta__textarea"></textarea>
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="fechaInicio">Fecha Inicio</label>
-        <input type="datetime-local" v-model="form.fechaInicio" id="fechaInicio" required class="crear-evento__input" />
-      </div>
+        <label class="form-tarjeta__label">Ubicación</label>
+        <input v-model="form.ubicacion" type="text" required class="form-tarjeta__input" />
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="fechaFin">Fecha Fin</label>
-        <input type="datetime-local" v-model="form.fechaFin" id="fechaFin" required class="crear-evento__input" />
-      </div>
+        <div class="form-tarjeta__fechas">
+          <div class="form-tarjeta__grupo">
+            <label class="form-tarjeta__label">Fecha de inicio</label>
+            <input v-model="form.fechaInicio" type="datetime-local" required class="form-tarjeta__input" />
+          </div>
+          <div class="form-tarjeta__grupo">
+            <label class="form-tarjeta__label">Fecha de fin</label>
+            <input v-model="form.fechaFin" type="datetime-local" required class="form-tarjeta__input" />
+          </div>
+        </div>
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="idTematica">ID Temática</label>
-        <input type="number" v-model.number="form.idTematica" id="idTematica" class="crear-evento__input" />
-      </div>
+        <label class="form-tarjeta__label">Imagen</label>
+        <input type="file" @change="seleccionarArchivo" accept="image/*" class="form-tarjeta__input" />
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="idCategoria">ID Categoría</label>
-        <input type="number" v-model.number="form.idCategoria" id="idCategoria" class="crear-evento__input" />
-      </div>
+        <div class="form-tarjeta__grupo">
+          <label class="form-tarjeta__label">Temática</label>
+          <select v-model="form.idTematica" class="form-tarjeta__input">
+            <option disabled :value="null">Selecciona una temática</option>
+            <option v-for="tem in tematicas" :key="tem.id" :value="tem.id">{{ tem.nombre }}</option>
+          </select>
+        </div>
 
-      <div class="crear-evento__grupo">
-        <label class="crear-evento__label" for="imagen">Imagen</label>
-        <input type="file" @change="seleccionarArchivo" accept="image/*" required class="crear-evento__input" />
-      </div>
+        <div class="form-tarjeta__grupo">
+          <label class="form-tarjeta__label">Categoría</label>
+          <select v-model="form.idCategoria" class="form-tarjeta__input">
+            <option disabled :value="null">Selecciona una categoría</option>
+            <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
 
-      <button type="submit" class="crear-evento__boton">Crear Evento</button>
-    </form>
+
+        <button type="submit" class="form-tarjeta__boton">Crear evento</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
+import { onMounted } from "vue";
+
+const categorias = ref<{ id: number; nombre: string }[]>([]);
+const tematicas = ref<{ id: number; nombre: string }[]>([]);
+
+onMounted(() => {
+  fetch("http://localhost:8888/api/CategoriaEvento")
+    .then(res => res.json())
+    .then(data => categorias.value = data);
+
+  fetch("http://localhost:8888/api/Tematica")
+    .then(res => res.json())
+    .then(data => tematicas.value = data);
+});
 
 
 const eventosStore = useEventosStore();
 const { crearEvento } = eventosStore;
-
 
 let organizadorLogeado = null;
 try {
@@ -73,15 +100,17 @@ const form = ref({
   fechaInicio: "",
   fechaFin: "",
   idTematica: null,
-  idCategoria: null
+  idCategoria: null,
 });
 
 const file = ref<File | null>(null);
+const previewUrl = ref<string | null>(null);
 
 function seleccionarArchivo(e: Event) {
   const target = e.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
     file.value = target.files[0];
+    previewUrl.value = URL.createObjectURL(file.value);
   }
 }
 
@@ -108,7 +137,6 @@ async function enviarFormulario() {
   if (form.value.idTematica !== null) {
     formData.append("idTematica", form.value.idTematica.toString());
   }
-
   if (form.value.idCategoria !== null) {
     formData.append("idCategoria", form.value.idCategoria.toString());
   }
@@ -117,7 +145,6 @@ async function enviarFormulario() {
     await crearEvento(formData);
     alert("Evento creado correctamente");
 
-    // Limpiar formulario
     form.value = {
       nombre: "",
       descripcion: "",
@@ -125,9 +152,10 @@ async function enviarFormulario() {
       fechaInicio: "",
       fechaFin: "",
       idTematica: null,
-      idCategoria: null
+      idCategoria: null,
     };
     file.value = null;
+    previewUrl.value = null;
   } catch (err: any) {
     alert("Error al crear el evento: " + err.message);
   }
@@ -137,18 +165,102 @@ async function enviarFormulario() {
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 
-.crear-evento {
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}
+
+.form-tarjeta {
+  background: $color-darkgray;
+  padding: 2rem;
+  border-radius: 10px;
   width: 100%;
   max-width: 500px;
-  margin: 0 auto;
-  padding: 1rem;
+  color: white;
+  font-family: $first-font;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  max-height: 95vh;
+  overflow-y: auto;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &__cerrar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+      color: $color-lightred;
+    }
+  }
 
   &__titulo {
     text-align: center;
+    font-size: 1.9rem;
     color: $color-red;
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__preview {
+    width: 100%;
+    height: 200px;
+    background: $color-black;
+    border: 2px dashed $color-lightgray;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__imagen {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit:cover;
+    border-radius: 6px;
+  }
+
+  &__placeholder {
+    color: $color-lightgray;
+    font-style: italic;
   }
 
   &__form {
@@ -157,63 +269,59 @@ async function enviarFormulario() {
     gap: 1rem;
   }
 
-  &__grupo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
   &__label {
     font-weight: bold;
     color: $color-lightgray;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
 
-  &__input {
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid $color-lightgray;
+  &__input,
+  &__textarea {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 5px;
+    background-color: $color-lightgray;
+    color: white;
     font-family: $first-font;
-    background-color: white;
-    color: $color-black;
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
 
-  &__input:focus {
-    outline: 2px solid $color-red;
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  &__fechas,
+  &__extras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__grupo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 
   &__boton {
     background-color: $color-red;
     color: white;
-    padding: 0.75rem 1rem;
     font-weight: bold;
-    font-family: $first-font;
+    padding: 0.9rem;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    font-size: 1.05rem;
+    transition: background-color 0.3s;
 
     &:hover {
       background-color: $color-lightred;
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  .crear-evento {
-    padding: 2rem;
-
-    &__titulo {
-      font-size: 2rem;
-    }
-
-    &__label {
-      font-size: 1rem;
-    }
-
-    &__input {
-      font-size: 1.05rem;
     }
   }
 }
