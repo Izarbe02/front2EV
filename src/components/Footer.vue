@@ -23,7 +23,7 @@
             <v-btn to="/organizadores" class="footer__link">Organizadores</v-btn>
           </v-col>
           <v-col cols="auto">
-            <v-btn to="/administrador" class="footer__link">Zona Administrador</v-btn>
+            <v-btn to="/administrador" class="footer__link">Gestion</v-btn>
           </v-col>
         </v-row>
       </div>
