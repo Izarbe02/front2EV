@@ -18,6 +18,8 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     console.warn("Error al parsear usuarioLogeado:", error);
   }
 
+
+  
   const usuarioLogeado = ref<UsuarioDto | null>(usuarioGuardado);
 
   const tokenLogin = ref<string | null>(

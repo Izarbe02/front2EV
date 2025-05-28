@@ -1,24 +1,37 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useUsuariosOrganizadoresStore } from "@/stores/UsuarioOrganizador";
 import { useUsuariosStore } from "@/stores/usuarios";
-
+import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
 
 const usuariosStore = useUsuariosStore();
 const usuariosOrganizadoresStore = useUsuariosOrganizadoresStore();
 
-const usuario = usuariosStore.usuarioLogeado;
-const organizadoresSeguidos = usuariosOrganizadoresStore.organizadoresSeguidos;
+const usuario = computed(() => usuariosStore.usuarioLogeado);
+const organizadoresSeguidos = ref([]);
 
-watch(
-  () => usuario?.id,
-  async (newId) => {
-    if (newId) {
-      await usuariosOrganizadoresStore.cargarOrganizadoresSeguidos(newId);
-    }
-  },
-  { immediate: true }
-);
+const cargarOrganizadores = async () => {
+  if (usuario.value?.id) {
+    await usuariosOrganizadoresStore.cargarOrganizadoresSeguidos(usuario.value.id);
+    organizadoresSeguidos.value = usuariosOrganizadoresStore.organizadoresSeguidos;
+  }
+};
+
+const dejarDeSeguir = async (idOrganizador: number) => {
+  if (!usuario.value?.id) return;
+
+  const dto: UsuarioOrganizadorDto = {
+    idUsuario: usuario.value.id,
+    idOrganizador
+  };
+
+  await usuariosOrganizadoresStore.unfollowOrganizador(dto);
+  await cargarOrganizadores();
+};
+
+onMounted(() => {
+  cargarOrganizadores();
+});
 </script>
 
 <template>
@@ -30,12 +43,31 @@ watch(
     </div>
 
     <div v-else class="organizador-lista__grid">
-      <div v-for="org in organizadoresSeguidos" :key="org.id" class="organizador-card">
-        <img :src="org.enlace" :alt="org.nombre" class="organizador-card__imagen" />
+      <div
+        v-for="org in organizadoresSeguidos"
+        :key="org.id"
+        class="organizador-card"
+      >
+        <img
+          :src="org.enlace"
+          :alt="org.nombre"
+          class="organizador-card__imagen"
+        />
         <div class="organizador-card__info">
-          <h3 class="organizador-card__nombre">{{ org.nombre }}</h3>
+          <RouterLink
+            :to="`/OrganizadorDetalle?id=${org.id}`"
+            class="organizador-card__nombre"
+          >
+            {{ org.nombre }}
+          </RouterLink>
           <p class="organizador-card__ubicacion">📍 {{ org.ubicacion }}</p>
           <p class="organizador-card__email">📧 {{ org.email }}</p>
+          <button
+            class="organizador-card__boton"
+            @click="dejarDeSeguir(org.id)"
+          >
+            Dejar de seguir
+          </button>
         </div>
       </div>
     </div>
@@ -44,6 +76,7 @@ watch(
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
+
 .organizador-lista {
   padding: 2rem;
   text-align: center;
@@ -69,6 +102,7 @@ watch(
     @media (min-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
     }
+
     @media (min-width: 1024px) {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -94,9 +128,16 @@ watch(
   }
 
   &__nombre {
+    display: block;
     font-size: 1.5rem;
     font-family: $titulo;
     margin-bottom: 0.5rem;
+    color: $color-lightred;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   &__ubicacion,
@@ -104,6 +145,23 @@ watch(
     font-size: 1rem;
     font-family: $first-font;
     color: $color-lightgray;
+  }
+
+  &__boton {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: $color-red;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: $first-font;
+    font-weight: bold;
+
+    &:hover {
+      background-color: $color-lightred;
+      color: black;
+    }
   }
 }
 </style>
