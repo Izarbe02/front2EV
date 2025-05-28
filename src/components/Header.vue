@@ -16,7 +16,14 @@
             <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
             <v-btn to="/administrador" class="navbar__link">Gestión</v-btn>
             <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
-            <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login">Iniciar Sesión</v-btn>
+            <v-btn
+  v-if="!estaLogeado"
+  to="/login"
+  class="navbar__mobile-link navbar__mobile-login"
+>
+  Iniciar Sesión
+</v-btn>
+
           </div>
   
           <!-- Botón de menú hamburguesa SOLO en móviles -->
@@ -34,29 +41,49 @@
           <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
           <v-list-item to="/administrador" class="navbar__mobile-link">Gestión</v-list-item>
           <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
-          <v-list-item to="/login" class="navbar__mobile-link navbar__mobile-login">
-            <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
-          </v-list-item>
+          <v-list-item
+  v-if="!estaLogeado"
+  to="/login"
+  class="navbar__mobile-link navbar__mobile-login"
+>
+  <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
+</v-list-item>
+
         </v-list>
       </v-navigation-drawer>
     </v-layout>
   </template>
   
   <script lang="ts">
-  import { defineComponent } from 'vue';
-  import LogoCanvas from "@/components/LogoCanvas.vue";
-  
-  export default defineComponent({
-    components: {
-      LogoCanvas
-    },
-    data() {
-      return {
-        drawer: false
-      };
-    }
-  });
-  </script>
+import { defineComponent, computed } from 'vue';
+import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
+import LogoCanvas from "@/components/LogoCanvas.vue";
+
+export default defineComponent({
+  components: {
+    LogoCanvas
+  },
+  data() {
+    return {
+      drawer: false
+    };
+  },
+  setup() {
+    const usuariosStore = useUsuariosStore();
+    const organizadoresStore = useOrganizadoresStore();
+
+    const estaLogeado = computed(() =>
+      usuariosStore.usuarioLogeado !== null || organizadoresStore.organizadorLogeado !== null
+    );
+
+    return {
+      estaLogeado
+    };
+  }
+});
+</script>
+
   
   <style lang="scss" scoped>
   @import "@/assets/styles/_variables.scss";

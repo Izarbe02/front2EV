@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useUsuariosStore } from '@/stores/usuarios';
+
+const props = defineProps<{
+  vistasPermitidas: string[];
+}>();
+
+const emit = defineEmits(['changeView', 'logout']);
+const isSidebarOpen = ref(false);
+const router = useRouter();
+const store = useUsuariosStore();
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const setView = (view: string) => {
+  emit('changeView', view);
+  isSidebarOpen.value = false;
+};
+
+const handleLogout = () => {
+  store.logout();
+  router.push('/');
+  isSidebarOpen.value = false;
+};
+
+const nombres: Record<string, string> = {
+  FeedEventosSeguidos: 'Novedades de organizadores',
+  GestionFollowOrganizador: 'Organizadores seguidos',
+  EventosGuardados: 'Eventos guardados',
+  EditarPerfilUsuario: 'Mi perfil',
+  UsuariosTable: 'Usuarios',
+  EventosTable: 'Eventos',
+  ComentariosTable: 'Comentarios',
+  TematicaTable: 'Temáticas',
+  CategoriaEventoTable: 'Categoría Evento'
+};
+
+const vistasFiltradas = computed(() =>
+  props.vistasPermitidas.filter((v) => Object.keys(nombres).includes(v))
+);
+</script>
+
 <template>
   <button class="toggle-btn" @click="toggleSidebar">☰</button>
 
@@ -19,52 +65,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useUsuariosStore } from '@/stores/usuarios';
-
-const props = defineProps<{
-  vistasPermitidas: string[];
-}>();
-
-const emit = defineEmits(['changeView', 'logout']);
-const isSidebarOpen = ref(false);
-const router = useRouter();
-const store = useUsuariosStore();
-
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
-};
-
-const setView = (view: string) => {
-  emit('changeView', view);
-  isSidebarOpen.value = false; 
-};
-
-const handleLogout = () => {
-  store.logout();
-  router.push('/');
-  isSidebarOpen.value = false;
-};
-
-const nombres: Record<string, string> = {
-  UsuariosTable: 'Usuarios',
-  GestionFollowOrganizador: 'Organizadores seguidos',
-  EventosTable: 'Eventos',
-  ComentariosTable: 'Comentarios',
-  TematicaTable: 'Temáticas',
-  CategoriaEventoTable: 'Categoría Evento',
-  EventosGuardados: 'Eventos guardados',
-  EditarPerfilUsuario: 'Mi perfil' 
-};
-
-const vistasFiltradas = computed(() =>
-  props.vistasPermitidas.filter((v) => Object.keys(nombres).includes(v))
-);
-</script>
-
 <style scoped lang="scss">
+@import "@/assets/styles/_variables.scss";
+
 .toggle-btn {
   position: fixed;
   top: 15px;

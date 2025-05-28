@@ -42,10 +42,11 @@ const rolActivo = computed(() => {
 });
 
 const currentView = ref<
-  'GestionFollowOrganizador' | 'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados' | 'EditarPerfilUsuario'
->('GestionFollowOrganizador');
+  'FeedEventosSeguidos' | 'GestionFollowOrganizador' | 'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados' | 'EditarPerfilUsuario'
+>('FeedEventosSeguidos');
 
 const components = {
+  FeedEventosSeguidos: defineAsyncComponent(() => import('@/components/FeedEventoOrg.vue')),
   GestionFollowOrganizador: defineAsyncComponent(() => import('@/components/GestionFollowOrganizador.vue')),
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
   EventosTable: defineAsyncComponent(() => import('@/components/EventosTable.vue')),
@@ -57,9 +58,9 @@ const components = {
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'], // admin
+  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
   2: ['EventosTable'],
-  3: ['GestionFollowOrganizador', 'EventosGuardados', 'EditarPerfilUsuario'] // usuario normal
+  3: ['FeedEventosSeguidos', 'GestionFollowOrganizador', 'EventosGuardados', 'EditarPerfilUsuario']
 };
 
 const vistaPermitida = computed(() =>
