@@ -38,16 +38,22 @@
         <label class="form-tarjeta__label">Imagen</label>
         <input type="file" @change="seleccionarArchivo" accept="image/*" class="form-tarjeta__input" />
 
-        <div class="form-tarjeta__extras">
-          <div class="form-tarjeta__grupo">
-            <label class="form-tarjeta__label">ID Temática</label>
-            <input v-model.number="form.idTematica" type="number" class="form-tarjeta__input" />
-          </div>
-          <div class="form-tarjeta__grupo">
-            <label class="form-tarjeta__label">ID Categoría</label>
-            <input v-model.number="form.idCategoria" type="number" class="form-tarjeta__input" />
-          </div>
+        <div class="form-tarjeta__grupo">
+          <label class="form-tarjeta__label">Temática</label>
+          <select v-model="form.idTematica" class="form-tarjeta__input">
+            <option disabled :value="null">Selecciona una temática</option>
+            <option v-for="tem in tematicas" :key="tem.id" :value="tem.id">{{ tem.nombre }}</option>
+          </select>
         </div>
+
+        <div class="form-tarjeta__grupo">
+          <label class="form-tarjeta__label">Categoría</label>
+          <select v-model="form.idCategoria" class="form-tarjeta__input">
+            <option disabled :value="null">Selecciona una categoría</option>
+            <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
+
 
         <button type="submit" class="form-tarjeta__boton">Crear evento</button>
       </form>
@@ -58,6 +64,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
+import { onMounted } from "vue";
+
+const categorias = ref<{ id: number; nombre: string }[]>([]);
+const tematicas = ref<{ id: number; nombre: string }[]>([]);
+
+onMounted(() => {
+  fetch("http://localhost:8888/api/CategoriaEvento")
+    .then(res => res.json())
+    .then(data => categorias.value = data);
+
+  fetch("http://localhost:8888/api/Tematica")
+    .then(res => res.json())
+    .then(data => tematicas.value = data);
+});
+
 
 const eventosStore = useEventosStore();
 const { crearEvento } = eventosStore;
