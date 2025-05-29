@@ -44,6 +44,8 @@ export const useEventosStore = defineStore("eventos", () => {
     // Crear un nuevo evento
     async function crearEvento(formData: FormData) {
     try {
+        console.log(formData);
+        
       const response = await fetch("http://localhost:8888/api/evento", {
         method: "POST",
         body: formData

@@ -101,6 +101,7 @@ const form = ref({
   fechaFin: "",
   idTematica: null,
   idCategoria: null,
+  enlace: "https://mi-plataforma.com/evento-privado",
 });
 
 const file = ref<File | null>(null);
@@ -140,7 +141,7 @@ async function enviarFormulario() {
   if (form.value.idCategoria !== null) {
     formData.append("idCategoria", form.value.idCategoria.toString());
   }
-
+  formData.append("enlace", form.value.enlace);
   try {
     await crearEvento(formData);
     alert("Evento creado correctamente");
