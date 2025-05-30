@@ -41,9 +41,17 @@ const rolActivo = computed(() => {
   return usuario.value?.idRol ?? organizador.value?.idRol ?? -1;
 });
 
-const currentView = ref<
-  'FeedEventosSeguidos' | 'GestionFollowOrganizador' | 'UsuariosTable' | 'EventosTable' | 'ComentariosTable' | 'TematicaTable' | 'CategoriaEventoTable' | 'EventosGuardados' | 'EditarPerfilUsuario'
->('FeedEventosSeguidos');
+
+const vistasInicialesPorRol: Record<number, keyof typeof components> = {
+  1: 'UsuariosTable',
+  2: 'EventosTable',
+  3: 'FeedEventosSeguidos'
+};
+
+const currentView = ref<keyof typeof components>(
+  vistasInicialesPorRol[usuario.value?.idRol ?? organizador.value?.idRol ?? -1] || 'EventosTable'
+);
+
 
 const components = {
   FeedEventosSeguidos: defineAsyncComponent(() => import('@/components/FeedEventoOrg.vue')),

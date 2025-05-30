@@ -2,7 +2,7 @@
   <v-container class="login">
     <v-sheet class="login__sheet" elevation="8">
       <h2 class="login__title">Ingresar</h2>
-      <p class="login__subtitle">Entrando podrás publicar nuevos eventos.</p>
+      <p class="login__subtitle">.</p>
 
       <v-form fast-fail class="login__form">
         <v-text-field
@@ -32,7 +32,7 @@
         </v-btn>
 
         <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
-          {{ usuariosStore.errorMessage }}
+      Credenciales incorrectas
         </v-alert>
       </v-form>
     </v-sheet>
