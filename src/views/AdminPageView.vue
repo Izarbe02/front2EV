@@ -54,7 +54,7 @@ const currentView = ref<keyof typeof components>(
 
 
 const components = {
-  FeedEventosSeguidos: defineAsyncComponent(() => import('@/components/FeedEventoOrg.vue')),
+  FeedEventosSeguidos: defineAsyncComponent(() => import('@/components/FeedEventosSeguidos.vue')),
   GestionFollowOrganizador: defineAsyncComponent(() => import('@/components/GestionFollowOrganizador.vue')),
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
   EventosTable: defineAsyncComponent(() => import('@/components/EventosTable.vue')),
