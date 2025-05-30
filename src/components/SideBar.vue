@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 
 const props = defineProps<{
   vistasPermitidas: string[];
@@ -11,6 +12,7 @@ const emit = defineEmits(['changeView', 'logout']);
 const isSidebarOpen = ref(false);
 const router = useRouter();
 const store = useUsuariosStore();
+const OrganizadoresStore = useOrganizadoresStore();
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
@@ -18,13 +20,22 @@ const toggleSidebar = () => {
 
 const setView = (view: string) => {
   emit('changeView', view);
-  isSidebarOpen.value = false;
+  isSidebarOpen.value = false;         
 };
 
 const handleLogout = () => {
+  if (store.usuarioLogeado)
+{
   store.logout();
   router.push('/');
   isSidebarOpen.value = false;
+}
+if (OrganizadoresStore.organizadorLogeado){
+  OrganizadoresStore.logoutOrganizador();
+  router.push('/');
+  isSidebarOpen.value = false;
+
+}
 };
 
 const nombres: Record<string, string> = {

@@ -7,7 +7,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   const organizadores = ref<OrganizadorDto[]>([]);
   const currentOrganizador = ref<OrganizadorDto | null>(null);
 
-  // ✅ Manejo seguro del localStorage (igual que usuarios)
+
   let organizadorGuardado: OrganizadorDto | null = null;
   try {
     const raw = localStorage.getItem("organizadorLogeado");
