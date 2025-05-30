@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
+import type { UsuarioOrganizadorDto } from "@/stores/dtos/UsuarioOrganizador.dto";
 import type OrganizadorDto from '@/stores/dtos/organizador.dto';
 import type EventoDto from '@/stores/dtos/evento.dto';
 
