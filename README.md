@@ -41,3 +41,8 @@ npm install
 npm i vuetify
 npm install -D sass-embedded
 npm install sweetalert2
+
+npm install chart.js vue-chartjs
+npm install --save-dev @types/chart.js
+
+npm install @bufbuild/protobuf@latest

@@ -220,6 +220,16 @@ export const useEventosStore = defineStore("eventos", () => {
         }
     }
     
+    async function cargarEventosPorMes() {
+        try {
+            const response = await fetch("http://localhost:8888/api/evento/grafica-eventos-mensual");
+            if (!response.ok) throw new Error("Error al obtener eventos por mes");
+            const data = await response.json();
+            eventosPorMes.value = data;
+        } catch (error) {
+            console.error("Error al cargar eventos por mes:", error);
+        }
+    }
 
     return {
         eventos,
@@ -239,6 +249,7 @@ export const useEventosStore = defineStore("eventos", () => {
         hayEventosFiltrados,
         eventosFiltrados,
         eventosProximos,
+        cargarEventosPorMes,
         proximosEventos,
         getEventoPorIdORganizador,
         filtrarPorRangoFechas
