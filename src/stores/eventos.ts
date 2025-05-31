@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import EventoDto from "@/stores/dtos/evento.dto";
 import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
+import EventosPorMesDto from "@/stores/dtos/eventosPorMes.dto";
 
 export const useEventosStore = defineStore("eventos", () => {
     // Estado reactivo
@@ -13,6 +14,7 @@ export const useEventosStore = defineStore("eventos", () => {
     const eventosProximos = ref<EventoDto[]>([]);
     const errorMessage = ref<string>("");
     const successMessage = ref<string>("");
+    const eventosPorMes = ref<EventosPorMesDto[]>([]);
 
 
     // Obtener todos los eventos del backend
@@ -225,7 +227,7 @@ export const useEventosStore = defineStore("eventos", () => {
             const response = await fetch("http://localhost:8888/api/evento/grafica-eventos-mensual");
             if (!response.ok) throw new Error("Error al obtener eventos por mes");
             const data = await response.json();
-            eventosPorMes.value = data;
+            EventosPorMesDto.value = data;
         } catch (error) {
             console.error("Error al cargar eventos por mes:", error);
         }

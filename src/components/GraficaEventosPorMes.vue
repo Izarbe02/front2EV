@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -10,21 +10,25 @@ import {
   CategoryScale,
   LinearScale
 } from 'chart.js'
+import { useEstadisticasStore } from '@/stores/estadisticasStore'
+import type { EventosPorMesDto } from '@/dto/EventosPorMesDto'
 
-// Registramos los módulos de Chart.js
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-// Datos reactivos para la gráfica
-const chartData = ref({
-  labels: [], // Aquí pondremos los meses
+// Store
+const store = useEstadisticasStore()
+
+// Computed para extraer los datos y transformarlos para la gráfica
+const chartData = computed(() => ({
+  labels: store.eventosPorMes.map((item: EventosPorMesDto) => `${item.mes}/${item.anio}`),
   datasets: [
     {
       label: 'Eventos por mes',
-      data: [], // Aquí pondremos la cantidad de eventos
+      data: store.eventosPorMes.map((item: EventosPorMesDto) => item.totalEventos),
       backgroundColor: '#d40202'
     }
   ]
-})
+}))
 
 // Opciones de la gráfica
 const chartOptions = ref({
@@ -47,13 +51,9 @@ const chartOptions = ref({
   }
 })
 
+// Cargar datos al montar el componente
 onMounted(async () => {
-  // Aquí llamas a tu endpoint del backend (que ya estamos preparando)
-  const res = await fetch('http://localhost:8888/api/Eventos/grafica-eventos-mensual')
-  const data = await res.json()
-
-  chartData.value.labels = data.map((item: any) => item.mes)
-  chartData.value.datasets[0].data = data.map((item: any) => item.totalEventos)
+  await store.cargarEventosPorMes()
 })
 </script>
 
