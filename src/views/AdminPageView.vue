@@ -32,6 +32,7 @@ const usuariosStore = useUsuariosStore();
 const organizadoresStore = useOrganizadoresStore();
 const router = useRouter();
 
+
 const usuario = computed(() => usuariosStore.usuarioLogeado);
 const organizador = computed(() => organizadoresStore.organizadorLogeado);
 
@@ -63,11 +64,12 @@ const components = {
   CategoriaEventoTable: defineAsyncComponent(() => import('@/components/CategoriaEventoTable.vue')),
   EventosGuardados: defineAsyncComponent(() => import('@/components/EventoGuardadoComp.vue')),
   EditarPerfilUsuario: defineAsyncComponent(() => import('@/components/EditarPerfilUsuario.vue')),
+  GraficaEventosPorMes: defineAsyncComponent(() => import('@/components/GraficaEventosPorMes.vue'))
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
-  2: ['EventosTable'],
+  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable', 'GraficaEventosPorMes'],
+  2: ['EventosTable', 'GraficaEventosPorMes'],
   3: ['FeedEventosSeguidos', 'GestionFollowOrganizador', 'EventosGuardados', 'EditarPerfilUsuario']
 };
 

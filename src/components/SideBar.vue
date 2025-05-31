@@ -41,7 +41,8 @@ const nombres: Record<string, string> = {
   EventosTable: 'Eventos',
   ComentariosTable: 'Comentarios',
   TematicaTable: 'Temáticas',
-  CategoriaEventoTable: 'Categoría Evento'
+  CategoriaEventoTable: 'Categoría Evento',
+  GraficaEventosPorMes: 'Eventos por mes'
 };
 
 const vistasFiltradas = computed(() =>

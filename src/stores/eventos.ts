@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import EventoDto from "@/stores/dtos/evento.dto";
 import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
-import EventosPorMesDto from "@/stores/dtos/eventosPorMes.dto";
+import type { EventosPorMesDto } from '@/stores/dtos/eventosPorMes.dto'
 
 export const useEventosStore = defineStore("eventos", () => {
     // Estado reactivo
@@ -158,11 +158,6 @@ export const useEventosStore = defineStore("eventos", () => {
         }
     }
     
-    
-    
-    
-    
-    
     // Obtener información detallada de un evento
     async function getInfoEvento(id: number): Promise<EventoInfoDto> {
         try {
@@ -224,10 +219,10 @@ export const useEventosStore = defineStore("eventos", () => {
     
     async function cargarEventosPorMes() {
         try {
-            const response = await fetch("http://localhost:8888/api/evento/grafica-eventos-mensual");
+            const response = await fetch("http://localhost:8888/api/Evento/estadisticas/por-mes");
             if (!response.ok) throw new Error("Error al obtener eventos por mes");
             const data = await response.json();
-            EventosPorMesDto.value = data;
+            eventosPorMes.value = data;
         } catch (error) {
             console.error("Error al cargar eventos por mes:", error);
         }
@@ -251,9 +246,10 @@ export const useEventosStore = defineStore("eventos", () => {
         hayEventosFiltrados,
         eventosFiltrados,
         eventosProximos,
-        cargarEventosPorMes,
+        eventosPorMes,
         proximosEventos,
         getEventoPorIdORganizador,
-        filtrarPorRangoFechas
+        filtrarPorRangoFechas,
+        cargarEventosPorMes
     };
 });
