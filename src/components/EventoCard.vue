@@ -121,9 +121,23 @@ const limpiarFiltro = async () => {
         <button class="evento-container__boton-filtro" @click="limpiarFiltro">
           Limpiar filtro
         </button>
-        <button class="evento-container__boton-filtro" @click="mostrarAcabados = !mostrarAcabados">
-          {{ mostrarAcabados ? 'Ver eventos activos' : 'Ver eventos acabados' }}
-        </button>
+        <div class="evento-container__tabs">
+  <button
+    class="evento-container__tab"
+    :class="{ 'evento-container__tab--active': !mostrarAcabados }"
+    @click="mostrarAcabados = false"
+  >
+    Actuales
+  </button>
+  <button
+    class="evento-container__tab"
+    :class="{ 'evento-container__tab--active': mostrarAcabados }"
+    @click="mostrarAcabados = true"
+  >
+    Acabados
+  </button>
+</div>
+
       </div>
     </div>
 
@@ -190,6 +204,45 @@ const limpiarFiltro = async () => {
       gap: 20px;
     }
   }
+  .evento-container__tabs {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  border-bottom: 2px solid white;
+}
+
+.evento-container__tab {
+  flex: 1;
+  text-align: center;
+  font-family: $first-font;
+  font-size: 1.1rem;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  color: white;
+  position: relative;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: $color-lightred;
+  }
+
+  &--active {
+    font-weight: bold;
+    color: $color-lightred;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: $color-red;
+    }
+  }
+}
 
   &__filtro-botones {
     display: flex;

@@ -49,6 +49,7 @@ const vistasFiltradas = computed(() =>
   props.vistasPermitidas.filter((v) => Object.keys(nombres).includes(v))
 );
 </script>
+
 <template>
   <button class="sidebar__toggle-btn" @click="toggleSidebar">☰</button>
 
@@ -81,8 +82,6 @@ const vistasFiltradas = computed(() =>
   </div>
 </template>
 
-
-
 <style scoped lang="scss">
 @import '@/assets/styles/_variables.scss';
 
@@ -100,10 +99,12 @@ const vistasFiltradas = computed(() =>
   border-radius: 0.5rem;
   z-index: 9999;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
     background-color: $color-lightred;
     box-shadow: 0 0 10px $color-lightred;
+    transform: scale(1.05); // ✅ efecto agrandado
   }
 }
 
@@ -167,11 +168,15 @@ const vistasFiltradas = computed(() =>
     border-radius: 0.6rem;
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.2s ease;
 
     &:hover {
       background-color: $color-red;
       box-shadow: 0 0 12px $color-lightred;
+      transform: scale(1.05); // ✅ efecto agrandado
     }
 
     &--link {
@@ -180,12 +185,13 @@ const vistasFiltradas = computed(() =>
     }
 
     &--logout {
-      background-color: $color-darkgray;
+      border: 1px solid white;
+      background-color: transparent;
+      color: white;
 
       &:hover {
-        background-color: $color-lightgray;
-        color: white;
-        box-shadow: 0 0 12px $color-lightred;
+        background-color: $color-red;
+        transform: scale(1.05);
       }
     }
   }
