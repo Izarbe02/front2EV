@@ -23,7 +23,7 @@
             <v-btn to="/organizadores" class="footer__link">Organizadores</v-btn>
           </v-col>
           <v-col cols="auto">
-            <v-btn to="/administrador" class="footer__link">Gestion</v-btn>
+            <v-btn to="/administrador" class="footer__link">Gestión</v-btn>
           </v-col>
         </v-row>
       </div>
@@ -102,14 +102,23 @@
     color: $color-lightred;
     background: $color-lightgray;
     text-transform: none;
+    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 
     &:hover {
       color: $color-whitered;
+      transform: scale(1.05);
+      background-color: $color-red;
     }
   }
 
   &__social-button {
     @include boton-gris;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      background-color: $color-red;
+    }
   }
 
   @media (max-width: 768px) {
