@@ -63,11 +63,12 @@ const components = {
   CategoriaEventoTable: defineAsyncComponent(() => import('@/components/CategoriaEventoTable.vue')),
   EventosGuardados: defineAsyncComponent(() => import('@/components/EventoGuardadoComp.vue')),
   EditarPerfilUsuario: defineAsyncComponent(() => import('@/components/EditarPerfilUsuario.vue')),
+  EditarPerfilOrganizador: defineAsyncComponent(() => import('@/components/EditarPerfilOrganizador.vue'))
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
   1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
-  2: ['EventosTable'],
+  2: ['EventosTable', 'EditarPerfilOrganizador'],
   3: ['FeedEventosSeguidos', 'GestionFollowOrganizador', 'EventosGuardados', 'EditarPerfilUsuario']
 };
 

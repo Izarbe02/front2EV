@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
 import { useOrganizadoresStore } from '@/stores/organizadores';
+import EditarPerfilOrganizador from './EditarPerfilOrganizador.vue';
 
 const props = defineProps<{ vistasPermitidas: string[] }>();
 const emit = defineEmits(['changeView', 'logout']);
@@ -41,7 +42,8 @@ const nombres: Record<string, string> = {
   EventosTable: 'Eventos',
   ComentariosTable: 'Comentarios',
   TematicaTable: 'Temáticas',
-  CategoriaEventoTable: 'Categoría Evento'
+  CategoriaEventoTable: 'Categoría Evento',
+  EditarPerfilOrganizador: 'Mi perfil'
 };
 
 const vistasFiltradas = computed(() =>
