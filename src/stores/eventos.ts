@@ -82,21 +82,33 @@ export const useEventosStore = defineStore("eventos", () => {
     }
 
     // Actualizar un evento
-    async function updateEvento(id: number, eventoActualizado: EventoDto) {
+    async function updateEventoConImagen(id: number, formData: FormData) {
         try {
             const response = await fetch(`http://localhost:8888/api/evento/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(eventoActualizado),
+            method: "PUT",
+            body: formData,
             });
 
-            if (!response.ok) throw new Error("Error al actualizar evento");
+            if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error("Error al actualizar evento: " + errorText);
+            }
 
-            await findAll(); 
-        } catch (error) {
+            const actualizado = await response.json();
+
+            // Actualizar la lista local
+            const index = eventos.value.findIndex(e => e.id === id);
+            if (index !== -1) {
+            eventos.value[index] = actualizado;
+            }
+
+            successMessage.value = "Evento actualizado correctamente.";
+        } catch (error: any) {
+            errorMessage.value = error.message;
             console.error("Error al actualizar evento:", error);
         }
-    }
+        }
+
 
     // Obtener un evento por ID
     async function filtroEvento(id: number) {
@@ -230,7 +242,7 @@ export const useEventosStore = defineStore("eventos", () => {
         findAll,
         crearEvento,
         deleteEvento,
-        updateEvento,
+        updateEventoConImagen,
         filtroEvento,
         getEventoPorOrganizador,
         getEventoPorCategoria,
