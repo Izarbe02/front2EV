@@ -121,7 +121,8 @@ const limpiarFiltro = async () => {
         <button class="evento-container__boton-filtro" @click="limpiarFiltro">
           Limpiar filtro
         </button>
-        <div class="evento-container__tabs">
+      </div>
+              <div class="evento-container__tabs">
   <button
     class="evento-container__tab"
     :class="{ 'evento-container__tab--active': !mostrarAcabados }"
@@ -137,8 +138,6 @@ const limpiarFiltro = async () => {
     Acabados
   </button>
 </div>
-
-      </div>
     </div>
 
     <div class="evento-container__tarjetas">
@@ -204,18 +203,13 @@ const limpiarFiltro = async () => {
       gap: 20px;
     }
   }
-  .evento-container__tabs {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-  border-bottom: 2px solid white;
-}
+
 
 .evento-container__tab {
   flex: 1;
-  text-align: center;
+margin-left: 10px;
   font-family: $first-font;
-  font-size: 1.1rem;
+  font-size: 2.1rem;
   padding: 12px 0;
   background: none;
   border: none;
