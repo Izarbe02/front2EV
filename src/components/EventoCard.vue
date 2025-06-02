@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import type EventoDto from "@/stores/dtos/evento.dto";
 import { RouterLink } from "vue-router";
+import Swal from "sweetalert2";
 
 const eventosStore = useEventosStore();
 const mostrarAcabados = ref(false);
@@ -49,7 +50,12 @@ const formatearFecha = (fecha: Date | string) => {
 
 const filtrarPorRango = async () => {
   if (!fechaInicio.value || !fechaFin.value) {
-    alert("Debes seleccionar ambas fechas.");
+    Swal.fire({
+      icon: 'warning',
+      title: 'Fechas incompletas',
+      text: 'Debes seleccionar ambas fechas.',
+      confirmButtonColor: '#d40202'
+    });
     return;
   }
 
@@ -60,7 +66,12 @@ const filtrarPorRango = async () => {
   fin.setHours(23, 59, 59, 999);
 
   if (inicio > fin) {
-    alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Rango de fechas inválido',
+      text: 'La fecha de inicio no puede ser posterior a la fecha de fin.',
+      confirmButtonColor: '#d40202'
+    });
     return;
   }
 
@@ -77,15 +88,12 @@ const limpiarFiltro = async () => {
   fechaFin.value = "";
   categoriaSeleccionada.value = "";
 
-
   eventosStore.hayEventosFiltrados = false;
   eventosStore.eventosFiltrados = [];
-
 
   await eventosStore.findAll();
 };
 </script>
-
 
 <template>
   <div class="evento-container">
@@ -207,7 +215,7 @@ const limpiarFiltro = async () => {
 
 .evento-container__tab {
   flex: 1;
-margin-left: 10px;
+  margin-left: 10px;
   font-family: $first-font;
   font-size: 2.1rem;
   padding: 12px 0;
