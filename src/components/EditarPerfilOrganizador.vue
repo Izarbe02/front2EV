@@ -10,17 +10,13 @@
 
     <form class="perfil__formulario" @submit.prevent="actualizarPerfil">
       <div class="perfil__grid">
-        <div class="perfil__campo">
-          <label for="username" class="perfil__label">Username</label>
-          <input v-model="form.username" id="username" class="perfil__input" type="text" required />
-        </div>
 
         <div class="perfil__campo">
           <label for="nombre" class="perfil__label">Nombre</label>
           <input v-model="form.nombre" id="nombre" class="perfil__input" type="text" required />
         </div>
 
-        <div class="perfil__campo perfil__campo--full">
+        <div class="perfil__campo ">
           <label for="email" class="perfil__label">Email</label>
           <input v-model="form.email" id="email" class="perfil__input" type="email" required />
         </div>
@@ -94,7 +90,7 @@ const previewUrl = ref<string | null>(null);
 
 // Formulario inicial con los datos del organizador
 const form = reactive({
-  username: '',
+  username: 'string',
   nombre: '',
   email: '',
   ubicacion: '',
@@ -106,7 +102,6 @@ const form = reactive({
 // Cargar datos al montar
 onMounted(() => {
   if (organizador.value) {
-    form.username = organizador.value.username;
     form.nombre = organizador.value.nombre;
     form.email = organizador.value.email;
     form.ubicacion = organizador.value.ubicacion;
@@ -115,7 +110,6 @@ onMounted(() => {
   }
 });
 
-// Imagen que se mostrará (preview local o imagen oficial)
 const imagenPerfil = computed(() => {
   if (previewUrl.value) return previewUrl.value;
   if (organizador.value?.enlace)
