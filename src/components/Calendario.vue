@@ -129,29 +129,10 @@ const formatearFecha = (fecha: Date | string) => {
     font-weight: 600 !important;
   }
   
-  .v-btn {
-    font-family: $first-font !important;
-    font-weight: 400 !important;
+  .v-date-picker__title{
+    display: none;
   }
-  
-  .v-date-picker-table thead th {
-    font-family: $first-font !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-  }
-  
-  .v-date-picker-table tbody td {
-    font-family: $first-font !important;
-  }
-  
-  .v-btn--active {
-    font-family: $first-font !important;
-    font-weight: 600 !important;
-  }
-  
-  .v-date-picker-controls .v-btn {
-    font-family: $first-font !important;
-  }
+
 }
 
 
@@ -170,12 +151,13 @@ const formatearFecha = (fecha: Date | string) => {
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5.8rem; 
+  padding: 0 2rem; 
 
   @include desktop {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+    padding: 0 5.8rem; 
   }
 }
 
