@@ -58,7 +58,6 @@ const components = {
   GestionFollowOrganizador: defineAsyncComponent(() => import('@/components/GestionFollowOrganizador.vue')),
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
   EventosTable: defineAsyncComponent(() => import('@/components/EventosTable.vue')),
-  ComentariosTable: defineAsyncComponent(() => import('@/components/ComentarioTable.vue')),
   TematicaTable: defineAsyncComponent(() => import('@/components/TematicaTable.vue')),
   CategoriaEventoTable: defineAsyncComponent(() => import('@/components/CategoriaEventoTable.vue')),
   EventosGuardados: defineAsyncComponent(() => import('@/components/EventoGuardadoComp.vue')),
@@ -67,7 +66,7 @@ const components = {
 } as const;
 
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable'],
+  1: ['UsuariosTable', 'EventosTable', 'TematicaTable', 'CategoriaEventoTable'],
   2: ['EventosTable', 'EditarPerfilOrganizador'],
   3: ['FeedEventosSeguidos', 'GestionFollowOrganizador', 'EventosGuardados', 'EditarPerfilUsuario']
 };

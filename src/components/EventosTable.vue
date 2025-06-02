@@ -9,40 +9,42 @@
       <CrearEvento v-if="mostrarCrear" @close="mostrarCrear = false" />
     </div>
 
-    <table class="contenido__tabla">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Ubicación</th>
-          <th>Fecha Inicio</th>
-          <th>Fecha Fin</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="eventosFiltrados.length === 0">
-          <td colspan="7">No tienes eventos disponibles</td>
-        </tr>
-        <tr v-for="evento in eventosFiltrados" :key="evento.id">
-          <td>{{ evento.id }}</td>
-          <td>{{ evento.nombre }}</td>
-          <td>{{ evento.descripcion }}</td>
-          <td>{{ evento.ubicacion }}</td>
-          <td>{{ formatearFecha(evento.fechaInicio) }}</td>
-          <td>{{ formatearFecha(evento.fechaFin) }}</td>
-          <td>
-            <button class="contenido__btn contenido__btn--editar" @click="editarEvento(evento)">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button class="contenido__btn contenido__btn--borrar" @click="borrarEvento(evento.id)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="contenido__tabla-wrapper">
+      <table class="contenido__tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Ubicación</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="eventosFiltrados.length === 0">
+            <td colspan="7">No tienes eventos disponibles</td>
+          </tr>
+          <tr v-for="evento in eventosFiltrados" :key="evento.id">
+            <td>{{ evento.id }}</td>
+            <td>{{ evento.nombre }}</td>
+            <td>{{ evento.descripcion }}</td>
+            <td>{{ evento.ubicacion }}</td>
+            <td>{{ formatearFecha(evento.fechaInicio) }}</td>
+            <td>{{ formatearFecha(evento.fechaFin) }}</td>
+            <td>
+              <button class="contenido__btn contenido__btn--editar" @click="editarEvento(evento)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="contenido__btn contenido__btn--borrar" @click="borrarEvento(evento.id)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div v-if="eventoEditado" class="modal-overlay">
       <div class="form-tarjeta">
@@ -85,7 +87,6 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ref, computed, onMounted, watchEffect } from "vue";
 import { useEventosStore } from "@/stores/eventos";
@@ -94,7 +95,6 @@ import { useOrganizadoresStore } from "@/stores/organizadores";
 import type EventoDto from "@/stores/dtos/evento.dto";
 import CrearEvento from "@/components/CrearEvento.vue";
 
-// Stores y estados
 const store = useEventosStore();
 const { eventos, findAll, deleteEvento, updateEventoConImagen } = store;
 
@@ -104,13 +104,11 @@ const organizadoresStore = useOrganizadoresStore();
 const eventoEditado = ref<EventoDto | null>(null);
 const mostrarCrear = ref(false);
 
-// Computed de roles
 const idOrganizadorLogeado = computed(() => organizadoresStore.organizadorLogeado?.id ?? null);
 const rolActual = computed(() =>
   usuariosStore.usuarioLogeado?.idRol ?? organizadoresStore.organizadorLogeado?.idRol ?? -1
 );
 
-// Lista filtrada según rol
 const eventosFiltrados = computed(() => {
   const rol = rolActual.value;
   const idOrg = idOrganizadorLogeado.value;
@@ -119,12 +117,10 @@ const eventosFiltrados = computed(() => {
   return [];
 });
 
-// Cargar eventos al montar
 onMounted(async () => {
   await findAll();
 });
 
-// Persistencia local del organizador
 watchEffect(() => {
   const raw = localStorage.getItem("organizadorLogeado");
   if (raw && raw !== "undefined" && !organizadoresStore.organizadorLogeado) {
@@ -136,7 +132,6 @@ watchEffect(() => {
   }
 });
 
-// Estado formulario edición
 const previewUrl = ref<string | null>(null);
 const fileEdit = ref<File | null>(null);
 const formEdit = ref({
@@ -148,7 +143,6 @@ const formEdit = ref({
   enlace: "",
 });
 
-// Cargar datos al hacer click en editar
 const editarEvento = (evento: EventoDto) => {
   eventoEditado.value = evento;
   fileEdit.value = null;
@@ -164,7 +158,6 @@ const editarEvento = (evento: EventoDto) => {
   };
 };
 
-// Cambiar imagen
 const seleccionarNuevaImagen = (e: Event) => {
   const target = e.target as HTMLInputElement;
   if (target.files?.[0]) {
@@ -173,7 +166,6 @@ const seleccionarNuevaImagen = (e: Event) => {
   }
 };
 
-// Guardar cambios con FormData
 const guardarCambiosEvento = async () => {
   if (!eventoEditado.value) return;
 
@@ -195,7 +187,6 @@ const guardarCambiosEvento = async () => {
   cerrarFormularioEdicion();
 };
 
-// Cerrar y resetear formulario
 const cerrarFormularioEdicion = () => {
   eventoEditado.value = null;
   formEdit.value = {
@@ -210,14 +201,12 @@ const cerrarFormularioEdicion = () => {
   previewUrl.value = null;
 };
 
-// Eliminar evento
 const borrarEvento = async (id: number) => {
   if (confirm("¿Estás seguro de que quieres eliminar este evento?")) {
     await deleteEvento(id);
   }
 };
 
-// Formatear fecha para tabla
 const formatearFecha = (fecha: Date | string): string => {
   const f = typeof fecha === "string" ? new Date(fecha) : fecha;
   return f.toLocaleDateString("es-ES", {
@@ -227,7 +216,6 @@ const formatearFecha = (fecha: Date | string): string => {
   });
 };
 </script>
-
 
 
 <style scoped lang="scss">
@@ -279,17 +267,21 @@ const formatearFecha = (fecha: Date | string): string => {
     }
   }
 
-  &__tabla {
+  &__tabla-wrapper {
     width: 100%;
     overflow-x: auto;
+
+    @media (min-width: 768px) {
+      overflow-x: visible;
+    }
+  }
+
+  &__tabla {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
     color: white;
     font-size: 0.9rem;
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-    }
 
     th,
     td {
@@ -363,15 +355,14 @@ const formatearFecha = (fecha: Date | string): string => {
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
+
   @media (min-width: 768px) {
-  .form-tarjeta {
-    padding: 2rem;
-    max-width: 600px;
+    .form-tarjeta {
+      padding: 2rem;
+      max-width: 600px;
+    }
   }
 }
-
-}
-
 
 .form-tarjeta {
   background: $color-darkgray;
@@ -494,7 +485,6 @@ const formatearFecha = (fecha: Date | string): string => {
     }
   }
 }
-
 
 @media (min-width: 768px) {
   .contenido {
