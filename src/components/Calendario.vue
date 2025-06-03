@@ -8,6 +8,7 @@
           v-model="date"
           :allowed-dates="allowedDates"
           @update:model-value="filtrarEventos"
+          class="calendario__date-picker"
         />
       </div>
 
@@ -120,6 +121,21 @@ const formatearFecha = (fecha: Date | string) => {
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
+:deep(.v-date-picker) {
+  font-family: $first-font !important;
+
+  .v-date-picker-header {
+    font-family: $first-font !important;
+    font-weight: 600 !important;
+  }
+  
+  .v-date-picker__title{
+    display: none;
+  }
+
+}
+
+
 .calendario__titulo-eventos {
   font-weight: bold;
   margin-bottom: 1.5rem;
@@ -135,12 +151,13 @@ const formatearFecha = (fecha: Date | string) => {
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5.8rem; // 👈 esto alinea con el carrusel (ajusta si tu carrusel usa otro valor)
+  padding: 0 2rem; 
 
   @include desktop {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+    padding: 0 5.8rem; 
   }
 }
 

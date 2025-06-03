@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
 import { useOrganizadoresStore } from '@/stores/organizadores';
+import EditarPerfilOrganizador from './EditarPerfilOrganizador.vue';
 
 const props = defineProps<{ vistasPermitidas: string[] }>();
 const emit = defineEmits(['changeView', 'logout']);
@@ -42,7 +43,9 @@ const nombres: Record<string, string> = {
   ComentariosTable: 'Comentarios',
   TematicaTable: 'Temáticas',
   CategoriaEventoTable: 'Categoría Evento',
-  GraficaEventosPorMes: 'Eventos por mes'
+  GraficaEventosPorMes: 'Eventos por mes',
+  EditarPerfilOrganizador: 'Mi perfil'
+
 };
 
 const vistasFiltradas = computed(() =>
@@ -104,7 +107,7 @@ const vistasFiltradas = computed(() =>
   &:hover {
     background-color: $color-lightred;
     box-shadow: 0 0 10px $color-lightred;
-    transform: scale(1.05); // ✅ efecto agrandado
+    transform: scale(1.05); 
   }
 }
 
@@ -176,7 +179,7 @@ const vistasFiltradas = computed(() =>
     &:hover {
       background-color: $color-red;
       box-shadow: 0 0 12px $color-lightred;
-      transform: scale(1.05); // ✅ efecto agrandado
+      transform: scale(1.05);
     }
 
     &--link {

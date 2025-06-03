@@ -144,6 +144,33 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     localStorage.removeItem("tokenLoginOrganizador");
   }
 
+  async function updateOrganizadorConImagen(id: number, formData: FormData) {
+  try {
+    const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error("Error al actualizar organizador con imagen: " + errorText);
+    }
+
+    const actualizado = await response.json();
+    successMessage.value = "Organizador actualizado correctamente";
+    
+    if (organizadorLogeado.value?.id === id) {
+      organizadorLogeado.value = actualizado;
+      localStorage.setItem("organizadorLogeado", JSON.stringify(actualizado));
+    }
+    return actualizado;
+  } catch (error: any) {
+    errorMessage.value = error.message;
+    console.error("Error al actualizar organizador con imagen:", error);
+  }
+}
+
+
   return {
     organizadores,
     currentOrganizador,
@@ -158,5 +185,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     deleteEstablecimiento,
     loginOrganizador,
     logoutOrganizador,
+    updateOrganizadorConImagen,
   };
 });

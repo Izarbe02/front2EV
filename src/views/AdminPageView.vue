@@ -59,17 +59,20 @@ const components = {
   GestionFollowOrganizador: defineAsyncComponent(() => import('@/components/GestionFollowOrganizador.vue')),
   UsuariosTable: defineAsyncComponent(() => import('@/components/UsuariosTable.vue')),
   EventosTable: defineAsyncComponent(() => import('@/components/EventosTable.vue')),
-  ComentariosTable: defineAsyncComponent(() => import('@/components/ComentarioTable.vue')),
   TematicaTable: defineAsyncComponent(() => import('@/components/TematicaTable.vue')),
   CategoriaEventoTable: defineAsyncComponent(() => import('@/components/CategoriaEventoTable.vue')),
   EventosGuardados: defineAsyncComponent(() => import('@/components/EventoGuardadoComp.vue')),
   EditarPerfilUsuario: defineAsyncComponent(() => import('@/components/EditarPerfilUsuario.vue')),
-  GraficaEventosPorMes: defineAsyncComponent(() => import('@/components/GraficaEventosPorMes.vue'))
+  GraficaEventosPorMes: defineAsyncComponent(() => import('@/components/GraficaEventosPorMes.vue')),
+  EditarPerfilOrganizador: defineAsyncComponent(() => import('@/components/EditarPerfilOrganizador.vue'))
 } as const;
 
+
+
 const permisosPorRol: Record<number, (keyof typeof components)[]> = {
-  1: ['UsuariosTable', 'EventosTable', 'ComentariosTable', 'TematicaTable', 'CategoriaEventoTable', 'GraficaEventosPorMes'],
-  2: ['EventosTable', 'GraficaEventosPorMes'],
+  1: ['UsuariosTable', 'EventosTable', 'TematicaTable', 'CategoriaEventoTable', 'GraficaEventosPorMes'],
+  2: ['EventosTable', 'EditarPerfilOrganizador','GraficaEventosPorMes'],
+
   3: ['FeedEventosSeguidos', 'GestionFollowOrganizador', 'EventosGuardados', 'EditarPerfilUsuario']
 };
 
