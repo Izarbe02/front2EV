@@ -1,16 +1,15 @@
-
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type ComentarioDto from "@/stores/dtos/comentario.dto";
+import type ComentarioCreateDto from "@/stores/dtos/comentarioCrear.dto";
+import type ComentarioUpdateDto from '@/stores/dtos/comentarioUpdate.dto'
 
 export const useComentariosStore = defineStore("comentarios", () => {
-  // Estado reactivo
   const comentarios = ref<ComentarioDto[]>([]);
   const currentComentario = ref<ComentarioDto | null>(null);
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
-  // Obtener todos los comentarios (GET: api/Comentario)
   async function findAll() {
     try {
       const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Comentario");
@@ -23,7 +22,6 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  // Obtener un comentario por ID (GET: api/Comentario/{id})
   async function getComentario(id: number) {
     try {
       const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Comentario/${id}`);
@@ -37,8 +35,19 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
-  // Crear un comentario (POST: api/Comentario)
-  async function createComentario(comentario: ComentarioDto) {
+  async function fetchComentariosByEvento(eventoId: number) {
+    try {
+      const response = await fetch(`http://localhost:8888/api/Comentario/evento/${eventoId}`);
+      if (!response.ok) throw new Error("Error al obtener comentarios del evento");
+      const data = await response.json();
+      comentarios.value = data;
+    } catch (error: any) {
+      errorMessage.value = error.message;
+      console.error("Error al cargar comentarios:", error);
+    }
+  }
+
+  async function createComentario(comentario: ComentarioCreateDto) {
     try {
       const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Comentario", {
         method: "POST",
@@ -55,6 +64,23 @@ export const useComentariosStore = defineStore("comentarios", () => {
     }
   }
 
+  async function updateComentario(comentario: ComentarioUpdateDto) {
+
+    try {
+      const response = await fetch(`http://localhost:8888/api/Comentario/${comentario.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(comentario),
+      });
+      if (!response.ok) throw new Error("Error al actualizar el comentario");
+      successMessage.value = "Comentario actualizado correctamente";
+      await fetchComentariosByEvento(comentario.idEvento);
+
+    } catch (error: any) {
+      errorMessage.value = error.message;
+      console.error("Error al actualizar el comentario:", error);
+    }
+  }
   // Eliminar un comentario (DELETE: api/Comentario/{id})
   async function deleteComentario(id: number) {
     try {
@@ -77,7 +103,9 @@ export const useComentariosStore = defineStore("comentarios", () => {
     successMessage,
     findAll,
     getComentario,
+    fetchComentariosByEvento,
     createComentario,
+    updateComentario,
     deleteComentario,
   };
 });

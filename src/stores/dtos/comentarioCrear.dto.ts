@@ -1,8 +1,6 @@
-export default interface ComentarioDto {
-  id: number;
+export default interface ComentarioCrearDto {
   idUsuario: number;
   idEvento: number;
   contenido: string;
   fecha: string;
-  nombreUsuario: string;
 }

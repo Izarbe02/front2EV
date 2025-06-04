@@ -47,8 +47,8 @@ const registrarUsuario = async () => {
         <v-text-field v-model="email" :rules="emailRule" label="Email" type="email" class="registro__input"></v-text-field>
         <v-text-field v-model="ubicacion" :rules="requiredRule" label="Ubicación" class="registro__input"></v-text-field>
         <v-text-field v-model="contrasenia" :rules="requiredRule" label="Contraseña" type="password" class="registro__input"></v-text-field>
-
-        <v-btn type="submit" block class="registro__button">Registrarse</v-btn>
+        <RouterLink to="/login" class="login__register"><v-btn type="submit" block class="registro__button">Registrarse</v-btn></RouterLink>
+        
       </v-form>
     </v-sheet>
   </v-container>
@@ -57,7 +57,7 @@ const registrarUsuario = async () => {
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
-
+.login__register{text-decoration: none;}
 .registro {
   display: flex;
   justify-content: center;

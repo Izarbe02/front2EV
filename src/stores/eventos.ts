@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import EventoDto from "@/stores/dtos/evento.dto";
 import EventoInfoDto from "@/stores/dtos/eventoInfo.dto";
+import type { EventosPorMesDto } from '@/stores/dtos/eventosPorMes.dto'
 
 export const useEventosStore = defineStore("eventos", () => {
     // Estado reactivo
@@ -13,6 +14,7 @@ export const useEventosStore = defineStore("eventos", () => {
     const eventosProximos = ref<EventoDto[]>([]);
     const errorMessage = ref<string>("");
     const successMessage = ref<string>("");
+    const eventosPorMes = ref<EventosPorMesDto[]>([]);
 
 
     // Obtener todos los eventos del backend
@@ -42,22 +44,29 @@ export const useEventosStore = defineStore("eventos", () => {
     }
 
     // Crear un nuevo evento
-    async function createEvento(evento: EventoDto) {
-        try {
-            const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Evento", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(evento),
-            });
+    async function crearEvento(formData: FormData) {
+    try {
+        console.log(formData);
+        
+      const response = await fetch("http://localhost:8888/api/evento", {
+        method: "POST",
+        body: formData
+      });
 
-            if (!response.ok) throw new Error("Error al crear evento");
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error al crear evento:", errorText);
+        throw new Error(errorText);
+      }
 
-            const createdEvento = await response.json();
-            eventos.value.push(createdEvento);
-        } catch (error) {
-            console.error("Error al crear evento:", error);
-        }
+      const nuevoEvento = await response.json();
+      eventos.value.push(nuevoEvento); // opcional: solo si manejas eventos cargados
+      return nuevoEvento;
+    } catch (error) {
+      console.error("Error inesperado al crear evento:", error);
+      throw error;
     }
+  }
 
     // Borrar un evento
     async function deleteEvento(id: number) {
@@ -149,23 +158,33 @@ export const useEventosStore = defineStore("eventos", () => {
         }
     }
     
-    
-    
-    
-    
-    
     // Obtener información detallada de un evento
-    async function getInfoEvento(id: number) {
+    async function getInfoEvento(id: number): Promise<EventoInfoDto> {
         try {
             const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Evento/DetalleEvento?id=${id}`);
             if (!response.ok) throw new Error("Error al obtener detalles del evento");
-
-            const eventoInfo = await response.json();
-            return eventoInfo;
+    
+            const data = await response.json();
+    
+            // Mapeo correcto al DTO de frontend
+            return new EventoInfoDto(
+                data.orgId,              // <- este es el que se usará en la URL
+                data.nombreOrg,
+                data.nombreEvento,
+                data.descripcion,
+                new Date(data.fechaInicio),
+                new Date(data.fechaFin),
+                data.ubicacion,
+                data.enlace,
+                data.categorias ?? [],
+                data.tematicas ?? []
+            );
         } catch (error) {
             console.error("Error al obtener detalles del evento:", error);
+            throw error;
         }
     }
+    
 
     // Buscador de eventos
     async function buscadorEvento(busqueda: string) {
@@ -182,6 +201,32 @@ export const useEventosStore = defineStore("eventos", () => {
             hayEventosFiltrados.value = false;
         }
     }
+    async function filtrarPorRangoFechas(desde: Date, hasta: Date) {
+        try {
+            const url = `http://localhost:8888/api/evento/filtrar-fechas?desde=${desde.toISOString()}&hasta=${hasta.toISOString()}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Error al filtrar eventos por fechas");
+    
+            const data = await response.json();
+            eventosFiltrados.value = data;
+            hayEventosFiltrados.value = eventosFiltrados.value.length > 0;
+        } catch (error) {
+            console.error("Error al filtrar eventos por rango de fechas:", error);
+            eventosFiltrados.value = [];
+            hayEventosFiltrados.value = false;
+        }
+    }
+    
+    async function cargarEventosPorMes() {
+        try {
+            const response = await fetch("http://localhost:8888/api/Evento/estadisticas/por-mes");
+            if (!response.ok) throw new Error("Error al obtener eventos por mes");
+            const data = await response.json();
+            eventosPorMes.value = data;
+        } catch (error) {
+            console.error("Error al cargar eventos por mes:", error);
+        }
+    }
 
     return {
         eventos,
@@ -190,7 +235,7 @@ export const useEventosStore = defineStore("eventos", () => {
         successMessage,
         eventoInfo,
         findAll,
-        createEvento,
+        crearEvento,
         deleteEvento,
         updateEvento,
         filtroEvento,
@@ -201,7 +246,10 @@ export const useEventosStore = defineStore("eventos", () => {
         hayEventosFiltrados,
         eventosFiltrados,
         eventosProximos,
+        eventosPorMes,
         proximosEventos,
-        getEventoPorIdORganizador
+        getEventoPorIdORganizador,
+        filtrarPorRangoFechas,
+        cargarEventosPorMes
     };
 });

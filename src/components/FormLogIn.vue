@@ -1,13 +1,14 @@
-<template> 
+<template>
   <v-container class="login">
     <v-sheet class="login__sheet" elevation="8">
       <h2 class="login__title">Ingresar</h2>
-      <p class="login__subtitle">Entrando podrás publicar nuevos eventos.</p>
-      <v-form fast-fail @submit.prevent="loginUser" class="login__form">
+      <p class="login__subtitle">.</p>
+
+      <v-form fast-fail class="login__form">
         <v-text-field
           v-model="username"
           :rules="usernameRules"
-          label="Email"
+          label="Username o Email"
           class="login__input"
         ></v-text-field>
 
@@ -21,13 +22,17 @@
 
         <a href="#" class="login__forgot-password">¿OLVIDASTE LA CONTRASEÑA?</a>
         <RouterLink to="/register" class="login__register">¿NO ESTÁS REGISTRADO/A?</RouterLink>
-        
-        <v-btn class="login__button" type="submit" block color="red">
+
+        <v-btn class="login__button" block color="red" @click="loginUser">
           Ingresar
         </v-btn>
 
+        <v-btn class="login__button_organizador" block @click="loginComoOrganizador">
+          Ingresar como organizador
+        </v-btn>
+
         <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
-          {{ usuariosStore.errorMessage }}
+      Credenciales incorrectas
         </v-alert>
       </v-form>
     </v-sheet>
@@ -35,47 +40,56 @@
 </template>
 
 <script lang="ts" setup>
-import { useUsuariosStore } from '@/stores/usuarios';
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
+
 import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
 
-const usuariosStore = useUsuariosStore();
+const usuariosStore = useUsuariosStore(); 
 const router = useRouter();
+const organizadoresStore = useOrganizadoresStore();
 
 const username = ref("");
 const contrasenia = ref("");
 
-const usernameRules = [
-  (value: string) => value.length > 0 || "Rellena este campo"
-];
-
-const contraseniaRules = [
-  (value: string) => value.length > 0 || "Rellena este campo"
-];
+const usernameRules = [(v: string) => !!v || "Campo obligatorio"];
+const contraseniaRules = [(v: string) => !!v || "Campo obligatorio"];
 
 const loginUser = async () => {
-  const usuarioLogin: UsuarioLoginDto = {
+  const dto: UsuarioLoginDto = {
     username: username.value,
     contrasenia: contrasenia.value,
   };
 
-  const loginExitoso = await usuariosStore.login(usuarioLogin);
-
-  if (loginExitoso) {
+  const ok = await usuariosStore.login(dto);
+  if (ok) {
     router.push("/");
   }
 };
 
-// Redirección automática si ya está logueado
-watchEffect(() => {
-  if (usuariosStore.usuarioLogeado) {
+const loginComoOrganizador = async () => {
+  const dto: UsuarioLoginDto = {
+    username: username.value,
+    contrasenia: contrasenia.value,
+  };
+
+  const ok = await organizadoresStore.loginOrganizador(dto);
+
+  if (ok && organizadoresStore.organizadorLogeado?.idRol === 2) {
+    
+    localStorage.setItem("organizadorLogeado", JSON.stringify(organizadoresStore.organizadorLogeado));
+    localStorage.setItem("tokenLoginOrganizador", organizadoresStore.tokenLoginOrganizador ?? "");
     router.push("/");
+  } else {
+    organizadoresStore.logoutOrganizador(); 
+    alert("Este usuario no tiene permisos de organizador.");
   }
-});
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
@@ -86,7 +100,6 @@ watchEffect(() => {
   min-height: 100vh;
 
   &__sheet {
-    
     padding: 24px;
     border-radius: 8px;
     background: rgba($color-black, 0.9);
@@ -111,12 +124,10 @@ watchEffect(() => {
   }
 
   &__form {
-    
-  background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
+    background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
   }
 
   &__input {
@@ -147,6 +158,25 @@ watchEffect(() => {
 
   &__button {
     @include boton-rojo;
+  }
+
+  &__button_organizador {
+    background-color: $color-whitered;
+    border: 1px solid $color-red;
+    color: $color-lightred;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 16px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: white;
+    }
+
+    &:active {
+      box-shadow: 0 0 10px 3px rgba($color-red, 0.7);
+    }
   }
 
   &__error {

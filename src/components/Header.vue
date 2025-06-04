@@ -1,20 +1,23 @@
-<template> 
+<template>
   <v-layout>
     <v-app-bar app class="navbar">
       <v-container class="navbar__container">
         <div class="navbar__logoZaragozaConecta">
           <a href="/">
-            <LogoCanvas/>
+            <LogoCanvas />
           </a>
           <router-link to="/">ZaragozaConecta</router-link>
         </div>
-        
+
         <!-- Navegación en pantallas grandes -->
         <div class="navbar__navigation">
           <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
           <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
+          <v-btn to="/administrador" class="navbar__link">Gestión</v-btn>
           <v-btn to="/aboutUs" class="navbar__link">About us</v-btn>
-          <v-btn to="/login" class="navbar__mobile-link navbar__mobile-login"><img src="../assets/Images/group.png" to="/login" alt="Grupo" class="navbar__mobile-logo"></v-btn>
+          <v-btn v-if="!estaLogeado" to="/login" class="navbar__mobile-link navbar__mobile-login">
+            Iniciar Sesión
+          </v-btn>
         </div>
 
         <!-- Botón de menú hamburguesa SOLO en móviles -->
@@ -29,17 +32,26 @@
       <v-list>
         <v-list-item to="/eventos" class="navbar__mobile-link">Eventos</v-list-item>
         <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
+        <v-list-item to="/administrador" class="navbar__mobile-link">Gestión</v-list-item>
         <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
-        <v-list-item to="/login" class="navbar__mobile-link navbar__mobile-login"><img src="../assets/Images/group.png" to="/login" alt="Grupo" class="navbar__mobile-logo"></v-list-item>
+        <v-list-item
+          v-if="!estaLogeado"
+          to="/login"
+          class="navbar__mobile-link navbar__mobile-login"
+        >
+          <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
+        </v-list-item>
       </v-list>
-      
     </v-navigation-drawer>
   </v-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 import LogoCanvas from "@/components/LogoCanvas.vue";
+
 export default defineComponent({
   components: {
     LogoCanvas
@@ -47,6 +59,18 @@ export default defineComponent({
   data() {
     return {
       drawer: false
+    };
+  },
+  setup() {
+    const usuariosStore = useUsuariosStore();
+    const organizadoresStore = useOrganizadoresStore();
+
+    const estaLogeado = computed(() =>
+      usuariosStore.usuarioLogeado !== null || organizadoresStore.organizadorLogeado !== null
+    );
+
+    return {
+      estaLogeado
     };
   }
 });
@@ -72,6 +96,7 @@ export default defineComponent({
     justify-content: space-between;
     width: 100%;
   }
+
   &__logoZaragozaConecta {
     display: flex;
     flex-direction: row;
@@ -79,54 +104,78 @@ export default defineComponent({
     font-family: $titulo;
     font-size: 1.6rem;
     font-weight: bold;
-    
+
     a {
       color: red;
       text-decoration: none;
     }
   }
+
   &__menu-button {
     color: $color-lightred;
-    display: block; 
+    display: block;
   }
 
   &__navigation {
-    display: none; 
+    display: none;
   }
 
-
-
-  // Botón de login en desktop
-  &__login-btn {
-    @include boton-rojo;
-    display: none; // Ocultar en móvil
-  }
-
-  // Menú de navegación móvil
   &__mobile-menu {
+    justify-content: space-between;
     background: $color-darkgray;
   }
 
   &__mobile-link {
-    font-size: 16px;
-    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
     color: white;
-    padding: 12px;
-    text-decoration: none;
-    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: $first-font;
+    font-size: 23px;
+    background-color: $color-red;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 
     &:hover {
-      background: $color-lightred;
+      background-color: #a70816;
+      transform: scale(1.05);
     }
   }
 
-  &__mobile-login {
-    @include boton-rojo;
+  .navbar__mobile-login {
     text-align: center;
     margin-top: 10px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: $first-font;
+    font-size: 23px;
+    background-color: $color-red;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+
+    &:hover {
+      background-color: #a70816;
+      transform: scale(1.05);
+    }
   }
 
-  // desktop
+  &__link {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-transform: none;
+    position: relative;
+    transition: transform 0.2s ease, color 0.3s ease;
+
+    &:hover,
+    &--active {
+      color: $color-red;
+      transform: scale(1.05);
+    }
+  }
+
   @media (min-width: 768px) {
     .navbar {
       flex-direction: row;
@@ -144,32 +193,7 @@ export default defineComponent({
     }
 
     .navbar__mobile-menu {
-      display: none; 
-    }
-
-    .navbar__login-btn {
-      display: block; 
-    }
-
-    &__logoZaragozaConecta{
-      font-weight: bold;
-      color: inherit;
-      text-decoration: none;
-      color: $color-red;
-      font-size: 2rem;
-      gap: 10px;
-  }
-    &__link {
-      font-size: 28px;
-      font-weight: bold;
-      color: rgb(255, 255, 255);
-      text-transform: none;
-      position: relative;
-
-      &:hover,
-      &--active {
-          color: $color-red;
-      }
+      display: none;
     }
   }
 }

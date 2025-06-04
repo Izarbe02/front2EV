@@ -1,94 +1,205 @@
-<template>
-      <button class="toggle-btn" @click="toggleSidebar">☰</button>
-      <div class="sidebar" :class="{ 'is-hidden': !isSidebarOpen }">
-        <ul>
-          <li @click="setView('UsuariosTable')">Usuarios</li>
-          <li @click="setView('EventosTable')">Eventos</li>
-          <li @click="setView('ComentariosTable')">Comentarios</li>
-          <li @click="setView('TematicaTable')">Tematicas</li>
-          <li @click="setView('CategoriaEventoTable')">Categoria Evento</li>
-          <a href="/" class="sidebar__link">Volver a la página principal</a>
-        </ul>
-      </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, defineEmits } from 'vue';
-  
-  const emit = defineEmits(['changeView'])
-  const isSidebarOpen = ref(false);
-  
-  const toggleSidebar = () => {
-    isSidebarOpen.value = !isSidebarOpen.value;
-  };
-  
-  const setView = (view: string) => {
-    emit('changeView', view);
-  };
-  </script>
-  
-  <style scoped lang="scss">
-  .toggle-btn {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 18px;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100vh;
-    padding: 60px 15px;
-    background: linear-gradient(to bottom, #000000, #1d1d1d);
-    transform: translateX(0);
-    transition: transform 0.3s ease-in-out;
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useUsuariosStore } from '@/stores/usuarios';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 
-    &__link{
-      margin-top: 4%;
-      display: flex;
-      align-items: center;
-      gap: 7%;
-      padding: 20px 10px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: rgb(219, 86, 97);
-      text-decoration: none;
-    }
+const props = defineProps<{ vistasPermitidas: string[] }>();
+const emit = defineEmits(['changeView', 'logout']);
+const isSidebarOpen = ref(false);
+const router = useRouter();
+
+const store = useUsuariosStore();
+const OrganizadoresStore = useOrganizadoresStore();
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const setView = (view: string) => {
+  emit('changeView', view);
+  isSidebarOpen.value = false;
+};
+
+const handleLogout = () => {
+  if (store.usuarioLogeado) {
+    store.logout();
   }
-  
-  .sidebar.is-hidden {
+  if (OrganizadoresStore.organizadorLogeado) {
+    OrganizadoresStore.logoutOrganizador();
+  }
+  router.push('/');
+  isSidebarOpen.value = false;
+};
+
+const nombres: Record<string, string> = {
+  FeedEventosSeguidos: 'Novedades de organizadores',
+  GestionFollowOrganizador: 'Organizadores seguidos',
+  EventosGuardados: 'Eventos guardados',
+  EditarPerfilUsuario: 'Mi perfil',
+  UsuariosTable: 'Usuarios',
+  EventosTable: 'Eventos',
+  ComentariosTable: 'Comentarios',
+  TematicaTable: 'Temáticas',
+  CategoriaEventoTable: 'Categoría Evento',
+  GraficaEventosPorMes: 'Eventos por mes'
+};
+
+const vistasFiltradas = computed(() =>
+  props.vistasPermitidas.filter((v) => Object.keys(nombres).includes(v))
+);
+</script>
+
+<template>
+  <button class="sidebar__toggle-btn" @click="toggleSidebar">☰</button>
+
+  <div class="sidebar" :class="{ 'sidebar--hidden': !isSidebarOpen }">
+    <button class="sidebar__close-btn" @click="isSidebarOpen = false">✕</button>
+
+    <ul class="sidebar__menu">
+      <li
+        v-for="vista in vistasFiltradas"
+        :key="vista"
+        class="sidebar__item"
+      >
+        <button class="sidebar__button" @click="setView(vista)">
+          {{ nombres[vista] || vista }}
+        </button>
+      </li>
+
+      <li class="sidebar__item">
+        <router-link to="/" class="sidebar__button sidebar__button--link">
+          Volver a la página principal
+        </router-link>
+      </li>
+
+      <li class="sidebar__item">
+        <button class="sidebar__button sidebar__button--logout" @click="handleLogout">
+          Cerrar sesión
+        </button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<style scoped lang="scss">
+@import '@/assets/styles/_variables.scss';
+
+.sidebar__toggle-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background-color: $color-red;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.4rem;
+  font-family: $first-font;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  z-index: 9999;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: $color-lightred;
+    box-shadow: 0 0 10px $color-lightred;
+    transform: scale(1.05); // ✅ efecto agrandado
+  }
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 260px;
+  height: 100vh;
+  background: linear-gradient(to bottom, $color-black, $color-darkgray);
+  padding: 4rem 1.5rem 1rem;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
+
+  &--hidden {
     transform: translateX(-100%);
   }
-  
-  li {
-    margin-top: 4%;
-    display: flex;
-    align-items: center;
-    gap: 7%;
-    padding: 20px 10px;
+
+  &__close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: $color-lightred;
     cursor: pointer;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  &__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    margin-top: 50px;
+  }
+
+  &__item {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.1rem;
+    font-family: $first-font;
     font-weight: bold;
-    font-size: 1.2rem;
     color: white;
+    background-color: $color-lightred;
+    border: none;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    text-align: center;
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background-color: $color-red;
+      box-shadow: 0 0 12px $color-lightred;
+      transform: scale(1.05); // ✅ efecto agrandado
+    }
+
+    &--link {
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    &--logout {
+      border: 1px solid white;
+      background-color: transparent;
+      color: white;
+
+      &:hover {
+        background-color: $color-red;
+        transform: scale(1.05);
+      }
+    }
   }
-  
-  li:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    max-width: 250px;
   }
-  
-  .icon {
-    font-size: 18px;
-  }
-  
-  </style>
-  
+}
+</style>
