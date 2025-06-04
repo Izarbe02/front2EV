@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import Header from '@/components/Header.vue';
-import DetalleEventoComp from './components/DetalleEventoComp.vue'
+import { defineAsyncComponent } from 'vue';
+
 import Footer from '@/components/Footer.vue';
+const Header = defineAsyncComponent(() => import("@/components/Header.vue"));
+const DetalleEventoComp = defineAsyncComponent(() => import("@/components/DetalleEventoComp.vue"));
+
 
 const route = useRoute()
 

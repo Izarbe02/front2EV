@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import Header from '@/components/Header.vue'
+import { defineAsyncComponent } from 'vue';
 
-import Footer from '@/components/Footer.vue'
+const Header = defineAsyncComponent(() => import("@/components/Header.vue"));
 
-import FormLogIn from './components/FormLogIn.vue'
+import Footer from '@/components/Footer.vue';
+
+
+const FormLogin = defineAsyncComponent(() => import('@/components/FormLogin.vue'));
 
 </script>
 
@@ -11,7 +14,7 @@ import FormLogIn from './components/FormLogIn.vue'
 
 <Header/>
 
-  <FormLogIn />
+  <FormLogin />
 
   <Footer/>
 </template>

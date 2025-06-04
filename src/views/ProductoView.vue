@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import Header from '@/components/Header.vue';
-import ProductoCard from './components/ProductoCard.vue';
+import { defineAsyncComponent } from 'vue';
+
+const Header = defineAsyncComponent(() => import("@/components/Header.vue"));
+const ProductoCard = defineAsyncComponent(() => import("@/components/ProductoCard.vue"));
+
 import Footer from '@/components/Footer.vue';
 
 </script>

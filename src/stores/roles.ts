@@ -17,7 +17,7 @@ export const useRolesStore = defineStore("roles", () => {
       if (!response.ok) throw new Error("Error al obtener roles");
       const data = await response.json();
       roles.value.splice(0, roles.value.length, ...data);
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener roles:", error);
     }
@@ -31,7 +31,7 @@ export const useRolesStore = defineStore("roles", () => {
       const data = await response.json();
       currentRol.value = data;
       return data;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener el rol:", error);
     }
@@ -49,7 +49,7 @@ export const useRolesStore = defineStore("roles", () => {
       const createdRol = await response.json();
       roles.value.push(createdRol);
       successMessage.value = "Rol creado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al crear el rol:", error);
     }
@@ -67,7 +67,7 @@ export const useRolesStore = defineStore("roles", () => {
       // Refrescar la lista de roles
       await findAll();
       successMessage.value = "Rol actualizado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el rol:", error);
     }
@@ -82,7 +82,7 @@ export const useRolesStore = defineStore("roles", () => {
       if (!response.ok) throw new Error("Error al eliminar el rol");
       roles.value = roles.value.filter(r => r.id !== id);
       successMessage.value = "Rol eliminado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al eliminar el rol:", error);
     }

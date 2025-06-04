@@ -17,7 +17,7 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
             if (!response.ok) throw new Error("Error al guardar evento");
 
             successMessage.value = "Evento guardado correctamente";
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             errorMessage.value = "No se pudo guardar el evento";
         }
@@ -32,7 +32,7 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
             if (!response.ok) throw new Error("Error al quitar evento");
 
             successMessage.value = "Evento quitado de favoritos";
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             errorMessage.value = "No se pudo quitar el evento";
         }
@@ -45,7 +45,7 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
             const result = await response.json();
             estaGuardado.value = result;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             estaGuardado.value = false;
         }
@@ -58,7 +58,7 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
             const data = await response.json();
             eventosGuardados.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             eventosGuardados.value = [];
         }
@@ -71,7 +71,7 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
             const data = await response.json();
             eventosGuardados.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             eventosGuardados.value = [];
         }

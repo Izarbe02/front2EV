@@ -25,7 +25,7 @@ export const useEventosStore = defineStore("eventos", () => {
 
             const data = await response.json();
             eventos.value.splice(0, eventos.value.length, ...data);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener eventos:", error);
         }
     }
@@ -38,7 +38,7 @@ export const useEventosStore = defineStore("eventos", () => {
             const data = await response.json();
             eventosProximos.value = data;
             eventosProximos.value.splice(0, eventosProximos.value.length, ...data);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener eventos:", error);
         }
     }
@@ -47,7 +47,7 @@ export const useEventosStore = defineStore("eventos", () => {
     async function crearEvento(formData: FormData) {
     try {
         console.log(formData);
-        
+
       const response = await fetch("http://localhost:8888/api/evento", {
         method: "POST",
         body: formData
@@ -62,7 +62,7 @@ export const useEventosStore = defineStore("eventos", () => {
       const nuevoEvento = await response.json();
       eventos.value.push(nuevoEvento); // opcional: solo si manejas eventos cargados
       return nuevoEvento;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error inesperado al crear evento:", error);
       throw error;
     }
@@ -78,7 +78,7 @@ export const useEventosStore = defineStore("eventos", () => {
             if (!response.ok) throw new Error("Error al eliminar evento");
 
             eventos.value = eventos.value.filter(e => e.id !== id);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al eliminar evento:", error);
         }
     }
@@ -94,8 +94,8 @@ export const useEventosStore = defineStore("eventos", () => {
 
             if (!response.ok) throw new Error("Error al actualizar evento");
 
-            await findAll(); 
-        } catch (error) {
+            await findAll();
+        } catch (error: any) {
             console.error("Error al actualizar evento:", error);
         }
     }
@@ -109,7 +109,7 @@ export const useEventosStore = defineStore("eventos", () => {
             const evento = await response.json();
             eventos.value = eventos.value.filter(e => e.id !== id);
             eventos.value.push(evento);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener el evento:", error);
         }
     }
@@ -122,7 +122,7 @@ export const useEventosStore = defineStore("eventos", () => {
 
             const data = await response.json();
             eventos.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener eventos por organizador:", error);
         }
     }
@@ -135,7 +135,7 @@ export const useEventosStore = defineStore("eventos", () => {
 
             const data = await response.json();
             eventos.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener eventos por categoría:", error);
         }
     }
@@ -143,29 +143,29 @@ export const useEventosStore = defineStore("eventos", () => {
 
     async function getEventoPorIdORganizador(idorganizador: number) {
         try {
-            
+
             const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Evento/organizadorid/${idorganizador}`);
             if (!response.ok) throw new Error("Error al obtener eventos por organizador");
-    
+
             const data = await response.json();
-            
+
             console.log("Eventos recibidos en la API:", data);
-    
+
             return Array.isArray(data) ? data : [];
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener eventos:", error);
-            return []; 
+            return [];
         }
     }
-    
+
     // Obtener información detallada de un evento
     async function getInfoEvento(id: number): Promise<EventoInfoDto> {
         try {
             const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Evento/DetalleEvento?id=${id}`);
             if (!response.ok) throw new Error("Error al obtener detalles del evento");
-    
+
             const data = await response.json();
-    
+
             // Mapeo correcto al DTO de frontend
             return new EventoInfoDto(
                 data.orgId,              // <- este es el que se usará en la URL
@@ -179,12 +179,12 @@ export const useEventosStore = defineStore("eventos", () => {
                 data.categorias ?? [],
                 data.tematicas ?? []
             );
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al obtener detalles del evento:", error);
             throw error;
         }
     }
-    
+
 
     // Buscador de eventos
     async function buscadorEvento(busqueda: string) {
@@ -195,7 +195,7 @@ export const useEventosStore = defineStore("eventos", () => {
             const data = await response.json();
             eventosFiltrados.value = data;
             hayEventosFiltrados.value = eventosFiltrados.value.length > 0;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error en la búsqueda de eventos:", error);
             eventosFiltrados.value = [];
             hayEventosFiltrados.value = false;
@@ -206,24 +206,24 @@ export const useEventosStore = defineStore("eventos", () => {
             const url = `http://localhost:8888/api/evento/filtrar-fechas?desde=${desde.toISOString()}&hasta=${hasta.toISOString()}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error("Error al filtrar eventos por fechas");
-    
+
             const data = await response.json();
             eventosFiltrados.value = data;
             hayEventosFiltrados.value = eventosFiltrados.value.length > 0;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al filtrar eventos por rango de fechas:", error);
             eventosFiltrados.value = [];
             hayEventosFiltrados.value = false;
         }
     }
-    
+
     async function cargarEventosPorMes() {
         try {
             const response = await fetch("http://localhost:8888/api/Evento/estadisticas/por-mes");
             if (!response.ok) throw new Error("Error al obtener eventos por mes");
             const data = await response.json();
             eventosPorMes.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al cargar eventos por mes:", error);
         }
     }

@@ -16,7 +16,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       if (!response.ok) throw new Error("Error al obtener comentarios");
       const data = await response.json();
       comentarios.value.splice(0, comentarios.value.length, ...data);
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener comentarios:", error);
     }
@@ -29,7 +29,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       const data = await response.json();
       currentComentario.value = data;
       return data;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener el comentario:", error);
     }
@@ -41,7 +41,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       if (!response.ok) throw new Error("Error al obtener comentarios del evento");
       const data = await response.json();
       comentarios.value = data;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al cargar comentarios:", error);
     }
@@ -58,7 +58,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       const createdComentario = await response.json();
       comentarios.value.push(createdComentario);
       successMessage.value = "Comentario creado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al crear el comentario:", error);
     }
@@ -76,7 +76,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       successMessage.value = "Comentario actualizado correctamente";
       await fetchComentariosByEvento(comentario.idEvento);
 
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el comentario:", error);
     }
@@ -90,7 +90,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
       if (!response.ok) throw new Error("Error al eliminar el comentario");
       comentarios.value = comentarios.value.filter(c => c.id !== id);
       successMessage.value = "Comentario eliminado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al eliminar el comentario:", error);
     }

@@ -39,7 +39,7 @@
   </v-container>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
@@ -47,7 +47,7 @@ import { useOrganizadoresStore } from '@/stores/organizadores';
 
 import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
 
-const usuariosStore = useUsuariosStore(); 
+const usuariosStore = useUsuariosStore();
 const router = useRouter();
 const organizadoresStore = useOrganizadoresStore();
 
@@ -78,12 +78,12 @@ const loginComoOrganizador = async () => {
   const ok = await organizadoresStore.loginOrganizador(dto);
 
   if (ok && organizadoresStore.organizadorLogeado?.idRol === 2) {
-    
+
     localStorage.setItem("organizadorLogeado", JSON.stringify(organizadoresStore.organizadorLogeado));
     localStorage.setItem("tokenLoginOrganizador", organizadoresStore.tokenLoginOrganizador ?? "");
     router.push("/");
   } else {
-    organizadoresStore.logoutOrganizador(); 
+    organizadoresStore.logoutOrganizador();
     alert("Este usuario no tiene permisos de organizador.");
   }
 };

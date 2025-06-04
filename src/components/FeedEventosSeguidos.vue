@@ -15,7 +15,7 @@ const cargarEventosRecientesSeguidos = async (idUsuario: number) => {
     if (res.ok) {
       eventosRecientesSeguidos.value = await res.json();
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error al cargar eventos recientes seguidos:", error);
   }
 };

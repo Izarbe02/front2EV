@@ -14,7 +14,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     if (raw && raw !== "undefined") {
       organizadorGuardado = JSON.parse(raw);
     }
-  } catch (error) {
+  } catch (error: any) {
     console.warn("Error al parsear organizadorLogeado:", error);
   }
 
@@ -34,7 +34,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
       const data = await response.json();
       organizadores.value.splice(0, organizadores.value.length, ...data);
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener organizadores:", error);
     }
@@ -47,7 +47,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
       currentOrganizador.value = await response.json();
       return currentOrganizador.value;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener organizador:", error);
     }
@@ -65,7 +65,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       const created = await response.json();
       organizadores.value.push(created);
       successMessage.value = "Organizador creado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al crear organizador:", error);
     }
@@ -88,7 +88,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       }
 
       successMessage.value = "Organizador actualizado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar organizador:", error);
     }
@@ -103,7 +103,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
       organizadores.value = organizadores.value.filter((o) => o.id !== id);
       successMessage.value = "Organizador eliminado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al eliminar organizador:", error);
     }
@@ -131,7 +131,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       localStorage.setItem("tokenLoginOrganizador", data.token);
 
       return true;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error en login de organizador:", error);
     }
@@ -164,7 +164,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       localStorage.setItem("organizadorLogeado", JSON.stringify(actualizado));
     }
     return actualizado;
-  } catch (error) {
+  } catch (error: any) {
     errorMessage.value = error.message;
     console.error("Error al actualizar organizador con imagen:", error);
   }

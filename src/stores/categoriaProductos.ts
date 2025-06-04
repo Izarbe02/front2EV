@@ -18,7 +18,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
 
       const data = await response.json();
       categorias.value.splice(0, categorias.value.length, ...data);
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener categorías:", error);
     }
@@ -33,7 +33,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
       const data = await response.json();
       currentCategoria.value = data;
       return data;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener la categoría:", error);
     }
@@ -52,7 +52,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
       const createdCategoria = await response.json();
       categorias.value.push(createdCategoria);
       successMessage.value = "Categoría creada correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al crear la categoría:", error);
     }
@@ -70,7 +70,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
 
       await findAll(); // Refrescar la lista de categorías
       successMessage.value = "Categoría actualizada correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar la categoría:", error);
     }
@@ -86,7 +86,7 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
 
       categorias.value = categorias.value.filter(cat => cat.id !== id);
       successMessage.value = "Categoría eliminada correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al eliminar la categoría:", error);
     }

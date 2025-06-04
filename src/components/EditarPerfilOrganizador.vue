@@ -170,7 +170,7 @@ async function actualizarPerfil() {
     mensaje.value = 'Perfil actualizado correctamente.';
     form.password = '';
     previewUrl.value = null;
-  } catch (error) {
+  } catch (error: any) {
     mensaje.value = 'Error al actualizar perfil.';
     hayError.value = true;
     console.error(error);

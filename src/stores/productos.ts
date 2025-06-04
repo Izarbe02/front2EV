@@ -16,7 +16,7 @@ export const useProductosStore = defineStore("productos", () => {
 
       const data = await response.json();
       productos.value.splice(0, productos.value.length, ...data);
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener productos:", error);
     }
@@ -30,7 +30,7 @@ export const useProductosStore = defineStore("productos", () => {
       const producto = await response.json();
       currentProducto.value = producto;
       return producto;
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener el producto:", error);
     }
@@ -48,7 +48,7 @@ export const useProductosStore = defineStore("productos", () => {
       const createdProducto = await response.json();
       productos.value.push(createdProducto);
       successMessage.value = "Producto creado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al crear el producto:", error);
     }
@@ -66,7 +66,7 @@ export const useProductosStore = defineStore("productos", () => {
       // Actualizamos la lista refrescando los productos
       await findAll();
       successMessage.value = "Producto actualizado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el producto:", error);
     }
@@ -81,7 +81,7 @@ export const useProductosStore = defineStore("productos", () => {
 
       productos.value = productos.value.filter(p => p.id !== id);
       successMessage.value = "Producto eliminado correctamente";
-    } catch (error) {
+    } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al eliminar el producto:", error);
     }

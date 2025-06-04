@@ -20,7 +20,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
         body: JSON.stringify(dto) // puede incluir opcionalmente dto.fechaSeguimiento
       });
       sigueOrganizador.value = res.ok;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al seguir al organizador:", error);
     }
   };
@@ -33,7 +33,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
         body: JSON.stringify(dto)
       });
       sigueOrganizador.value = !res.ok ? sigueOrganizador.value : false;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al dejar de seguir al organizador:", error);
     }
   };
@@ -47,7 +47,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
       });
       const data = await res.json();
       sigueOrganizador.value = data;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al comprobar seguimiento:", error);
     }
   };
@@ -56,7 +56,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
     try {
       const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/seguidos/${idUsuario}`);
       organizadoresSeguidos.value = await res.json();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al cargar organizadores seguidos:", error);
     }
   };
@@ -65,7 +65,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
     try {
       const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/seguidores/${idOrganizador}`);
       numSeguidores.value = await res.json();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al cargar número de seguidores:", error);
     }
   };
@@ -76,7 +76,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
       if (res.ok) {
         eventosRecientesSeguidos.value = await res.json();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al cargar eventos recientes seguidos:", error);
     }
   };

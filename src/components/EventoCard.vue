@@ -23,7 +23,7 @@ const cargarCategorias = async () => {
     const response = await fetch("http://localhost:8888/api/CategoriaEvento");
     if (!response.ok) throw new Error("Error al obtener categorías");
     categorias.value = await response.json();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error cargando categorías:", error);
   }
 };

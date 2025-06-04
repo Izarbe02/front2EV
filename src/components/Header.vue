@@ -9,7 +9,6 @@
           <router-link to="/">ZaragozaConecta</router-link>
         </div>
 
-        <!-- Navegación en pantallas grandes -->
         <div class="navbar__navigation">
           <v-btn to="/eventos" class="navbar__link navbar__link--active">Eventos</v-btn>
           <v-btn to="/organizadores" class="navbar__link">Organizadores</v-btn>
@@ -20,25 +19,19 @@
           </v-btn>
         </div>
 
-        <!-- Botón de menú hamburguesa SOLO en móviles -->
         <v-btn icon class="navbar__menu-button" @click.stop="drawer = !drawer">
           ☰
         </v-btn>
       </v-container>
     </v-app-bar>
 
-    <!-- Menú hamburguesa SOLO en móviles -->
     <v-navigation-drawer v-model="drawer" temporary class="navbar__mobile-menu">
       <v-list>
         <v-list-item to="/eventos" class="navbar__mobile-link">Eventos</v-list-item>
         <v-list-item to="/organizadores" class="navbar__mobile-link">Organizadores</v-list-item>
         <v-list-item to="/administrador" class="navbar__mobile-link">Gestión</v-list-item>
         <v-list-item to="/aboutUs" class="navbar__mobile-link">About us</v-list-item>
-        <v-list-item
-          v-if="!estaLogeado"
-          to="/login"
-          class="navbar__mobile-link navbar__mobile-login"
-        >
+        <v-list-item v-if="!estaLogeado" to="/login" class="navbar__mobile-link navbar__mobile-login">
           <img src="../assets/Images/group.png" alt="Grupo" class="navbar__mobile-logo" />
         </v-list-item>
       </v-list>
@@ -46,35 +39,24 @@
   </v-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue';
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
 import { useOrganizadoresStore } from '@/stores/organizadores';
-import LogoCanvas from "@/components/LogoCanvas.vue";
+import { defineAsyncComponent } from 'vue';
 
-export default defineComponent({
-  components: {
-    LogoCanvas
-  },
-  data() {
-    return {
-      drawer: false
-    };
-  },
-  setup() {
-    const usuariosStore = useUsuariosStore();
-    const organizadoresStore = useOrganizadoresStore();
+const LogoCanvas = defineAsyncComponent(() => import('@/components/LogoCanvas.vue'));
 
-    const estaLogeado = computed(() =>
-      usuariosStore.usuarioLogeado !== null || organizadoresStore.organizadorLogeado !== null
-    );
+const drawer = ref(false);
 
-    return {
-      estaLogeado
-    };
-  }
-});
+const usuariosStore = useUsuariosStore();
+const organizadoresStore = useOrganizadoresStore();
+
+const estaLogeado = computed(() =>
+  usuariosStore.usuarioLogeado !== null || organizadoresStore.organizadorLogeado !== null
+);
 </script>
+
 
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";

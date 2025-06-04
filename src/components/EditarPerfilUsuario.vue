@@ -155,7 +155,7 @@ async function actualizarPerfil() {
     form.password = '';
 
 store.usuarioLogeado = { ...usuarioActualizado, contrasenia: usuario.contrasenia };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     mensaje.value = 'Hubo un error al actualizar el perfil.';
     hayError.value = true;

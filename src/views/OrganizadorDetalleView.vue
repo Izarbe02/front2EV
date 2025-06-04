@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import Header from '@/components/Header.vue';
-import OrganizadorDetalle from './components/OrganizadorDetalle.vue';
+import { defineAsyncComponent } from 'vue';
+
+const Header = defineAsyncComponent(() => import("@/components/Header.vue"));
+const OrganizadorDetalle = defineAsyncComponent(() => import("@/components/OrganizadorDetalle.vue"));
+
 import Footer from '@/components/Footer.vue';
 
 

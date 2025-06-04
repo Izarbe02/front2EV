@@ -62,12 +62,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watchEffect } from "vue";
+import { ref, computed, onMounted, watchEffect, defineAsyncComponent } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import { useUsuariosStore } from "@/stores/usuarios";
 import { useOrganizadoresStore } from "@/stores/organizadores";
 import type EventoDto from "@/stores/dtos/evento.dto";
-import CrearEvento from "/components/CrearEvento.vue";
+
+const CrearEvento = defineAsyncComponent(() => import("@/components/CrearEvento.vue"));
 
 
 const store = useEventosStore();

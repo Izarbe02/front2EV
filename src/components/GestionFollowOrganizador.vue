@@ -3,12 +3,13 @@ import { onMounted, ref, computed } from "vue";
 import { useUsuariosOrganizadoresStore } from "@/stores/usuarioOrganizador";
 import { useUsuariosStore } from "@/stores/usuarios";
 import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
+import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 
 const usuariosStore = useUsuariosStore();
 const usuariosOrganizadoresStore = useUsuariosOrganizadoresStore();
 
 const usuario = computed(() => usuariosStore.usuarioLogeado);
-const organizadoresSeguidos = ref([]);
+const organizadoresSeguidos = ref<OrganizadorDto[]>([]);
 
 const cargarOrganizadores = async () => {
   if (usuario.value?.id) {
