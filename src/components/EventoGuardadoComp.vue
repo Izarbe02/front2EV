@@ -9,19 +9,23 @@ const eventos = ref<EventoDto[]>([])
 const store = useUsuariosStore();
 console.log(store.usuarioLogeado);
 
+
 const cargarEventosGuardados = async () => {
-  await eventosGuardadosStore.cargarEventosGuardados(store.usuarioLogeado.id)
-  eventos.value = eventosGuardadosStore.eventosGuardados
-}
+  const usuario = store.usuarioLogeado;
+  if (!usuario) return;
+
+  await eventosGuardadosStore.cargarEventosGuardados(usuario.id);
+  eventos.value = eventosGuardadosStore.eventosGuardados;
+};
 
 const quitarEvento = async (idEvento: number) => {
-  await eventosGuardadosStore.quitarEvento(store.usuarioLogeado.id, idEvento)
-  await cargarEventosGuardados()
-}
+  const usuario = store.usuarioLogeado;
+  if (!usuario) return;
 
-onMounted(() => {
-  cargarEventosGuardados()
-})
+  await eventosGuardadosStore.quitarEvento(usuario.id, idEvento);
+  await cargarEventosGuardados();
+};
+
 </script>
 
 <template>

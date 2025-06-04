@@ -64,6 +64,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
+import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 import { onMounted } from "vue";
 
 const categorias = ref<{ id: number; nombre: string }[]>([]);
@@ -83,7 +84,7 @@ onMounted(() => {
 const eventosStore = useEventosStore();
 const { crearEvento } = eventosStore;
 
-let organizadorLogeado = null;
+let organizadorLogeado: OrganizadorDto | null = null;
 try {
   const raw = localStorage.getItem("organizadorLogeado");
   if (raw && raw !== "undefined") {
@@ -99,8 +100,8 @@ const form = ref({
   ubicacion: "",
   fechaInicio: "",
   fechaFin: "",
-  idTematica: null,
-  idCategoria: null,
+  idTematica: 0,
+  idCategoria: 0,
   enlace: "https://mi-plataforma.com/evento-privado",
 });
 
@@ -152,15 +153,15 @@ async function enviarFormulario() {
     ubicacion: "",
     fechaInicio: "",
     fechaFin: "",
-    idTematica: null,
-    idCategoria: null,
+    idTematica: 0,
+    idCategoria: 0,
     enlace: "https://mi-plataforma.com/evento-privado", // o una cadena vacía si lo prefieres
   };
 
     file.value = null;
     previewUrl.value = null;
   } catch (err) {
-    alert("Error al crear el evento: " + err.message);
+    alert("Error al crear el evento: " + err);
   }
 }
 </script>

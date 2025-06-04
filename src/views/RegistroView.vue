@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FormRegister from '@/components/FormRegister.vue';
+import FormRegister from './components/FormRegister.vue';
 import Header from '@/components/Header.vue'
 
 import Footer from '@/components/Footer.vue'

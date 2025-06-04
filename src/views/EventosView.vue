@@ -3,8 +3,8 @@ import { onMounted } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import BuscadorEventos from "@/components/BuscadorEventos.vue";
-import EventoCard from "@/components/EventoCard.vue";
+import BuscadorEventos from "./components/BuscadorEventos.vue";
+import EventoCard from "./components/EventoCard.vue";
 
 const eventosStore = useEventosStore();
 

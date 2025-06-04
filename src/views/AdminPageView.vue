@@ -26,7 +26,7 @@ import { ref, computed, defineAsyncComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
 import { useOrganizadoresStore } from '@/stores/organizadores';
-import SideBar from '@/components/SideBar.vue';
+import SideBar from './components/SideBar.vue';
 
 const usuariosStore = useUsuariosStore();
 const organizadoresStore = useOrganizadoresStore();

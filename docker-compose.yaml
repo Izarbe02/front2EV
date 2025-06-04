@@ -11,3 +11,6 @@ services:
     volumes:
       - ./src/assets:/usr/share/nginx/html/src/assets
     restart: always
+
+
+    

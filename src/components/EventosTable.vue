@@ -67,7 +67,7 @@ import { useEventosStore } from "@/stores/eventos";
 import { useUsuariosStore } from "@/stores/usuarios";
 import { useOrganizadoresStore } from "@/stores/organizadores";
 import type EventoDto from "@/stores/dtos/evento.dto";
-import CrearEvento from "@/components/CrearEvento.vue";
+import CrearEvento from "/components/CrearEvento.vue";
 
 
 const store = useEventosStore();
