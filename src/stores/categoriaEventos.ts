@@ -13,7 +13,7 @@ export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
   // Obtener todas las categorías (GET: api/CategoriaEvento)
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/CategoriaEvento");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento");
       if (!response.ok) throw new Error("Error al obtener categorías");
       
       const data = await response.json();
@@ -27,7 +27,7 @@ export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
   // Obtener una categoría por ID (GET: api/CategoriaEvento/{id})
   async function getCategoria(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/CategoriaEvento/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento/${id}`);
       if (!response.ok) throw new Error("Error al obtener la categoría");
       
       const categoria = await response.json();
@@ -42,7 +42,7 @@ export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
   // Crear una nueva categoría (POST: api/CategoriaEvento)
   async function createCategoria(categoria: CategoriaEventoDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/CategoriaEvento", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(categoria),
@@ -61,7 +61,7 @@ export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
   // Actualizar una categoría (PUT: api/CategoriaEvento/{id})
   async function updateCategoria(id: number, categoriaActualizada: CategoriaEventoDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/CategoriaEvento/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(categoriaActualizada),
@@ -79,7 +79,7 @@ export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
   // Eliminar una categoría (DELETE: api/CategoriaEvento/{id})
   async function deleteCategoria(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/CategoriaEvento/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar la categoría");

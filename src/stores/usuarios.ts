@@ -31,7 +31,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/Usuario");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Usuario");
       if (!response.ok) throw new Error("Error al obtener usuarios");
 
       const data = await response.json();
@@ -44,7 +44,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
   async function getUsuario(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Usuario/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Usuario/${id}`);
       if (!response.ok) throw new Error("Error al obtener el usuario");
 
       const usuario = await response.json();
@@ -58,7 +58,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
   async function createUsuario(usuario: UsuarioDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Usuario", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuario),
@@ -78,7 +78,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     if (!usuarioActualizado) throw new Error("No hay usuario");
 
     try {
-      const response = await fetch(`http://localhost:8888/api/Usuario/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Usuario/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuarioActualizado),
@@ -97,7 +97,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
   async function deleteUsuario(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Usuario/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Usuario/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el usuario");
@@ -112,7 +112,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
   async function login(usuarioLogin: UsuarioLoginDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/auth/login", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuarioLogin),

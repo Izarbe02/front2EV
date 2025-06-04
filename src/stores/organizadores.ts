@@ -42,7 +42,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function getOrganizador(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`);
       if (!response.ok) throw new Error("Error al obtener organizador");
 
       currentOrganizador.value = await response.json();
@@ -55,7 +55,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function createEstablecimiento(organizador: OrganizadorDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Organizador", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Organizador", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(organizador),
@@ -73,7 +73,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function updateEstablecimiento(id: number, updated: OrganizadorDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
@@ -96,7 +96,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function deleteEstablecimiento(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar organizador");

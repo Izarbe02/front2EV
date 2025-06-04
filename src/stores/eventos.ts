@@ -20,7 +20,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Obtener todos los eventos del backend
     async function findAll() {
         try {
-            const response = await fetch("http://localhost:8888/api/evento");
+            const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/evento");
             if (!response.ok) throw new Error("Error al obtener eventos");
 
             const data = await response.json();
@@ -32,7 +32,7 @@ export const useEventosStore = defineStore("eventos", () => {
 
     async function proximosEventos() {
         try {
-            const response = await fetch("http://localhost:8888/api/Evento/proximos");
+            const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Evento/proximos");
             if (!response.ok) throw new Error("Error al obtener eventos");
 
             const data = await response.json();
@@ -71,7 +71,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Borrar un evento
     async function deleteEvento(id: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/${id}`, {
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/evento/${id}`, {
                 method: "DELETE",
             });
 
@@ -86,7 +86,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Actualizar un evento
     async function updateEvento(id: number, eventoActualizado: EventoDto) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/${id}`, {
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/evento/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(eventoActualizado),
@@ -103,7 +103,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Obtener un evento por ID
     async function filtroEvento(id: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/${id}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/evento/${id}`);
             if (!response.ok) throw new Error("Error al obtener el evento");
 
             const evento = await response.json();
@@ -117,7 +117,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Obtener eventos por organizador
     async function getEventoPorOrganizador(organizador: string) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/organizador/${organizador}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/evento/organizador/${organizador}`);
             if (!response.ok) throw new Error("Error al obtener eventos por organizador");
 
             const data = await response.json();
@@ -130,7 +130,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Obtener eventos por categoría
     async function getEventoPorCategoria(categoria: string) {
         try {
-            const response = await fetch(`http://localhost:8888/api/evento/categoria/${categoria}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/evento/categoria/${categoria}`);
             if (!response.ok) throw new Error("Error al obtener eventos por categoría");
 
             const data = await response.json();
@@ -144,7 +144,7 @@ export const useEventosStore = defineStore("eventos", () => {
     async function getEventoPorIdORganizador(idorganizador: number) {
         try {
             
-            const response = await fetch(`http://localhost:8888/api/Evento/organizadorid/${idorganizador}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Evento/organizadorid/${idorganizador}`);
             if (!response.ok) throw new Error("Error al obtener eventos por organizador");
     
             const data = await response.json();
@@ -161,7 +161,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Obtener información detallada de un evento
     async function getInfoEvento(id: number): Promise<EventoInfoDto> {
         try {
-            const response = await fetch(`http://localhost:8888/api/Evento/DetalleEvento?id=${id}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Evento/DetalleEvento?id=${id}`);
             if (!response.ok) throw new Error("Error al obtener detalles del evento");
     
             const data = await response.json();
@@ -189,7 +189,7 @@ export const useEventosStore = defineStore("eventos", () => {
     // Buscador de eventos
     async function buscadorEvento(busqueda: string) {
         try {
-            const response = await fetch(`http://localhost:8888/api/Evento/BuscadorEvento/${busqueda}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Evento/BuscadorEvento/${busqueda}`);
             if (!response.ok) throw new Error("Error en la búsqueda de eventos");
 
             const data = await response.json();

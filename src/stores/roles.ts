@@ -13,7 +13,7 @@ export const useRolesStore = defineStore("roles", () => {
   // Obtener todos los roles (GET: api/Rol)
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/Rol");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Rol");
       if (!response.ok) throw new Error("Error al obtener roles");
       const data = await response.json();
       roles.value.splice(0, roles.value.length, ...data);
@@ -26,7 +26,7 @@ export const useRolesStore = defineStore("roles", () => {
   // Obtener un rol por ID (GET: api/Rol/{id})
   async function getRol(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Rol/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Rol/${id}`);
       if (!response.ok) throw new Error("Error al obtener el rol");
       const data = await response.json();
       currentRol.value = data;
@@ -40,7 +40,7 @@ export const useRolesStore = defineStore("roles", () => {
   // Crear un nuevo rol (POST: api/Rol)
   async function createRol(rol: RolDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Rol", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Rol", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rol),
@@ -58,7 +58,7 @@ export const useRolesStore = defineStore("roles", () => {
   // Actualizar un rol (PUT: api/Rol/{id})
   async function updateRol(id: number, updatedRol: RolDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Rol/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Rol/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedRol),
@@ -76,7 +76,7 @@ export const useRolesStore = defineStore("roles", () => {
   // Eliminar un rol (DELETE: api/Rol/{id})
   async function deleteRol(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Rol/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Rol/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el rol");
