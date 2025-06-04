@@ -3,64 +3,37 @@
     <div class="perfil__header">
       <h2 class="perfil__titulo">Editar mi perfil</h2>
       <p class="perfil__subtitulo">Actualiza tu información personal</p>
+      <div class="perfil__imagen">
+        <img :src="imagenPerfil" alt="Foto de perfil" />
+        </div>
     </div>
 
     <form class="perfil__formulario" @submit.prevent="actualizarPerfil">
       <div class="perfil__grid">
-        <div class="perfil__campo">
-          <label for="username" class="perfil__label">Username</label>
-          <div class="perfil__input-container">
-            <input
-              v-model="form.username"
-              id="username"
-              class="perfil__input"
-              type="text"
-              placeholder="Tu nombre de usuario"
-              required
-            />
-            <span class="perfil__input-icon">@</span>
-          </div>
-        </div>
 
         <div class="perfil__campo">
           <label for="nombre" class="perfil__label">Nombre</label>
-          <div class="perfil__input-container">
-            <input
-              v-model="form.nombre"
-              id="nombre"
-              class="perfil__input"
-              type="text"
-              placeholder="Tu nombre completo"
-              required
-            />
-          </div>
+          <input v-model="form.nombre" id="nombre" class="perfil__input" type="text" required />
         </div>
 
-        <div class="perfil__campo perfil__campo--full">
+        <div class="perfil__campo ">
           <label for="email" class="perfil__label">Email</label>
-          <div class="perfil__input-container">
-            <input
-              v-model="form.email"
-              id="email"
-              class="perfil__input"
-              type="email"
-              placeholder="ejemplo@correo.com"
-              required
-            />
-          </div>
+          <input v-model="form.email" id="email" class="perfil__input" type="email" required />
         </div>
 
         <div class="perfil__campo">
           <label for="ubicacion" class="perfil__label">Ubicación</label>
-          <div class="perfil__input-container">
-            <input
-              v-model="form.ubicacion"
-              id="ubicacion"
-              class="perfil__input"
-              type="text"
-              placeholder="Ciudad, País"
-            />
-          </div>
+          <input v-model="form.ubicacion" id="ubicacion" class="perfil__input" type="text" />
+        </div>
+
+        <div class="perfil__campo">
+          <label for="telefono" class="perfil__label">Teléfono</label>
+          <input v-model="form.telefono" id="telefono" class="perfil__input" type="text" />
+        </div>
+
+        <div class="perfil__campo perfil__campo--full">
+          <label for="descripcion" class="perfil__label">Descripción</label>
+          <textarea v-model="form.descripcion" id="descripcion" class="perfil__input" rows="3"></textarea>
         </div>
 
         <div class="perfil__campo">
@@ -68,25 +41,24 @@
           <div class="perfil__input-container">
             <input
               v-model="form.password"
+              :type="mostrarPassword ? 'text' : 'password'"
               id="password"
               class="perfil__input"
-              type="password"
-              placeholder=""
             />
-            <button
-              type="button"
-              class="perfil__toggle-password"
-              @click="togglePasswordVisibility"
-            >
+            <button type="button" class="perfil__toggle-password" @click="togglePasswordVisibility">
               {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
             </button>
           </div>
           <span class="perfil__hint">Opcional - Mínimo 8 caracteres</span>
         </div>
+
+        <div class="perfil__campo">
+          <label for="file" class="perfil__label">Imagen de perfil</label>
+          <input type="file" @change="handleFileChange" accept="image/*" class="perfil__input" id="file" />
+        </div>
       </div>
 
       <div class="perfil__acciones">
-        <button type="button" class="perfil__boton perfil__boton--secundario">Cancelar</button>
         <button type="submit" class="perfil__boton perfil__boton--primario">
           <span class="perfil__boton-texto">Guardar cambios</span>
           <span v-if="cargando" class="perfil__spinner"></span>
@@ -95,71 +67,113 @@
     </form>
 
     <transition name="fade">
-      <div v-if="mensaje" :class="['perfil__mensaje', {'perfil__mensaje--error': hayError}]">
+      <div v-if="mensaje" :class="['perfil__mensaje', { 'perfil__mensaje--error': hayError }]">
         {{ mensaje }}
       </div>
     </transition>
   </div>
 </template>
+
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { useUsuariosStore } from '@/stores/usuarios';
+import { ref, reactive, computed, onMounted } from 'vue';
+import { useOrganizadoresStore } from '@/stores/organizadores';
 
-const store = useUsuariosStore();
-const usuario = store.usuarioLogeado;
-console.log(usuario);
+const store = useOrganizadoresStore();
+const organizador = computed(() => store.organizadorLogeado);
 
+const cargando = ref(false);
 const mensaje = ref('');
 const hayError = ref(false);
-const cargando = ref(false);
 const mostrarPassword = ref(false);
+const file = ref<File | null>(null);
+const previewUrl = ref<string | null>(null);
 
+// Formulario inicial con los datos del organizador
 const form = reactive({
-  username: usuario?.username || '',
-  nombre: usuario?.nombre || '',
-  email: usuario?.email || '',
-  ubicacion: usuario?.ubicacion || '',
+  username: 'string',
+  nombre: '',
+  email: '',
+  ubicacion: '',
+  telefono: '',
+  descripcion: '',
   password: ''
+});
+
+// Cargar datos al montar
+onMounted(() => {
+  if (organizador.value) {
+    form.nombre = organizador.value.nombre;
+    form.email = organizador.value.email;
+    form.ubicacion = organizador.value.ubicacion;
+    form.telefono = organizador.value.telefono;
+    form.descripcion = organizador.value.descripcion;
+  }
+});
+
+const imagenPerfil = computed(() => {
+  if (previewUrl.value) return previewUrl.value;
+  if (organizador.value?.enlace)
+    return `${organizador.value.enlace}?t=${Date.now()}`; // 🔄 fuerza recarga
+  return '';
 });
 
 function togglePasswordVisibility() {
   mostrarPassword.value = !mostrarPassword.value;
+}
 
-  const passwordInput = document.getElementById('password') as HTMLInputElement;
-  if (passwordInput) {
-    passwordInput.type = mostrarPassword.value ? 'text' : 'password';
+function handleFileChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target?.files?.[0]) {
+    if (previewUrl.value) {
+      URL.revokeObjectURL(previewUrl.value);
+    }
+    file.value = target.files[0];
+    previewUrl.value = URL.createObjectURL(file.value);
   }
 }
 
 async function actualizarPerfil() {
-  if (!usuario) return;
+  if (!organizador.value) return;
 
   cargando.value = true;
-  hayError.value = false;
   mensaje.value = '';
-
-  // Generar nueva clase usuario completa
-  const usuarioActualizado = {
-    ...usuario,
-    username: form.username,
-    nombre: form.nombre,
-    email: form.email,
-    ubicacion: form.ubicacion,
-    password: form.password.trim() !== '' ? form.password : usuario.contrasenia
-  };
+  hayError.value = false;
 
   try {
-    await store.updateUsuario(usuario.id, usuarioActualizado);
+    const formData = new FormData();
+    formData.append('username', form.username);
+    formData.append('nombre', form.nombre);
+    formData.append('email', form.email);
+    formData.append('ubicacion', form.ubicacion);
+    formData.append('telefono', form.telefono);
+    formData.append('descripcion', form.descripcion);
+    formData.append(
+      'contrasenia',
+      form.password.trim() !== ''
+        ? form.password
+        : organizador.value.contrasenia
+    );
+    if (file.value) {
+      formData.append('file', file.value);
+    }
+
+    const actualizado = await store.updateOrganizadorConImagen(
+      organizador.value.id,
+      formData
+    );
+
+    if (actualizado) {
+      store.organizadorLogeado = actualizado;
+      localStorage.setItem('organizadorLogeado', JSON.stringify(actualizado));
+    }
 
     mensaje.value = 'Perfil actualizado correctamente.';
     form.password = '';
-
-
-    store.usuarioLogeado = { ...usuarioActualizado, contrasenia: undefined };
+    previewUrl.value = null;
   } catch (error) {
-    console.error(error);
-    mensaje.value = 'Hubo un error al actualizar el perfil.';
+    mensaje.value = 'Error al actualizar perfil.';
     hayError.value = true;
+    console.error(error);
   } finally {
     cargando.value = false;
   }
@@ -167,11 +181,12 @@ async function actualizarPerfil() {
 </script>
 
 
+
+
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 
 .perfil {
-
   padding: 2rem;
   font-family: $first-font;
   max-width: 800px;
@@ -188,6 +203,23 @@ async function actualizarPerfil() {
     margin-bottom: 0.5rem;
     font-weight: 700;
   }
+
+   &__imagen {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+
+    img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid $color-green;
+        box-shadow: 0 0 10px rgba($color-green, 0.3);
+        }
+    }
+
 
   &__subtitulo {
     font-size: 1rem;
@@ -234,7 +266,7 @@ async function actualizarPerfil() {
     border: 2px solid rgba($color-lightgray, 0.2);
     border-radius: 6px;
     font-size: 1rem;
-    background-color:white;
+    background-color: rgb(34, 34, 34);
     color: white;
     transition: all 0.3s ease;
 
@@ -366,16 +398,23 @@ async function actualizarPerfil() {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
+
 @media (min-width: 992px) {
   .perfil {
     max-width: 1000px;
@@ -417,5 +456,4 @@ async function actualizarPerfil() {
     }
   }
 }
-
 </style>

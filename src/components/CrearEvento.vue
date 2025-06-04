@@ -146,18 +146,20 @@ async function enviarFormulario() {
     await crearEvento(formData);
     alert("Evento creado correctamente");
 
-    form.value = {
-      nombre: "",
-      descripcion: "",
-      ubicacion: "",
-      fechaInicio: "",
-      fechaFin: "",
-      idTematica: null,
-      idCategoria: null,
-    };
+  form.value = {
+    nombre: "",
+    descripcion: "",
+    ubicacion: "",
+    fechaInicio: "",
+    fechaFin: "",
+    idTematica: null,
+    idCategoria: null,
+    enlace: "https://mi-plataforma.com/evento-privado", // o una cadena vacía si lo prefieres
+  };
+
     file.value = null;
     previewUrl.value = null;
-  } catch (err: any) {
+  } catch (err) {
     alert("Error al crear el evento: " + err.message);
   }
 }

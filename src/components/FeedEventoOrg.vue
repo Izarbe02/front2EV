@@ -1,21 +1,16 @@
-
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
-import { useUsuariosOrganizadoresStore } from '@/stores/UsuarioOrganizador';
+import { onMounted, computed } from 'vue';
+import { useUsuariosOrganizadoresStore } from '@/stores/usuarioOrganizador';
 import { useUsuariosStore } from '@/stores/usuarios';
-import type EventoDto from '@/stores/dtos/evento.dto';
-import { useEventosStore } from '@/stores/eventos';
 
 const usuariosStore = useUsuariosStore();
 const usuariosOrganizadoresStore = useUsuariosOrganizadoresStore();
-const eventosStore = useEventosStore();
 
 const usuario = computed(() => usuariosStore.usuarioLogeado);
-const feedEventos = ref<EventoDto[]>([]);
 
 const cargarFeed = async () => {
   if (usuario.value?.id) {
-    feedEventos.value = await usuariosOrganizadoresStore.getEventosSeguidosDesdeFecha(usuario.value.id);
+   await usuariosOrganizadoresStore.cargarEventosRecientesSeguidos(usuario.value.id);
   }
 };
 
@@ -28,12 +23,12 @@ onMounted(() => {
   <div class="feed">
     <h2 class="feed__titulo">Novedades de tus organizadores</h2>
 
-    <div v-if="feedEventos.length === 0" class="feed__vacio">
+    <div v-if="usuariosOrganizadoresStore.eventosRecientesSeguidos.length === 0" class="feed__vacio">
       No hay nuevos eventos desde que comenzaste a seguir a los organizadores.
     </div>
 
     <div v-else class="feed__lista">
-      <div v-for="evento in feedEventos" :key="evento.id" class="feed__evento">
+      <div v-for="evento in usuariosOrganizadoresStore.eventosRecientesSeguidos" :key="evento.id" class="feed__evento">
         <img :src="evento.enlace" alt="imagen evento" class="feed__imagen" />
         <div class="feed__contenido">
           <RouterLink :to="`/EventoDetalle?id=${evento.id}`" class="feed__nombre">

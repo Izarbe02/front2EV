@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <v-container class="calendario">
     <h3 class="calendario__titulo-eventos">Selecciona una fecha para ver sus eventos</h3>
@@ -58,15 +59,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import { useDate } from "vuetify";
+import EventoDto from "@/stores/dtos/evento.dto";
 
 const eventosStore = useEventosStore();
 const date = ref<Date>(new Date());
 const adapter = useDate();
 const eventosDias = ref<Set<string>>(new Set());
-const eventosSeleccionados = ref<any[]>([]);
+const eventosSeleccionados = ref<EventoDto[]>([]);
 const fechaActual = new Date();
 
 onMounted(async () => {

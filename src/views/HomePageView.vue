@@ -8,7 +8,7 @@ import CarouselHomePage from '@/components/CarouselHomePage.vue';
 </script>
 
 
-<template>
+<template>s
 
 
  <Header/>
@@ -17,7 +17,7 @@ import CarouselHomePage from '@/components/CarouselHomePage.vue';
  </div>
  <Calendario/>
  <HomePage/>
- 
+
 
 <Footer/>
 </template>

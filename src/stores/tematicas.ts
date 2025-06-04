@@ -17,7 +17,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
       if (!response.ok) throw new Error("Error al obtener tematicas");
       const data = await response.json();
       tematicas.value.splice(0, tematicas.value.length, ...data);
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener tematicas:", error);
     }
@@ -31,7 +31,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
       const data = await response.json();
       currentTematica.value = data;
       return data;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener la tematica:", error);
     }
@@ -49,7 +49,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
       const createdTematica = await response.json();
       tematicas.value.push(createdTematica);
       successMessage.value = "Tematica creada correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al crear la tematica:", error);
     }
@@ -66,7 +66,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
       if (!response.ok) throw new Error("Error al actualizar la tematica");
       await findAll(); // Refresca la lista de tematicas
       successMessage.value = "Tematica actualizada correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al actualizar la tematica:", error);
     }
@@ -81,7 +81,7 @@ export const useTematicasStore = defineStore("tematicas", () => {
       if (!response.ok) throw new Error("Error al eliminar la tematica");
       tematicas.value = tematicas.value.filter(t => t.id !== id);
       successMessage.value = "Tematica eliminada correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al eliminar la tematica:", error);
     }

@@ -11,7 +11,7 @@ import {
   LinearScale
 } from 'chart.js'
 import { useEventosStore } from '@/stores/eventos'
-import type { EventosPorMesDto } from '@/dto/EventosPorMesDto'
+import type { EventosPorMesDto } from '@/stores/dtos/eventosPorMes.dto'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 

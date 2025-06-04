@@ -17,7 +17,7 @@ export const usePostsStore = defineStore("posts", () => {
       if (!response.ok) throw new Error("Error al obtener posts");
       const data = await response.json();
       posts.value.splice(0, posts.value.length, ...data);
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener posts:", error);
     }
@@ -31,7 +31,7 @@ export const usePostsStore = defineStore("posts", () => {
       const data = await response.json();
       currentPost.value = data;
       return data;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener el post:", error);
     }
@@ -49,7 +49,7 @@ export const usePostsStore = defineStore("posts", () => {
       const createdPost = await response.json();
       posts.value.push(createdPost);
       successMessage.value = "Post creado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al crear el post:", error);
     }
@@ -66,7 +66,7 @@ export const usePostsStore = defineStore("posts", () => {
       if (!response.ok) throw new Error("Error al actualizar el post");
       await findAll(); // Actualiza la lista de posts tras la modificación
       successMessage.value = "Post actualizado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el post:", error);
     }
@@ -81,7 +81,7 @@ export const usePostsStore = defineStore("posts", () => {
       if (!response.ok) throw new Error("Error al eliminar el post");
       posts.value = posts.value.filter(p => p.id !== id);
       successMessage.value = "Post eliminado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al eliminar el post:", error);
     }

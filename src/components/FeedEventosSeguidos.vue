@@ -45,10 +45,10 @@ onMounted(() => {
           <div class="evento-detalle__lugar">
             📍 {{ evento.ubicacion }}
             <RouterLink
-              :to="`/OrganizadorDetalle?id=${evento.orgId}`"
+              :to="`/OrganizadorDetalle?id=${evento.idOrganizador}`"
               class="evento-detalle__direccion"
             >
-              {{ evento.nombreOrg }}
+              {{ evento.fechaFin }}
             </RouterLink>
           </div>
 

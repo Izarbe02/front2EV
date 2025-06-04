@@ -13,10 +13,10 @@ export const useProductosStore = defineStore("productos", () => {
     try {
       const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Producto");
       if (!response.ok) throw new Error("Error al obtener productos");
-      
+
       const data = await response.json();
       productos.value.splice(0, productos.value.length, ...data);
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener productos:", error);
     }
@@ -26,11 +26,11 @@ export const useProductosStore = defineStore("productos", () => {
     try {
       const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Producto/${id}`);
       if (!response.ok) throw new Error("Error al obtener el producto");
-      
+
       const producto = await response.json();
       currentProducto.value = producto;
       return producto;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener el producto:", error);
     }
@@ -44,11 +44,11 @@ export const useProductosStore = defineStore("productos", () => {
         body: JSON.stringify(producto),
       });
       if (!response.ok) throw new Error("Error al crear el producto");
-      
+
       const createdProducto = await response.json();
       productos.value.push(createdProducto);
       successMessage.value = "Producto creado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al crear el producto:", error);
     }
@@ -62,11 +62,11 @@ export const useProductosStore = defineStore("productos", () => {
         body: JSON.stringify(productoActualizado),
       });
       if (!response.ok) throw new Error("Error al actualizar el producto");
-      
+
       // Actualizamos la lista refrescando los productos
       await findAll();
       successMessage.value = "Producto actualizado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el producto:", error);
     }
@@ -78,10 +78,10 @@ export const useProductosStore = defineStore("productos", () => {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el producto");
-      
+
       productos.value = productos.value.filter(p => p.id !== id);
       successMessage.value = "Producto eliminado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al eliminar el producto:", error);
     }

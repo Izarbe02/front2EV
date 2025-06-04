@@ -15,10 +15,10 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
     try {
       const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto");
       if (!response.ok) throw new Error("Error al obtener categorías");
-      
+
       const data = await response.json();
       categorias.value.splice(0, categorias.value.length, ...data);
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener categorías:", error);
     }
@@ -29,11 +29,11 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
     try {
       const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaProducto/${id}`);
       if (!response.ok) throw new Error("Error al obtener la categoría");
-      
+
       const data = await response.json();
       currentCategoria.value = data;
       return data;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener la categoría:", error);
     }
@@ -48,11 +48,11 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
         body: JSON.stringify(categoria),
       });
       if (!response.ok) throw new Error("Error al crear la categoría");
-      
+
       const createdCategoria = await response.json();
       categorias.value.push(createdCategoria);
       successMessage.value = "Categoría creada correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al crear la categoría:", error);
     }
@@ -67,10 +67,10 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
         body: JSON.stringify(updatedCategoria),
       });
       if (!response.ok) throw new Error("Error al actualizar la categoría");
-      
+
       await findAll(); // Refrescar la lista de categorías
       successMessage.value = "Categoría actualizada correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al actualizar la categoría:", error);
     }
@@ -83,10 +83,10 @@ export const useCategoriaProductosStore = defineStore("categoriaProductos", () =
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar la categoría");
-      
+
       categorias.value = categorias.value.filter(cat => cat.id !== id);
       successMessage.value = "Categoría eliminada correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al eliminar la categoría:", error);
     }

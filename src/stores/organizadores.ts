@@ -34,7 +34,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
       const data = await response.json();
       organizadores.value.splice(0, organizadores.value.length, ...data);
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener organizadores:", error);
     }
@@ -42,12 +42,12 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function getOrganizador(id: number) {
     try {
-      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`);
+      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`);
       if (!response.ok) throw new Error("Error al obtener organizador");
 
       currentOrganizador.value = await response.json();
       return currentOrganizador.value;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener organizador:", error);
     }
@@ -55,7 +55,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function createEstablecimiento(organizador: OrganizadorDto) {
     try {
-      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Organizador", {
+      const response = await fetch("http://localhost:8888/api/Organizador", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(organizador),
@@ -65,7 +65,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       const created = await response.json();
       organizadores.value.push(created);
       successMessage.value = "Organizador creado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al crear organizador:", error);
     }
@@ -73,7 +73,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function updateEstablecimiento(id: number, updated: OrganizadorDto) {
     try {
-      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`, {
+      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
@@ -88,7 +88,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       }
 
       successMessage.value = "Organizador actualizado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al actualizar organizador:", error);
     }
@@ -96,14 +96,14 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
 
   async function deleteEstablecimiento(id: number) {
     try {
-      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Organizador/${id}`, {
+      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar organizador");
 
       organizadores.value = organizadores.value.filter((o) => o.id !== id);
       successMessage.value = "Organizador eliminado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al eliminar organizador:", error);
     }
@@ -131,7 +131,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
       localStorage.setItem("tokenLoginOrganizador", data.token);
 
       return true;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error en login de organizador:", error);
     }
@@ -143,6 +143,33 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     localStorage.removeItem("organizadorLogeado");
     localStorage.removeItem("tokenLoginOrganizador");
   }
+
+  async function updateOrganizadorConImagen(id: number, formData: FormData) {
+  try {
+    const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error("Error al actualizar organizador con imagen: " + errorText);
+    }
+
+    const actualizado = await response.json();
+    successMessage.value = "Organizador actualizado correctamente";
+
+    if (organizadorLogeado.value?.id === id) {
+      organizadorLogeado.value = actualizado;
+      localStorage.setItem("organizadorLogeado", JSON.stringify(actualizado));
+    }
+    return actualizado;
+  } catch (error) {
+    errorMessage.value = error.message;
+    console.error("Error al actualizar organizador con imagen:", error);
+  }
+}
+
 
   return {
     organizadores,
@@ -158,5 +185,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     deleteEstablecimiento,
     loginOrganizador,
     logoutOrganizador,
+    updateOrganizadorConImagen,
   };
 });

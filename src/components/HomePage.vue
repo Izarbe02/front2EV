@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section class="homepage">
     <div class="homepage__container">
@@ -11,7 +12,7 @@
             :key="index"
             class="homepage__card"
           >
-            <img :src="event.enlace" class="homepage__card-image"></img>
+            <img :src="event.enlace" class="homepage__card-image">
             <v-card-title class="homepage__card-title">
               {{ event.nombre }}
             </v-card-title>
@@ -38,6 +39,7 @@ import { useEventosStore } from "@/stores/eventos";
 import EventoDto from "@/stores/dtos/evento.dto";
 
 export default defineComponent({
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Homepage",
   setup() {
     const store = useEventosStore();
@@ -104,15 +106,15 @@ export default defineComponent({
     }
   }
   &__card {
-    width: 300px; 
-    height: 450px; 
+    width: 300px;
+    height: 450px;
     margin: 0 auto;
     background-color: rgb(247, 247, 247);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; 
+    justify-content: space-between;
     border-radius: 10px;
-    overflow: hidden; 
+    overflow: hidden;
 
     @include desktop {
       width: 30%;
@@ -123,7 +125,7 @@ export default defineComponent({
   &__card-image {
     width: 100%;
     height: 50%;
-    object-fit: cover; 
+    object-fit: cover;
   }
 
   &__card-title {
@@ -139,7 +141,7 @@ export default defineComponent({
     color: $color-gray;
     padding: 14px;
     text-align: center;
-    flex-grow: 1; 
+    flex-grow: 1;
   }
 
   &__card-actions {

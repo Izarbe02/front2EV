@@ -30,7 +30,7 @@ new URL("@/assets/Images/part3logo.png", import.meta.url).href,
 ];
 
 onMounted(async () => {
-await nextTick(); 
+await nextTick();
 
 if (!logoCanvas.value) {
   console.error("No se encontró el canvas en el DOM");
@@ -89,7 +89,7 @@ if (Math.abs(targetProgress - animationProgress.value) > 0.01) {
 }
 
 function drawLogo(progress: number) {
-const ctx = logoCanvas.value?.getContext("2d"); 
+const ctx = logoCanvas.value?.getContext("2d");
 
 if (!ctx) {
   console.warn("No se pudo obtener el contexto del canvas");
@@ -118,14 +118,14 @@ images.value.forEach((img, index) => {
     imgWidth = imgHeight * aspectRatio;
   }
 
-  let xPos =
+  const xPos =
     index === 0
       ? width / 2 - imgWidth / 2
       : index === 1
       ? width / 2 - imgWidth / 2 - spacing - offset
       : width / 2 - imgWidth / 2 + spacing + offset;
 
-  let yPos = (height - imgHeight) / 2;
+  const yPos = (height - imgHeight) / 2;
 
   ctx.save();
 

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from "vue";
-import { useRoute } from "vue-router";
 import { useOrganizadoresStore } from "@/stores/organizadores";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 import { useEventosStore } from "@/stores/eventos";
 import type EventoDto from "@/stores/dtos/evento.dto";
-import { useUsuariosOrganizadoresStore } from "@/stores/UsuarioOrganizador";
+import { useUsuariosOrganizadoresStore } from "@/stores/usuarioOrganizador";
 import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
 import { useUsuariosStore } from "@/stores/usuarios";
 
@@ -113,7 +112,7 @@ watch(
     <div class="organizador-detalle" v-if="organizador">
       <div class="organizador-detalle__contenedor">
         <h1 class="organizador-detalle__titulo">{{ organizador.nombre }}</h1>
-  
+
         <div class="organizador-detalle__contenido">
           <div class="organizador-detalle__imagen">
             <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-detalle__portada" />
@@ -125,7 +124,7 @@ watch(
               <p class="organizador-detalle__direccion">📍{{ organizador.ubicacion }}</p>
               <p class="organizador-detalle__descripcion">{{ organizador.email }}</p>
             </div>
-  
+
             <div
               v-if="usuario && usuario.idRol === 3"
               class="organizador-detalle__boton"
@@ -136,20 +135,20 @@ watch(
               >
                 {{ sigue ? 'Dejar de seguir' : 'Seguir al organizador' }}
               </button>
-  
+
               <span class="organizador-detalle__boton-contador">
                 {{ usuariosOrganizadoresStore.numSeguidores }} seguidores
               </span>
             </div>
           </div>
         </div>
-  
+
         <div class="organizador-detalle__eventos">
           <p class="organizador-detalle__tituloseventos">Nuestros eventos</p>
           <div v-if="isLoading">
             <p>Cargando eventos...</p>
           </div>
-  
+
           <div
             v-else-if="eventosLocales.length > 0"
             class="organizador-detalle__contenedoreventos"
@@ -193,7 +192,7 @@ watch(
       </div>
     </div>
   </template>
-  
+
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";

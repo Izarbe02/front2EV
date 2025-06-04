@@ -19,7 +19,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   }
 
 
-  
+
   const usuarioLogeado = ref<UsuarioDto | null>(usuarioGuardado);
 
   const tokenLogin = ref<string | null>(
@@ -36,7 +36,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
       const data = await response.json();
       usuarios.value.splice(0, usuarios.value.length, ...data);
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener usuarios:", error);
     }
@@ -50,7 +50,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
       const usuario = await response.json();
       currentUsuario.value = usuario;
       return usuario;
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al obtener el usuario:", error);
     }
@@ -68,7 +68,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
       const createdUsuario = await response.json();
       usuarios.value.push(createdUsuario);
       successMessage.value = "Usuario creado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al crear el usuario:", error);
     }
@@ -89,7 +89,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
       usuarioLogeado.value = usuarioActualizado;
       localStorage.setItem("usuarioLogeado", JSON.stringify(usuarioActualizado));
       successMessage.value = "Usuario actualizado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al actualizar el usuario:", error);
     }
@@ -104,7 +104,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
       usuarios.value = usuarios.value.filter((u) => u.id !== id);
       successMessage.value = "Usuario eliminado correctamente";
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error al eliminar el usuario:", error);
     }
@@ -137,7 +137,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
         return true;
       }
-    } catch (error: any) {
+    } catch (error) {
       errorMessage.value = error.message;
       console.error("Error en login:", error);
     }

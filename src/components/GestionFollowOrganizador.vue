@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { useUsuariosOrganizadoresStore } from "@/stores/UsuarioOrganizador";
+import { useUsuariosOrganizadoresStore } from "@/stores/usuarioOrganizador";
 import { useUsuariosStore } from "@/stores/usuarios";
 import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
 

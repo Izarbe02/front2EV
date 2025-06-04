@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { UsuarioOrganizadorDto } from "@/stores/dtos/UsuarioOrganizador.dto";
+import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
 import type OrganizadorDto from '@/stores/dtos/organizador.dto';
 import type EventoDto from '@/stores/dtos/evento.dto';
 
@@ -12,7 +12,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
 
   const followOrganizador = async (dto: UsuarioOrganizadorDto) => {
     console.log(dto);
-    
+
     try {
       const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/follow`, {
         method: 'POST',
