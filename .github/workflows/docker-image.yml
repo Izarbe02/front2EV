@@ -2,9 +2,9 @@ name: Docker Image CICD
 
 on:
   push:
-    branches: [ "AWSDeveloer" ]
+    branches: [ "AWSDeveloepr" ]
   pull_request:
-    branches: [ "AWSDeveloer" ]
+    branches: [ "AWSDeveloper" ]
 env:
   EKS_CLUSTER_NAME: KubernetesTFG
   AWS_REGION: us-east-1
