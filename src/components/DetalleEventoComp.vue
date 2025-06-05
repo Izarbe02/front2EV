@@ -145,6 +145,26 @@ function formatFecha(fecha: string): string {
 console.log(comentariosStore.comentarios[2]);
 console.log(usuariosStore.currentUsuario);
 
+const descargarFolleto = async () => {
+  if (!evento.value?.enlace) return;
+
+  try {
+    const response = await fetch(evento.value.enlace, { mode: 'cors' });
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `folleto_${evento.value.nombreEvento}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error al descargar el folleto:', error);
+    Swal.fire('Error', 'No se pudo descargar el folleto.', 'error');
+  }
+};
 
 </script>
 
@@ -215,7 +235,15 @@ console.log(usuariosStore.currentUsuario);
 
           <div class="evento-detalle__acciones">
             <button class="evento-detalle__boton">📅 Añadir al calendario</button>
-            <button class="evento-detalle__boton">⬇️ Descargar folleto</button>
+            <a
+              class="evento-detalle__boton"
+              :href="evento.enlace"
+              target="_blank"
+              rel="noopener"
+            >
+              ⬇️ Ver y descargar folleto
+            </a>
+
             <button class="evento-detalle__boton" @click="onToggleGuardar">
               {{ estaGuardado ? '💔 Quitar de guardados' : '❤️ Guardar evento' }}
             </button>
@@ -395,7 +423,7 @@ console.log(usuariosStore.currentUsuario);
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
-
+    text-decoration: none;
     &:hover {
       background-color: #d40202;
       color: #000;
