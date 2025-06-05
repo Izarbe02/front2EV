@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 </script>
 
@@ -99,17 +98,7 @@
   }
 
   &__link {
-    font-size: 18px;
-    color: $color-lightred;
-    background: $color-lightgray;
-    text-transform: none;
-    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
-
-    &:hover {
-      color: $color-whitered;
-      transform: scale(1.05);
-      background-color: $color-red;
-    }
+  @include boton-borde-rojo;
   }
 
   &__social-button {
