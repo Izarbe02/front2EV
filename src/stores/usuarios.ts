@@ -7,7 +7,6 @@ export const useUsuariosStore = defineStore("usuarios", () => {
   const usuarios = ref<UsuarioDto[]>([]);
   const currentUsuario = ref<UsuarioDto | null>(null);
 
-
   let usuarioGuardado: UsuarioDto | null = null;
   try {
     const raw = localStorage.getItem("usuarioLogeado");
@@ -18,14 +17,8 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     console.warn("Error al parsear usuarioLogeado:", error);
   }
 
-
-
   const usuarioLogeado = ref<UsuarioDto | null>(usuarioGuardado);
-
-  const tokenLogin = ref<string | null>(
-    localStorage.getItem("tokenLogin")
-  );
-
+  const tokenLogin = ref<string | null>(localStorage.getItem("tokenLogin"));
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
@@ -53,6 +46,7 @@ export const useUsuariosStore = defineStore("usuarios", () => {
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener el usuario:", error);
+      return null; // ✅ Añadido para corregir TS7030
     }
   }
 
@@ -120,13 +114,10 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(
-          `Error al iniciar sesión: ${errorText || response.statusText}`
-        );
+        throw new Error(`Error al iniciar sesión: ${errorText || response.statusText}`);
       }
 
-      const data: { token: string; usuario: UsuarioDto } | null =
-        await response.json();
+      const data: { token: string; usuario: UsuarioDto } | null = await response.json();
 
       if (data) {
         usuarioLogeado.value = data.usuario;
@@ -137,9 +128,12 @@ export const useUsuariosStore = defineStore("usuarios", () => {
 
         return true;
       }
+
+      return false; // ✅ Si no hay `data`, retornamos algo
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error en login:", error);
+      return false; // ✅ Añadido para cubrir todos los caminos
     }
   }
 

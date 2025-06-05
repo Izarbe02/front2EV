@@ -7,7 +7,6 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   const organizadores = ref<OrganizadorDto[]>([]);
   const currentOrganizador = ref<OrganizadorDto | null>(null);
 
-
   let organizadorGuardado: OrganizadorDto | null = null;
   try {
     const raw = localStorage.getItem("organizadorLogeado");
@@ -19,10 +18,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   }
 
   const organizadorLogeado = ref<OrganizadorDto | null>(organizadorGuardado);
-
-  const tokenLoginOrganizador = ref<string | null>(
-    localStorage.getItem("tokenLoginOrganizador")
-  );
+  const tokenLoginOrganizador = ref<string | null>(localStorage.getItem("tokenLoginOrganizador"));
 
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
@@ -50,6 +46,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error al obtener organizador:", error);
+      return null;
     }
   }
 
@@ -134,6 +131,7 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
     } catch (error: any) {
       errorMessage.value = error.message;
       console.error("Error en login de organizador:", error);
+      return false;
     }
   }
 
@@ -145,31 +143,32 @@ export const useOrganizadoresStore = defineStore("organizadores", () => {
   }
 
   async function updateOrganizadorConImagen(id: number, formData: FormData) {
-  try {
-    const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
-      method: "PUT",
-      body: formData,
-    });
+    try {
+      const response = await fetch(`http://localhost:8888/api/Organizador/${id}`, {
+        method: "PUT",
+        body: formData,
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error("Error al actualizar organizador con imagen: " + errorText);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error("Error al actualizar organizador con imagen: " + errorText);
+      }
+
+      const actualizado = await response.json();
+      successMessage.value = "Organizador actualizado correctamente";
+
+      if (organizadorLogeado.value?.id === id) {
+        organizadorLogeado.value = actualizado;
+        localStorage.setItem("organizadorLogeado", JSON.stringify(actualizado));
+      }
+
+      return actualizado;
+    } catch (error: any) {
+      errorMessage.value = error.message;
+      console.error("Error al actualizar organizador con imagen:", error);
+      return null;
     }
-
-    const actualizado = await response.json();
-    successMessage.value = "Organizador actualizado correctamente";
-
-    if (organizadorLogeado.value?.id === id) {
-      organizadorLogeado.value = actualizado;
-      localStorage.setItem("organizadorLogeado", JSON.stringify(actualizado));
-    }
-    return actualizado;
-  } catch (error: any) {
-    errorMessage.value = error.message;
-    console.error("Error al actualizar organizador con imagen:", error);
   }
-}
-
 
   return {
     organizadores,
