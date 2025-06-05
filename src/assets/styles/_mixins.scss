@@ -7,17 +7,14 @@
     margin-top: 16px;
     font-family: 'Poppins', sans-serif;
     transition: all 0.3s ease-in-out;
-
     &:hover {
         background: $color-red;
         color: white;
     }
-
     &:active {
         box-shadow: 0 0 10px 3px rgba($color-red, 0.7);
     }
 }
-
 
 @mixin boton-gris {
     background: $color-darkgray;
@@ -28,11 +25,9 @@
     margin-top: 16px;
     font-family: 'Poppins', sans-serif;
     transition: all 0.3s ease-in-out;
-
     &:hover {
         background: lighten($color-darkgray, 10%);
     }
-
     &:active {
         box-shadow: 0 0 10px 3px rgba($color-darkgray, 0.7);
     }
@@ -51,10 +46,30 @@
     font-family: $titulo;
 }
 
+@mixin boton-blanco {
+    background-color: white;
+    color: $color-red;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+    transition: transform 0.2s ease, background-color 0.4s ease;
+    &:hover {
+        background-color: darken($color-red, 10%);
+        transform: scale(1.05);
+        color: white;
+    }
+    @media (min-width: 768px) {
+        font-size: 1.1rem;
+        padding: 12px 24px;
+    }
+}
 
 @mixin desktop {
     @media (min-width: 1024px) {
-      @content;
+        @content;
     }
-  }
-  
+}
