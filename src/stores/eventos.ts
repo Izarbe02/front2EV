@@ -60,7 +60,7 @@ export const useEventosStore = defineStore("eventos", () => {
       }
 
       const nuevoEvento = await response.json();
-      eventos.value.push(nuevoEvento); // opcional: solo si manejas eventos cargados
+      eventos.value.push(nuevoEvento);
       return nuevoEvento;
     } catch (error: any) {
       console.error("Error inesperado al crear evento:", error);

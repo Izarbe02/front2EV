@@ -75,7 +75,7 @@ const items = ref([
 @import "@/assets/styles/_variables.scss";
 
 .carousel {
-  position: relative; // 🔧 Necesario para que el título se posicione sobre el carrusel
+  position: relative;
   width: 100%;
   max-width: 400px;
   margin-top: 21%;
