@@ -24,11 +24,11 @@ onMounted(() => {
           <p class="organizador-card__titulo">{{ organizador.nombre }}</p>
 
           <div class="organizador-card__info">
-            
+
             <span class="organizador-card__localizacion">
               {{ organizador.ubicacion }}
             </span>
-            
+
           </div>
 
           <button class="organizador-card__boton">
@@ -66,7 +66,8 @@ h1 {
 }
 
 .organizador-card {
-  background-color: #272525;
+ background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
   border: 2px solid #292929;
   border-radius: 8px;
   color: #fff;
@@ -76,8 +77,8 @@ h1 {
   display: flex;
   flex-direction: column;
   border: 2px solid #3b0000;
-  
-  
+
+
 
   &:hover {
     transform: translateY(-3px);
