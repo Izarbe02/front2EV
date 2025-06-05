@@ -17,8 +17,11 @@ export default defineComponent({
       const height = (canvas.height = window.innerHeight);
       container.appendChild(canvas);
 
-      const gl = canvas.getContext("webgl");
-      if (!gl) throw new Error("WebGL no soportado");
+const context = canvas.getContext("webgl");
+if (!context) throw new Error("WebGL no soportado");
+
+const gl = context as WebGLRenderingContext;
+
 
       const numMetaballs = 30;
       const metaballs: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
