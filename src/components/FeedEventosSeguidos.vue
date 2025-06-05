@@ -11,7 +11,7 @@ const router = useRouter();
 
 const cargarEventosRecientesSeguidos = async (idUsuario: number) => {
   try {
-    const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/eventos-recientes/${idUsuario}`);
+    const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/eventos-recientes/${idUsuario}`);
     if (res.ok) {
       eventosRecientesSeguidos.value = await res.json();
     }

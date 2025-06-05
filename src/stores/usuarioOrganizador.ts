@@ -14,7 +14,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
     console.log(dto);
 
     try {
-      const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/follow`, {
+      const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/follow`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dto) // puede incluir opcionalmente dto.fechaSeguimiento
@@ -27,7 +27,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
 
   const unfollowOrganizador = async (dto: UsuarioOrganizadorDto) => {
     try {
-      const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/unfollow`, {
+      const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/unfollow`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dto)
@@ -40,7 +40,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
 
   const comprobarSigue = async (dto: UsuarioOrganizadorDto) => {
     try {
-      const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/exists`, {
+      const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/exists`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dto)
@@ -54,7 +54,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
 
   const cargarOrganizadoresSeguidos = async (idUsuario: number) => {
     try {
-      const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/seguidos/${idUsuario}`);
+      const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/seguidos/${idUsuario}`);
       organizadoresSeguidos.value = await res.json();
     } catch (error: any) {
       console.error("Error al cargar organizadores seguidos:", error);
@@ -63,7 +63,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
 
   const cargarNumSeguidores = async (idOrganizador: number) => {
     try {
-      const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/seguidores/${idOrganizador}`);
+      const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/seguidores/${idOrganizador}`);
       numSeguidores.value = await res.json();
     } catch (error: any) {
       console.error("Error al cargar número de seguidores:", error);
@@ -72,7 +72,7 @@ export const useUsuariosOrganizadoresStore = defineStore('usuariosOrganizadores'
 
   const cargarEventosRecientesSeguidos = async (idUsuario: number) => {
     try {
-      const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/eventos-recientes/${idUsuario}`);
+      const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/eventos-recientes/${idUsuario}`);
       if (res.ok) {
         eventosRecientesSeguidos.value = await res.json();
       }

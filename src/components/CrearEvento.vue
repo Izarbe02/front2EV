@@ -71,11 +71,11 @@ const categorias = ref<{ id: number; nombre: string }[]>([]);
 const tematicas = ref<{ id: number; nombre: string }[]>([]);
 
 onMounted(() => {
-  fetch("http://localhost:8888/api/CategoriaEvento")
+  fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento")
     .then(res => res.json())
     .then(data => categorias.value = data);
 
-  fetch("http://localhost:8888/api/Tematica")
+  fetch("https://zaragozaconectaapi.retocsv.es/api/Tematica")
     .then(res => res.json())
     .then(data => tematicas.value = data);
 });

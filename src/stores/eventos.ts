@@ -48,7 +48,7 @@ export const useEventosStore = defineStore("eventos", () => {
     try {
         console.log(formData);
 
-      const response = await fetch("http://localhost:8888/api/evento", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/evento", {
         method: "POST",
         body: formData
       });
@@ -203,7 +203,7 @@ export const useEventosStore = defineStore("eventos", () => {
     }
     async function filtrarPorRangoFechas(desde: Date, hasta: Date) {
         try {
-            const url = `http://localhost:8888/api/evento/filtrar-fechas?desde=${desde.toISOString()}&hasta=${hasta.toISOString()}`;
+            const url = `https://zaragozaconectaapi.retocsv.es/api/evento/filtrar-fechas?desde=${desde.toISOString()}&hasta=${hasta.toISOString()}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error("Error al filtrar eventos por fechas");
 
@@ -219,7 +219,7 @@ export const useEventosStore = defineStore("eventos", () => {
 
     async function cargarEventosPorMes() {
         try {
-            const response = await fetch("http://localhost:8888/api/Evento/estadisticas/por-mes");
+            const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Evento/estadisticas/por-mes");
             if (!response.ok) throw new Error("Error al obtener eventos por mes");
             const data = await response.json();
             eventosPorMes.value = data;

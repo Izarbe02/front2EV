@@ -37,7 +37,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
 
   async function fetchComentariosByEvento(eventoId: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Comentario/evento/${eventoId}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Comentario/evento/${eventoId}`);
       if (!response.ok) throw new Error("Error al obtener comentarios del evento");
       const data = await response.json();
       comentarios.value = data;
@@ -67,7 +67,7 @@ export const useComentariosStore = defineStore("comentarios", () => {
   async function updateComentario(comentario: ComentarioUpdateDto) {
 
     try {
-      const response = await fetch(`http://localhost:8888/api/Comentario/${comentario.id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Comentario/${comentario.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(comentario),

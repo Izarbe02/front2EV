@@ -20,7 +20,7 @@ onMounted(async () => {
 
 const cargarCategorias = async () => {
   try {
-    const response = await fetch("http://localhost:8888/api/CategoriaEvento");
+    const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento");
     if (!response.ok) throw new Error("Error al obtener categorías");
     categorias.value = await response.json();
   } catch (error: any) {
