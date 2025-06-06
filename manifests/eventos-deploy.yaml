@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: eventos
-        image: zarbix/docker-frontend-eventos:18
+        image: zarbix/docker-frontend-eventos:19
         imagePullPolicy: Always
         ports:
         - containerPort: 80

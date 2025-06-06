@@ -3,7 +3,7 @@
 services:
   frontend:
     container_name: 2EvFront
-    image: zarbix/docker-frontend-eventos:18
+    image: zarbix/docker-frontend-eventos:19
     build: 
       context: .
       dockerfile: Dockerfile
