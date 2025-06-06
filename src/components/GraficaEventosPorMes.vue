@@ -15,10 +15,8 @@ import type { EventosPorMesDto } from '@/stores/dtos/eventosPorMes.dto'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-// Store
 const store = useEventosStore()
 
-// Helper: mes a nombre
 function obtenerNombreMes(mes: number): string {
   const meses = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -41,7 +39,6 @@ const chartData = computed(() => ({
   ]
 }))
 
-// Opciones de la gráfica
 const chartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,

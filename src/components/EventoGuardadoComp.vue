@@ -7,25 +7,23 @@ import type EventoDto from '@/stores/dtos/evento.dto'
 const eventosGuardadosStore = useEventosGuardadosStore()
 const eventos = ref<EventoDto[]>([])
 const store = useUsuariosStore();
-console.log(store.usuarioLogeado);
-
 
 const cargarEventosGuardados = async () => {
-  const usuario = store.usuarioLogeado;
-  if (!usuario) return;
+  if (!store.usuarioLogeado) return;
 
-  await eventosGuardadosStore.cargarEventosGuardados(usuario.id);
+  await eventosGuardadosStore.cargarEventosGuardados(store.usuarioLogeado.id);
   eventos.value = eventosGuardadosStore.eventosGuardados;
 };
 
 const quitarEvento = async (idEvento: number) => {
-  const usuario = store.usuarioLogeado;
-  if (!usuario) return;
+  if (!store.usuarioLogeado) return;
 
-  await eventosGuardadosStore.quitarEvento(usuario.id, idEvento);
+  await eventosGuardadosStore.quitarEvento(store.usuarioLogeado.id, idEvento);
   await cargarEventosGuardados();
 };
-
+onMounted(async () => {
+ cargarEventosGuardados();
+});
 </script>
 
 <template>

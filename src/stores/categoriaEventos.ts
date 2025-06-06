@@ -4,13 +4,11 @@ import { ref } from "vue";
 import type CategoriaEventoDto from "@/stores/dtos/categoriaEvento.dto";
 
 export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
-  // Estado reactivo
   const categorias = ref<CategoriaEventoDto[]>([]);
   const currentCategoria = ref<CategoriaEventoDto | null>(null);
   const errorMessage = ref<string>("");
   const successMessage = ref<string>("");
 
-  // Obtener todas las categorías (GET: api/CategoriaEvento)
   async function findAll() {
     try {
       const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento");
@@ -24,7 +22,6 @@ export const useCategoriaEventosStore = defineStore("categoriaEventos", () => {
     }
   }
 
-  // Obtener una categoría por ID (GET: api/CategoriaEvento/{id})
   async function getCategoria(id: number) {
     try {
       const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento/${id}`);

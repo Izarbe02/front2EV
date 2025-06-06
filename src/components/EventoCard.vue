@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import type EventoDto from "@/stores/dtos/evento.dto";
 import { RouterLink } from "vue-router";
+import Swal from 'sweetalert2';
 
 const eventosStore = useEventosStore();
 const mostrarAcabados = ref(false);
@@ -49,7 +50,12 @@ const formatearFecha = (fecha: Date | string) => {
 
 const filtrarPorRango = async () => {
   if (!fechaInicio.value || !fechaFin.value) {
-    alert("Debes seleccionar ambas fechas.");
+    await Swal.fire({
+      icon: 'warning',
+      title: 'Fechas requeridas',
+      text: 'Debes seleccionar ambas fechas.',
+      confirmButtonColor: '#d40202' // tu $color-red
+    });
     return;
   }
 
@@ -60,7 +66,12 @@ const filtrarPorRango = async () => {
   fin.setHours(23, 59, 59, 999);
 
   if (inicio > fin) {
-    alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+    await Swal.fire({
+      icon: 'warning',
+      title: 'Fechas inválidas',
+      text: 'La fecha de inicio no puede ser posterior a la fecha de fin.',
+      confirmButtonColor: '#d40202' // tu $color-red
+    });
     return;
   }
 

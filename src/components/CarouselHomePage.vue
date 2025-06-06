@@ -16,7 +16,7 @@
         </v-btn>
       </template>
 
-      <!-- Botón Siguiente -->
+
       <template v-slot:next="{ props }">
         <v-btn
           class="carousel__button carousel__button--next"
@@ -95,6 +95,7 @@ const items = ref([
   padding: 0 10px;
   width: 100%;
   max-width: 1000px;
+  margin-bottom: 50px;
 
   @media (min-width: 768px) {
     top: 20px;

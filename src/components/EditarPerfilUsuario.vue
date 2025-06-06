@@ -138,7 +138,7 @@ async function actualizarPerfil() {
   hayError.value = false;
   mensaje.value = '';
 
-  // Generar nueva clase usuario completa
+
   const usuarioActualizado = {
     ...usuario,
     username: form.username,

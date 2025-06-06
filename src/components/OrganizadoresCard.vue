@@ -6,8 +6,6 @@ import { useOrganizadoresStore } from "@/stores/organizadores";
 const store = useOrganizadoresStore();
 const { organizadores, findAll } = store;
 
-
-// Cargar productos al montar el componente
 onMounted(() => {
   findAll();
 });

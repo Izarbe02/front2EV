@@ -1,4 +1,4 @@
-<!-- eslint-disable vue/multi-word-component-names -->
+
 <template>
   <v-container class="calendario">
     <h3 class="calendario__titulo-eventos">Selecciona una fecha para ver sus eventos</h3>
@@ -123,12 +123,7 @@ const formatearFecha = (fecha: Date | string) => {
 @import "@/assets/styles/_mixins.scss";
 
 .calendario__titulo-eventos {
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  color: $color-darkGreen;
-  font-size: 1.8rem;
-  font-family: $first-font;
-  text-align: center;
+  @include titulo-evento
 }
 
 .calendario__fila {
@@ -137,8 +132,7 @@ const formatearFecha = (fecha: Date | string) => {
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5.8rem; // 👈 esto alinea con el carrusel (ajusta si tu carrusel usa otro valor)
-
+  padding: 0 5.8rem;
   @include desktop {
     flex-direction: row;
     justify-content: space-between;

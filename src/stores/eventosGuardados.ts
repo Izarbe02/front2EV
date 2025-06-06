@@ -54,6 +54,8 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
     async function cargarEventosGuardados(idUsuario: number) {
         try {
             const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/EventosGuardados/${idUsuario}`);
+            console.log(response);
+
             if (!response.ok) throw new Error("Error al obtener eventos guardados");
 
             const data = await response.json();

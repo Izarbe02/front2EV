@@ -1,9 +1,9 @@
-<!-- eslint-disable vue/multi-word-component-names -->
+
 <template>
   <section class="homepage">
     <div class="homepage__container">
 
-      <!-- Tarjetas de proximos eventos -->
+
       <div class="homepage__events">
         <h2 class="homepage__title">Próximos Eventos</h2>
         <div class="homepage__cards">
@@ -39,13 +39,13 @@ import { useEventosStore } from "@/stores/eventos";
 import EventoDto from "@/stores/dtos/evento.dto";
 
 export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
+
   name: "Homepage",
   setup() {
     const store = useEventosStore();
     const events = ref<EventoDto[]>([]);
 
-    // Cargar los proximos eventos al montar el componente
+
     onMounted(async () => {
       await store.proximosEventos();
       events.value = store.eventosProximos;
@@ -92,6 +92,7 @@ export default defineComponent({
     @include titulo-evento;
     text-align: center;
     text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
+    color: white;
   }
 
   &__cards {
@@ -109,7 +110,8 @@ export default defineComponent({
     width: 300px;
     height: 450px;
     margin: 0 auto;
-    background-color: rgb(247, 247, 247);
+    background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -131,14 +133,14 @@ export default defineComponent({
   &__card-title {
     font-family: $first-font;
     font-size: 1.4rem;
-    color: $color-darkgray;
+    color: white;
     padding: 10px;
     text-align: center;
   }
 
   &__card-text {
     font-size: 1.0rem;
-    color: $color-gray;
+    color: white;
     padding: 14px;
     text-align: center;
     flex-grow: 1;

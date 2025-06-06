@@ -39,7 +39,7 @@ import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
 import { useOrganizadoresStore } from '@/stores/organizadores';
 import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
-
+import Swal from 'sweetalert2';
 const usuariosStore = useUsuariosStore();
 const router = useRouter();
 const organizadoresStore = useOrganizadoresStore();
@@ -76,7 +76,12 @@ const loginComoOrganizador = async () => {
     router.push("/");
   } else {
     organizadoresStore.logoutOrganizador();
-    alert("Este usuario no tiene permisos de organizador.");
+    await Swal.fire({
+      icon: 'error',
+      title: 'Acceso denegado',
+      text: 'Este usuario no tiene permisos de organizador.',
+      confirmButtonColor: '#d40202' // tu $color-red
+    });
   }
 };
 </script>

@@ -44,12 +44,6 @@ onMounted(() => {
           <p class="feed__fecha">📅 {{ new Date(evento.fechaInicio).toLocaleDateString() }}</p>
           <div class="evento-detalle__lugar">
             📍 {{ evento.ubicacion }}
-            <RouterLink
-              :to="`/OrganizadorDetalle?id=${evento.idOrganizador}`"
-              class="evento-detalle__direccion"
-            >
-              {{ evento.fechaFin }}
-            </RouterLink>
           </div>
 
           <button class="feed__boton" @click="router.push(`/EventoDetalle?id=${evento.id}`)">

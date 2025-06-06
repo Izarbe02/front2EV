@@ -111,10 +111,15 @@ onMounted(() => {
 }
 
 .organizador-card {
-  background-color: $color-darkgray;
+ background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+   border: 2px solid #951f1f;
+  border-radius: 8px;
+
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   &__imagen {
     width: 100%;

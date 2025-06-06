@@ -187,7 +187,12 @@ const vistasFiltradas = computed(() =>
       text-decoration: none;
 
       &-out{
-       @include boton-borde-rosa
+       @include boton-borde-rosa;
+
+      &:hover {
+        background-color: $color-red;
+        transform: scale(1.05);
+      }
       }
     }
 

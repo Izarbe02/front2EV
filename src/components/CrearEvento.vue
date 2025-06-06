@@ -66,6 +66,7 @@ import { ref } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 import { onMounted } from "vue";
+import Swal from 'sweetalert2';
 
 const categorias = ref<{ id: number; nombre: string }[]>([]);
 const tematicas = ref<{ id: number; nombre: string }[]>([]);
@@ -117,15 +118,28 @@ function seleccionarArchivo(e: Event) {
 }
 
 async function enviarFormulario() {
-  if (!organizadorLogeado?.id) {
-    alert("Debes iniciar sesión como organizador para crear un evento.");
-    return;
-  }
 
-  if (!file.value) {
-    alert("Debes seleccionar una imagen.");
-    return;
-  }
+
+if (!organizadorLogeado?.id) {
+  await Swal.fire({
+    icon: 'warning',
+    title: 'Iniciar sesión',
+    text: 'Debes iniciar sesión como organizador para crear un evento.',
+    confirmButtonColor: '#d40202'
+  });
+  return;
+}
+
+if (!file.value) {
+  await Swal.fire({
+    icon: 'warning',
+    title: 'Imagen requerida',
+    text: 'Debes seleccionar una imagen.',
+    confirmButtonColor: '#d40202'
+  });
+  return;
+}
+
 
   const formData = new FormData();
   formData.append("nombre", form.value.nombre);
@@ -145,7 +159,12 @@ async function enviarFormulario() {
   formData.append("enlace", form.value.enlace);
   try {
     await crearEvento(formData);
-    alert("Evento creado correctamente");
+    await Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: 'Evento creado correctamente',
+      confirmButtonColor: '#1d9773' // o tu $color-darkGreen
+    });
 
   form.value = {
     nombre: "",
@@ -161,7 +180,11 @@ async function enviarFormulario() {
     file.value = null;
     previewUrl.value = null;
   } catch (err) {
-    alert("Error al crear el evento: " + err);
+    await Swal.fire({
+      icon: 'error',
+      title: 'Error al crear el evento',
+      confirmButtonColor: '#d40202'
+    });
   }
 }
 </script>

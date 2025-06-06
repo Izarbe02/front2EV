@@ -88,7 +88,6 @@ const mostrarPassword = ref(false);
 const file = ref<File | null>(null);
 const previewUrl = ref<string | null>(null);
 
-// Formulario inicial con los datos del organizador
 const form = reactive({
   username: 'string',
   nombre: '',
@@ -99,7 +98,6 @@ const form = reactive({
   password: ''
 });
 
-// Cargar datos al montar
 onMounted(() => {
   if (organizador.value) {
     form.nombre = organizador.value.nombre;
