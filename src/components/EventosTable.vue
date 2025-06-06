@@ -7,60 +7,86 @@
         {{ mostrarCrear ? 'Cerrar creación' : 'Crear nuevo evento' }}
       </button>
       <CrearEvento v-if="mostrarCrear" @close="mostrarCrear = false" />
-
     </div>
 
-    <table class="contenido__tabla">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Ubicación</th>
-          <th>Fecha Inicio</th>
-          <th>Fecha Fin</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="eventosFiltrados.length === 0">
-          <td colspan="7">No tienes eventos disponibles</td>
-        </tr>
+    <div class="contenido__tabla-wrapper">
+      <table class="contenido__tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Ubicación</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="eventosFiltrados.length === 0">
+            <td colspan="7">No tienes eventos disponibles</td>
+          </tr>
+          <tr v-for="evento in eventosFiltrados" :key="evento.id">
+            <td>{{ evento.id }}</td>
+            <td>{{ evento.nombre }}</td>
+            <td>{{ evento.descripcion }}</td>
+            <td>{{ evento.ubicacion }}</td>
+            <td>{{ formatearFecha(evento.fechaInicio) }}</td>
+            <td>{{ formatearFecha(evento.fechaFin) }}</td>
+            <td>
+              <button class="contenido__btn contenido__btn--editar" @click="editarEvento(evento)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="contenido__btn contenido__btn--borrar" @click="borrarEvento(evento.id)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <tr v-for="evento in eventosFiltrados" :key="evento.id">
-          <td>{{ evento.id }}</td>
-          <td>{{ evento.nombre }}</td>
-          <td>{{ evento.descripcion }}</td>
-          <td>{{ evento.ubicacion }}</td>
-          <td>{{ formatearFecha(evento.fechaInicio) }}</td>
-          <td>{{ formatearFecha(evento.fechaFin) }}</td>
-          <td>
-            <button class="contenido__btn contenido__btn--editar" @click="editarEvento(evento)">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button class="contenido__btn contenido__btn--borrar" @click="borrarEvento(evento.id)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="eventoEditado" class="modal-overlay">
+      <div class="form-tarjeta">
+        <button class="form-tarjeta__cerrar" @click="cerrarFormularioEdicion">✕</button>
+        <h2 class="form-tarjeta__titulo">Editar evento</h2>
 
-    <div v-if="eventoEditado" class="contenido__modal">
-      <h3 class="contenido__modal-titulo">Editar Evento</h3>
-      <div class="contenido__modal-campo">
-        <span class="contenido__modal-label">Nombre:</span>
-        <span>{{ eventoEditado.nombre }}</span>
+        <div class="form-tarjeta__preview">
+          <img v-if="previewUrl" :src="previewUrl" class="form-tarjeta__imagen" />
+          <img v-else-if="formEdit.enlace" :src="formEdit.enlace" class="form-tarjeta__imagen" />
+          <div v-else class="form-tarjeta__placeholder">Imagen del evento</div>
+        </div>
+
+        <form @submit.prevent="guardarCambiosEvento" class="form-tarjeta__form">
+          <label class="form-tarjeta__label">Título del evento</label>
+          <input v-model="formEdit.nombre" type="text" required class="form-tarjeta__input" />
+
+          <label class="form-tarjeta__label">Descripción</label>
+          <textarea v-model="formEdit.descripcion" required class="form-tarjeta__textarea"></textarea>
+
+          <label class="form-tarjeta__label">Ubicación</label>
+          <input v-model="formEdit.ubicacion" type="text" required class="form-tarjeta__input" />
+
+          <div class="form-tarjeta__fechas">
+            <div class="form-tarjeta__grupo">
+              <label class="form-tarjeta__label">Fecha de inicio</label>
+              <input v-model="formEdit.fechaInicio" type="datetime-local" required class="form-tarjeta__input" />
+            </div>
+            <div class="form-tarjeta__grupo">
+              <label class="form-tarjeta__label">Fecha de fin</label>
+              <input v-model="formEdit.fechaFin" type="datetime-local" required class="form-tarjeta__input" />
+            </div>
+          </div>
+
+          <label class="form-tarjeta__label">Imagen</label>
+          <input type="file" @change="seleccionarNuevaImagen" accept="image/*" class="form-tarjeta__input" />
+
+          <button type="submit" class="form-tarjeta__boton">Guardar cambios</button>
+        </form>
       </div>
-      <div class="contenido__modal-campo">
-        <span class="contenido__modal-label">Ubicación:</span>
-        <span>{{ eventoEditado.ubicacion }}</span>
-      </div>
-      <button class="contenido__modal-boton" @click="cerrarEdicion">Cerrar</button>
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ref, computed, onMounted, watchEffect, defineAsyncComponent } from "vue";
 import { useEventosStore } from "@/stores/eventos";
@@ -72,7 +98,7 @@ const CrearEvento = defineAsyncComponent(() => import("@/components/CrearEvento.
 
 
 const store = useEventosStore();
-const { eventos, findAll, deleteEvento } = store;
+const { eventos, findAll, deleteEvento, updateEventoConImagen } = store;
 
 const usuariosStore = useUsuariosStore();
 const organizadoresStore = useOrganizadoresStore();
@@ -86,14 +112,10 @@ const rolActual = computed(() =>
 );
 
 const eventosFiltrados = computed(() => {
-  const lista = eventos ?? [];
   const rol = rolActual.value;
   const idOrg = idOrganizadorLogeado.value;
-
-  if (rol === 1) return lista;
-  if (rol === 2 && idOrg !== null) {
-    return lista.filter(e => e.idOrganizador === idOrg);
-  }
+  if (rol === 1) return eventos;
+  if (rol === 2 && idOrg !== null) return eventos.filter(e => e.idOrganizador === idOrg);
   return [];
 });
 
@@ -112,21 +134,73 @@ watchEffect(() => {
   }
 });
 
+const previewUrl = ref<string | null>(null);
+const fileEdit = ref<File | null>(null);
+const formEdit = ref({
+  nombre: "",
+  descripcion: "",
+  ubicacion: "",
+  fechaInicio: "",
+  fechaFin: "",
+  enlace: "",
+});
+
 const editarEvento = (evento: EventoDto) => {
   eventoEditado.value = evento;
+  fileEdit.value = null;
+  previewUrl.value = null;
+
+  formEdit.value = {
+    nombre: evento.nombre,
+    descripcion: evento.descripcion,
+    ubicacion: evento.ubicacion,
+    fechaInicio: new Date(evento.fechaInicio).toISOString().slice(0, 16),
+    fechaFin: new Date(evento.fechaFin).toISOString().slice(0, 16),
+    enlace: evento.enlace ?? "",
+  };
 };
 
-const cerrarEdicion = () => {
+const seleccionarNuevaImagen = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files?.[0]) {
+    fileEdit.value = target.files[0];
+    previewUrl.value = URL.createObjectURL(fileEdit.value);
+  }
+};
+
+const guardarCambiosEvento = async () => {
+  if (!eventoEditado.value) return;
+
+  const formData = new FormData();
+  formData.append("idOrganizador", String(idOrganizadorLogeado.value));
+  formData.append("nombre", formEdit.value.nombre);
+  formData.append("descripcion", formEdit.value.descripcion);
+  formData.append("ubicacion", formEdit.value.ubicacion);
+  formData.append("fechaInicio", new Date(formEdit.value.fechaInicio).toISOString());
+  formData.append("fechaFin", new Date(formEdit.value.fechaFin).toISOString());
+  formData.append("enlace", formEdit.value.enlace || "");
+
+  if (fileEdit.value) {
+    formData.append("file", fileEdit.value);
+  }
+
+  await updateEventoConImagen(eventoEditado.value.id, formData);
+  await findAll();
+  cerrarFormularioEdicion();
+};
+
+const cerrarFormularioEdicion = () => {
   eventoEditado.value = null;
-};
-
-const formatearFecha = (fecha: Date | string): string => {
-  const fechaObjeto = fecha instanceof Date ? fecha : new Date(fecha);
-  return fechaObjeto.toLocaleDateString("es-ES", {
-    weekday: "long",
-    day: "2-digit",
-    month: "short",
-  });
+  formEdit.value = {
+    nombre: "",
+    descripcion: "",
+    ubicacion: "",
+    fechaInicio: "",
+    fechaFin: "",
+    enlace: "",
+  };
+  fileEdit.value = null;
+  previewUrl.value = null;
 };
 
 const borrarEvento = async (id: number) => {
@@ -134,7 +208,17 @@ const borrarEvento = async (id: number) => {
     await deleteEvento(id);
   }
 };
+
+const formatearFecha = (fecha: Date | string): string => {
+  const f = typeof fecha === "string" ? new Date(fecha) : fecha;
+  return f.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+  });
+};
 </script>
+
 
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
@@ -185,17 +269,21 @@ const borrarEvento = async (id: number) => {
     }
   }
 
-  &__tabla {
+  &__tabla-wrapper {
     width: 100%;
     overflow-x: auto;
+
+    @media (min-width: 768px) {
+      overflow-x: visible;
+    }
+  }
+
+  &__tabla {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
     color: white;
     font-size: 0.9rem;
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-    }
 
     th,
     td {
@@ -244,60 +332,158 @@ const borrarEvento = async (id: number) => {
       }
     }
   }
+}
 
-  &__modal {
-    margin-top: 2rem;
-    background: $color-whitered;
-    padding: 1.5rem;
-    border-radius: 10px;
-    color: $color-black;
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  @media (min-width: 768px) {
+    .form-tarjeta {
+      padding: 2rem;
+      max-width: 600px;
+    }
+  }
+}
+
+.form-tarjeta {
+  background: $color-darkgray;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  color: white;
+  font-family: $first-font;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  max-height: 95vh;
+  overflow-y: auto;
+  position: relative;
+
+  &__cerrar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+      color: $color-lightred;
+    }
+  }
+
+  &__titulo {
+    text-align: center;
+    font-size: 1.9rem;
+    color: $color-red;
+    margin-bottom: 1rem;
+  }
+
+  &__preview {
     width: 100%;
-    max-width: 500px;
-    margin-inline: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    height: 200px;
+    background: $color-black;
+    border: 2px dashed $color-lightgray;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__imagen {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  &__placeholder {
+    color: $color-lightgray;
+    font-style: italic;
+  }
+
+  &__form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
 
-    &-titulo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: $color-red;
-      text-align: center;
-    }
+  &__label {
+    font-weight: bold;
+    color: $color-lightgray;
+    font-size: 1.05rem;
+  }
 
-    &-campo {
-      display: flex;
+  &__input,
+  &__textarea {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 5px;
+    background-color: $color-lightgray;
+    color: white;
+    font-family: $first-font;
+    font-size: 1.05rem;
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  &__fechas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
       justify-content: space-between;
-      font-size: 1.1rem;
-      flex-wrap: wrap;
-
-      span {
-        word-break: break-word;
-      }
     }
+  }
 
-    &-label {
-      font-weight: bold;
-      color: $color-darkgray;
-      margin-right: 0.5rem;
-    }
+  &__grupo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 
-    &-boton {
-      align-self: center;
-      background-color: $color-red;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      font-family: $first-font;
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out;
+  &__boton {
+    background-color: $color-red;
+    color: white;
+    font-weight: bold;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    transition: background-color 0.3s;
 
-      &:hover {
-        background-color: $color-lightred;
-      }
+    &:hover {
+      background-color: $color-lightred;
     }
   }
 }
@@ -313,17 +499,22 @@ const borrarEvento = async (id: number) => {
     &__tabla {
       font-size: 1rem;
     }
+  }
 
-    &__modal {
-      padding: 2rem;
+  .form-tarjeta {
+    padding: 2rem;
 
-      &-titulo {
-        font-size: 1.8rem;
-      }
+    &__titulo {
+      font-size: 1.8rem;
+    }
 
-      &-campo {
-        font-size: 1.2rem;
-      }
+    &__label {
+      font-size: 1.1rem;
+    }
+
+    &__input,
+    &__textarea {
+      font-size: 1.1rem;
     }
   }
 }

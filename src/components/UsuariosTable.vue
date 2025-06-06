@@ -4,39 +4,41 @@
 
     <button class="btn-crear" @click="abrirFormularioNuevo">Crear Usuario</button>
 
-    <table class="contenido__tabla">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Contraseña</th>
-          <th>Ubicación</th>
-          <th>IdRol</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="usuario in usuarios" :key="usuario.id">
-          <td>{{ usuario.id }}</td>
-          <td>{{ usuario.nombre }}</td>
-          <td>{{ usuario.username }}</td>
-          <td>{{ usuario.email }}</td>
-          <td>{{ usuario.contrasenia }}</td>
-          <td>{{ usuario.ubicacion }}</td>
-          <td>{{ usuario.idRol }}</td>
-          <td>
-            <button class="btn-editar" @click="abrirForm(usuario)">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button class="btn-borrar" @click="borrarUsuario(usuario.id)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="contenido__tabla-wrapper">
+      <table class="contenido__tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Contraseña</th>
+            <th>Ubicación</th>
+            <th>IdRol</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="usuario in usuarios" :key="usuario.id">
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.username }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.contrasenia }}</td>
+            <td>{{ usuario.ubicacion }}</td>
+            <td>{{ usuario.idRol }}</td>
+            <td>
+              <button class="btn-editar" @click="abrirForm(usuario)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="btn-borrar" @click="borrarUsuario(usuario.id)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div v-if="modalVisible" class="modal">
       <div class="modal-contenido">
@@ -178,17 +180,21 @@ const borrarUsuario = async (id: number) => {
     margin-bottom: 1.5rem;
   }
 
-  &__tabla {
+  &__tabla-wrapper {
     width: 100%;
     overflow-x: auto;
+
+    @media (min-width: 768px) {
+      overflow-x: visible;
+    }
+  }
+
+  &__tabla {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
     color: white;
     font-size: 0.95rem;
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-    }
 
     th,
     td {
@@ -205,7 +211,8 @@ const borrarUsuario = async (id: number) => {
   }
 }
 
-.btn-editar, .btn-borrar {
+.btn-editar,
+.btn-borrar {
   background: none;
   border: none;
   cursor: pointer;

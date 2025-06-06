@@ -84,7 +84,7 @@ export const useEventosStore = defineStore("eventos", () => {
     }
 
     // Actualizar un evento
-    async function updateEvento(id: number, eventoActualizado: EventoDto) {
+    async function updateEventoConImagen(id: number, formData: FormData) {
         try {
             const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/evento/${id}`, {
                 method: "PUT",
@@ -92,13 +92,18 @@ export const useEventosStore = defineStore("eventos", () => {
                 body: JSON.stringify(eventoActualizado),
             });
 
-            if (!response.ok) throw new Error("Error al actualizar evento");
+            if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error("Error al actualizar evento: " + errorText);
+            }
 
             await findAll();
         } catch (error: any) {
+
             console.error("Error al actualizar evento:", error);
         }
-    }
+        }
+
 
     // Obtener un evento por ID
     async function filtroEvento(id: number) {
@@ -237,7 +242,7 @@ export const useEventosStore = defineStore("eventos", () => {
         findAll,
         crearEvento,
         deleteEvento,
-        updateEvento,
+        updateEventoConImagen,
         filtroEvento,
         getEventoPorOrganizador,
         getEventoPorCategoria,
