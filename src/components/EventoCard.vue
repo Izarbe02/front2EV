@@ -115,7 +115,7 @@ const limpiarFiltro = async () => {
       </div>
 
       <div class="evento-container__filtro-botones">
-        <button class="evento-container__boton-filtro" @click="filtrarPorRango">
+        <button class="evento-container__boton-filtro_fecha" @click="filtrarPorRango">
           Filtrar por fecha
         </button>
         <button class="evento-container__boton-filtro" @click="limpiarFiltro">
@@ -295,10 +295,13 @@ margin-left: 10px;
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+      transition: transform 0.2s ease, background-color 0.4s ease;
 
     &:hover {
-      background-color: darken($color-lightred, 10%);
+      background-color: darken(white, 10%);
+
+      transform: scale(1.05);
+      color: $color-lightred;
     }
 
     @media (min-width: 768px) {
@@ -306,6 +309,9 @@ margin-left: 10px;
       padding: 12px 24px;
     }
   }
+&__boton-filtro_fecha {
+  @include boton-blanco;
+}
 
   &__tarjetas {
     margin-top: 25px;

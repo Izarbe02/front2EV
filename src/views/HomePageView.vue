@@ -14,6 +14,7 @@ import HomePage from '@/components/HomePage.vue'
 
 
  <Header/>
+
  <div class="carouselContainer">
     <CarouselHomePage/>
  </div>

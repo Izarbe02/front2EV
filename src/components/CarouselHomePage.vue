@@ -1,4 +1,10 @@
 <template>
+<div class="tituloCont">
+    <h2 class="txto">Difunde tus eventos, encuentra actividades y apoya iniciativas en Zaragoza. </h2><br>
+    <h1 class="txtoB">Cultura, activismo, comunidad</h1>
+ </div>
+
+
   <div class="carousel">
     <v-carousel cycle height="400" hide-delimiters>
       <template v-slot:prev="{ props }">
@@ -29,7 +35,7 @@
             {{ item.text }}
           </div>
 
-          <v-btn 
+          <v-btn
             class="carousel__buttonVerMas"
             color="primary"
             variant="flat"
@@ -62,14 +68,14 @@ const items = ref([
     url: "/aboutus",
     text: "Sobre nosotros",
   }
-  
+
 ]);
 </script>
-
 <style scoped lang="scss">
 @import "@/assets/styles/_variables.scss";
 
 .carousel {
+  position: relative;
   width: 100%;
   max-width: 400px;
   margin-top: 21%;
@@ -77,6 +83,36 @@ const items = ref([
     max-width: 1200px;
     margin-top: 7%;
   }
+}
+
+.tituloCont {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  text-align: center;
+  padding: 0 10px;
+  width: 100%;
+  max-width: 1000px;
+
+  @media (min-width: 768px) {
+    top: 20px;
+  }
+}
+
+.txto {
+  font-family: $first-font;
+  color: rgb(180, 1, 1);
+  margin: 0;
+}
+
+.txtoB {
+  font-family: $titulo;
+  font-weight: bold;
+  color: red;
+  text-shadow: 1px 1px 1px rgba(187, 187, 187, 0.7);
+  margin: 0;
 }
 
 .carousel__item {
@@ -91,12 +127,11 @@ const items = ref([
   object-fit: cover;
 }
 
-
 .carousel__text {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(0, 0, 0, 0.6); 
+  background: rgba(0, 0, 0, 0.6);
   color: $color-red;
   padding: 2px 8px;
   font-size: 180%;
@@ -110,7 +145,6 @@ const items = ref([
     left: 10px;
   }
 }
-
 
 .carousel__buttonVerMas {
   position: absolute;
@@ -130,7 +164,6 @@ const items = ref([
   }
 }
 
-/* --------------------------------------------------------- */
 .carousel__button {
   position: absolute;
   background-color: rgba(0, 0, 0, 0) !important;
@@ -146,18 +179,15 @@ const items = ref([
   transition: all 0.3s ease-in-out;
   box-shadow: none !important;
 }
-/* Botón Anterior */
+
 .carousel__button--prev {
   left: 10px;
 }
 
-/* Botón Siguiente */
 .carousel__button--next {
   right: 10px;
 }
 
-
-/* Efecto hover */
 .carousel__button:hover {
   background-color: rgba(0, 0, 0, 0.918) !important;
   color: $color-lightred !important;

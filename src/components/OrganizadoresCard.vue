@@ -66,7 +66,8 @@ h1 {
 }
 
 .organizador-card {
-  background-color: #272525;
+ background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
   border: 2px solid #292929;
   border-radius: 8px;
   color: #fff;

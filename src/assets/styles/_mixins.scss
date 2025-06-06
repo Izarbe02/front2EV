@@ -42,8 +42,58 @@
     font-family: $titulo;
 }
 
+@mixin boton-blanco {
+    background-color: white;
+    color: $color-red;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+    transition: transform 0.2s ease, background-color 0.4s ease;
+    &:hover {
+        background-color: darken($color-red, 10%);
+        transform: scale(1.05);
+        color: white;
+    }
+    @media (min-width: 768px) {
+        font-size: 1.1rem;
+        padding: 12px 24px;
+    }
+}
+
 @mixin desktop {
     @media (min-width: 1024px) {
         @content;
+    }
+}
+
+@mixin boton-borde-rojo {
+    font-size: 18px;
+    color: $color-red;
+    border: 2px solid $color-red;
+    background: black;
+    text-transform: none;
+    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    &:hover {
+        color: black;
+        transform: scale(1.05);
+        background-color: $color-red;
+    }
+}
+
+@mixin boton-borde-rosa {
+    font-size: 18px;
+    color: $color-lightred;
+    border: 2px solid $color-lightred;
+    background: black;
+    text-transform: none;
+    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    &:hover {
+        color: black;
+        transform: scale(1.05);
+        background-color: $color-lightred;
     }
 }
