@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, ref, computed } from "vue";
+  import { onMounted, ref } from "vue";
 import { useEventosGuardadosStore } from '@/stores/eventosGuardados'
 import { useUsuariosStore } from '@/stores/usuarios'
 import type EventoDto from '@/stores/dtos/evento.dto'
@@ -7,22 +7,23 @@ import type EventoDto from '@/stores/dtos/evento.dto'
 const eventosGuardadosStore = useEventosGuardadosStore()
 const eventos = ref<EventoDto[]>([])
 const store = useUsuariosStore();
-const usuario = computed(() => store.usuarioLogeado);
-console.log(store.usuarioLogeado);
 
 const cargarEventosGuardados = async () => {
-  await eventosGuardadosStore.cargarEventosGuardados(store.usuarioLogeado.id)
-  eventos.value = eventosGuardadosStore.eventosGuardados
-}
+  if (!store.usuarioLogeado) return;
+
+  await eventosGuardadosStore.cargarEventosGuardados(store.usuarioLogeado.id);
+  eventos.value = eventosGuardadosStore.eventosGuardados;
+};
 
 const quitarEvento = async (idEvento: number) => {
-  await eventosGuardadosStore.quitarEvento(store.usuarioLogeado.id, idEvento)
-  await cargarEventosGuardados()
-}
+  if (!store.usuarioLogeado) return;
 
-onMounted(() => {
-  cargarEventosGuardados()
-})
+  await eventosGuardadosStore.quitarEvento(store.usuarioLogeado.id, idEvento);
+  await cargarEventosGuardados();
+};
+onMounted(async () => {
+ cargarEventosGuardados();
+});
 </script>
 
 <template>

@@ -88,7 +88,6 @@ const mostrarPassword = ref(false);
 const file = ref<File | null>(null);
 const previewUrl = ref<string | null>(null);
 
-// Formulario inicial con los datos del organizador
 const form = reactive({
   username: 'string',
   nombre: '',
@@ -99,7 +98,6 @@ const form = reactive({
   password: ''
 });
 
-// Cargar datos al montar
 onMounted(() => {
   if (organizador.value) {
     form.nombre = organizador.value.nombre;
@@ -170,7 +168,8 @@ async function actualizarPerfil() {
     mensaje.value = 'Perfil actualizado correctamente.';
     form.password = '';
     previewUrl.value = null;
-  } catch (error) {
+  } catch (error: any) {
+
     mensaje.value = 'Error al actualizar perfil.';
     hayError.value = true;
     console.error(error);
@@ -203,7 +202,7 @@ async function actualizarPerfil() {
     margin-bottom: 0.5rem;
     font-weight: 700;
   }
-  
+
    &__imagen {
     margin-top: 1rem;
     margin-bottom: 2rem;

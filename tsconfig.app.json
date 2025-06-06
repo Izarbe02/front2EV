@@ -1,15 +1,8 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "!src/components/EventCalendar.vue"],
-  "exclude": ["src/**/__tests__/*"],
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".", 
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "incremental": true,
-    "composite": true,
-    "paths": {
-      "@/*": ["src/*"],
-      "@assets/*": ["src/assets/*"]
-    }
-  }
+    "noImplicitAny": false,
+    "strictNullChecks": true
+  },
+  "include": ["src"]
 }

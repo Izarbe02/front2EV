@@ -13,7 +13,7 @@ export const usePostsStore = defineStore("posts", () => {
   // Obtener todos los posts (GET: api/Post)
   async function findAll() {
     try {
-      const response = await fetch("http://localhost:8888/api/Post");
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Post");
       if (!response.ok) throw new Error("Error al obtener posts");
       const data = await response.json();
       posts.value.splice(0, posts.value.length, ...data);
@@ -26,7 +26,7 @@ export const usePostsStore = defineStore("posts", () => {
   // Obtener un post por ID (GET: api/Post/{id})
   async function getPost(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Post/${id}`);
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Post/${id}`);
       if (!response.ok) throw new Error("Error al obtener el post");
       const data = await response.json();
       currentPost.value = data;
@@ -40,7 +40,7 @@ export const usePostsStore = defineStore("posts", () => {
   // Crear un nuevo post (POST: api/Post)
   async function createPost(post: PostDto) {
     try {
-      const response = await fetch("http://localhost:8888/api/Post", {
+      const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/Post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(post),
@@ -58,7 +58,7 @@ export const usePostsStore = defineStore("posts", () => {
   // Actualizar un post (PUT: api/Post/{id})
   async function updatePost(id: number, updatedPost: PostDto) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Post/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Post/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedPost),
@@ -75,7 +75,7 @@ export const usePostsStore = defineStore("posts", () => {
   // Eliminar un post (DELETE: api/Post/{id})
   async function deletePost(id: number) {
     try {
-      const response = await fetch(`http://localhost:8888/api/Post/${id}`, {
+      const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/Post/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error al eliminar el post");

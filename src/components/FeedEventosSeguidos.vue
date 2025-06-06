@@ -11,11 +11,11 @@ const router = useRouter();
 
 const cargarEventosRecientesSeguidos = async (idUsuario: number) => {
   try {
-    const res = await fetch(`http://localhost:8888/api/UsuarioOrganizador/eventos-recientes/${idUsuario}`);
+    const res = await fetch(`https://zaragozaconectaapi.retocsv.es/api/UsuarioOrganizador/eventos-recientes/${idUsuario}`);
     if (res.ok) {
       eventosRecientesSeguidos.value = await res.json();
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error al cargar eventos recientes seguidos:", error);
   }
 };
@@ -44,12 +44,6 @@ onMounted(() => {
           <p class="feed__fecha">📅 {{ new Date(evento.fechaInicio).toLocaleDateString() }}</p>
           <div class="evento-detalle__lugar">
             📍 {{ evento.ubicacion }}
-            <RouterLink
-              :to="`/OrganizadorDetalle?id=${evento.orgId}`"
-              class="evento-detalle__direccion"
-            >
-              {{ evento.nombreOrg }}
-            </RouterLink>
           </div>
 
           <button class="feed__boton" @click="router.push(`/EventoDetalle?id=${evento.id}`)">

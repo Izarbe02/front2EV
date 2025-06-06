@@ -5,7 +5,6 @@ import { useEventosStore } from "@/stores/eventos";
 const eventosStore = useEventosStore();
 const busqueda = ref("");
 
-// Función para buscar cuando se presiona el botón
 const buscar = () => {
   eventosStore.buscadorEvento(busqueda.value);
 };

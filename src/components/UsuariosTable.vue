@@ -75,7 +75,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
 import type UsuarioDto from '@/stores/dtos/usuario.dto';
-
+import Swal from 'sweetalert2';
 const modalVisible = ref(false);
 const esModoEdicion = ref(false);
 const store = useUsuariosStore();
@@ -128,7 +128,12 @@ const guardarCambios = async () => {
 
   usuarioEditado.value.idRol = Number(usuarioEditado.value.idRol);
   if (isNaN(usuarioEditado.value.idRol) || usuarioEditado.value.idRol <= 0) {
-    alert("El rol seleccionado no es válido.");
+    await Swal.fire({
+      icon: 'error',
+      title: 'Rol inválido',
+      text: 'El rol seleccionado no es válido.',
+      confirmButtonColor: '#d40202' // $color-red
+    });
     return;
   }
 

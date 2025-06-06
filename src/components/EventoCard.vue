@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useEventosStore } from "@/stores/eventos";
 import type EventoDto from "@/stores/dtos/evento.dto";
 import { RouterLink } from "vue-router";
+import Swal from 'sweetalert2';
 
 const eventosStore = useEventosStore();
 const mostrarAcabados = ref(false);
@@ -20,10 +21,10 @@ onMounted(async () => {
 
 const cargarCategorias = async () => {
   try {
-    const response = await fetch("http://localhost:8888/api/CategoriaEvento");
+    const response = await fetch("https://zaragozaconectaapi.retocsv.es/api/CategoriaEvento");
     if (!response.ok) throw new Error("Error al obtener categorías");
     categorias.value = await response.json();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error cargando categorías:", error);
   }
 };
@@ -49,7 +50,12 @@ const formatearFecha = (fecha: Date | string) => {
 
 const filtrarPorRango = async () => {
   if (!fechaInicio.value || !fechaFin.value) {
-    alert("Debes seleccionar ambas fechas.");
+    await Swal.fire({
+      icon: 'warning',
+      title: 'Fechas requeridas',
+      text: 'Debes seleccionar ambas fechas.',
+      confirmButtonColor: '#d40202' // tu $color-red
+    });
     return;
   }
 
@@ -60,7 +66,12 @@ const filtrarPorRango = async () => {
   fin.setHours(23, 59, 59, 999);
 
   if (inicio > fin) {
-    alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+    await Swal.fire({
+      icon: 'warning',
+      title: 'Fechas inválidas',
+      text: 'La fecha de inicio no puede ser posterior a la fecha de fin.',
+      confirmButtonColor: '#d40202' // tu $color-red
+    });
     return;
   }
 
@@ -115,7 +126,7 @@ const limpiarFiltro = async () => {
       </div>
 
       <div class="evento-container__filtro-botones">
-        <button class="evento-container__boton-filtro" @click="filtrarPorRango">
+        <button class="evento-container__boton-filtro_fecha" @click="filtrarPorRango">
           Filtrar por fecha
         </button>
         <button class="evento-container__boton-filtro" @click="limpiarFiltro">
@@ -295,10 +306,13 @@ margin-left: 10px;
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+      transition: transform 0.2s ease, background-color 0.4s ease;
 
     &:hover {
-      background-color: darken($color-lightred, 10%);
+      background-color: darken(white, 10%);
+
+      transform: scale(1.05);
+      color: $color-lightred;
     }
 
     @media (min-width: 768px) {
@@ -306,6 +320,9 @@ margin-left: 10px;
       padding: 12px 24px;
     }
   }
+&__boton-filtro_fecha {
+  @include boton-blanco;
+}
 
   &__tarjetas {
     margin-top: 25px;

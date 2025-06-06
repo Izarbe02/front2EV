@@ -4,13 +4,13 @@
 <template>
   <v-footer class="footer">
     <v-container class="footer__container">
-      <!-- Logo y copyright -->
+
       <div class="footer__section footer__section--top">
         <v-img src="/logo.png" alt="Logo" class="footer__logo" contain></v-img>
         <span class="footer__text">&copy; 2025 Mi Empresa. Todos los derechos reservados.</span>
       </div>
 
-      <!-- Enlaces -->
+
       <div class="footer__section footer__section--middle">
         <v-row justify="center" class="footer__links">
           <v-col cols="auto">
@@ -28,7 +28,6 @@
         </v-row>
       </div>
 
-      <!-- Redes sociales -->
       <div class="footer__section footer__section--bottom">
         <v-row justify="center" class="footer__socials">
           <v-col cols="auto">
@@ -59,7 +58,7 @@
 @import "@/assets/styles/_mixins.scss";
 
 .footer {
-  background: $color-gray;
+  background:rgb(37, 36, 36);
   padding: 16px 0;
   display: flex;
   width: 100%;
@@ -98,17 +97,7 @@
   }
 
   &__link {
-    font-size: 18px;
-    color: $color-lightred;
-    background: $color-lightgray;
-    text-transform: none;
-    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
-
-    &:hover {
-      color: $color-whitered;
-      transform: scale(1.05);
-      background-color: $color-red;
-    }
+  @include boton-borde-rojo;
   }
 
   &__social-button {

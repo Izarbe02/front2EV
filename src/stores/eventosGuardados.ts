@@ -10,14 +10,14 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
     async function guardarEvento(idUsuario: number, idEvento: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/EventosGuardados/guardar?idUsuario=${idUsuario}&idEvento=${idEvento}`, {
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/EventosGuardados/guardar?idUsuario=${idUsuario}&idEvento=${idEvento}`, {
                 method: "POST"
             });
 
             if (!response.ok) throw new Error("Error al guardar evento");
 
             successMessage.value = "Evento guardado correctamente";
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             errorMessage.value = "No se pudo guardar el evento";
         }
@@ -25,14 +25,14 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
     async function quitarEvento(idUsuario: number, idEvento: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/EventosGuardados/quitar?idUsuario=${idUsuario}&idEvento=${idEvento}`, {
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/EventosGuardados/quitar?idUsuario=${idUsuario}&idEvento=${idEvento}`, {
                 method: "DELETE"
             });
 
             if (!response.ok) throw new Error("Error al quitar evento");
 
             successMessage.value = "Evento quitado de favoritos";
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             errorMessage.value = "No se pudo quitar el evento";
         }
@@ -40,12 +40,12 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
     async function comprobarEventoGuardado(idUsuario: number, idEvento: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/EventosGuardados/existe?idUsuario=${idUsuario}&idEvento=${idEvento}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/EventosGuardados/existe?idUsuario=${idUsuario}&idEvento=${idEvento}`);
             if (!response.ok) throw new Error("Error al comprobar evento");
 
             const result = await response.json();
             estaGuardado.value = result;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             estaGuardado.value = false;
         }
@@ -53,12 +53,14 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
     async function cargarEventosGuardados(idUsuario: number) {
         try {
-            const response = await fetch(`http://localhost:8888/api/EventosGuardados/${idUsuario}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/EventosGuardados/${idUsuario}`);
+            console.log(response);
+
             if (!response.ok) throw new Error("Error al obtener eventos guardados");
 
             const data = await response.json();
             eventosGuardados.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             eventosGuardados.value = [];
         }
@@ -66,12 +68,12 @@ export const useEventosGuardadosStore = defineStore("eventosGuardados", () => {
 
     async function cargarEventosGuardadosOrdenados(idUsuario: number, criterio: string) {
         try {
-            const response = await fetch(`http://localhost:8888/api/EventosGuardados/${idUsuario}/ordenados?criterio=${criterio}`);
+            const response = await fetch(`https://zaragozaconectaapi.retocsv.es/api/EventosGuardados/${idUsuario}/ordenados?criterio=${criterio}`);
             if (!response.ok) throw new Error("Error al obtener eventos ordenados");
 
             const data = await response.json();
             eventosGuardados.value = data;
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             eventosGuardados.value = [];
         }

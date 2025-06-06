@@ -6,8 +6,6 @@ import { useOrganizadoresStore } from "@/stores/organizadores";
 const store = useOrganizadoresStore();
 const { organizadores, findAll } = store;
 
-
-// Cargar productos al montar el componente
 onMounted(() => {
   findAll();
 });
@@ -24,7 +22,11 @@ onMounted(() => {
           <p class="organizador-card__titulo">{{ organizador.nombre }}</p>
 
           <div class="organizador-card__info">
-            <span class="organizador-card__localizacion">{{ organizador.ubicacion }}</span>
+
+            <span class="organizador-card__localizacion">
+              {{ organizador.ubicacion }}
+            </span>
+
           </div>
           <RouterLink :to="`/OrganizadorDetalle?id=${organizador.id}`" class="organizador-card__boton">
               Saber más
@@ -74,29 +76,29 @@ onMounted(() => {
 }
 
 .organizador-card {
-  background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+ background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
   background-size: cover;
-  border: 2px solid $color-gray;
+  border: 2px solid #292929;
+
   border-radius: 8px;
   color: #fff;
   width: 100%;
   max-width: 430px;
   display: flex;
   flex-direction: column;
+  border: 2px solid #3b0000;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 15px rgba(92, 92, 92, 0.7);
   }
-
   &__imagen {
     width: 100%;
     height: 250px;
     object-fit: cover;
-    border-radius: 8px 8px 0 0;
-  }
 
+  }
   &__contenido {
     padding: 1rem 1.5rem 2rem 1.5rem;
     display: flex;
@@ -104,7 +106,6 @@ onMounted(() => {
     flex-grow: 1;
     justify-content: space-between;
   }
-
   &__titulo {
     font-family: $first-font;
     font-size: 2rem;

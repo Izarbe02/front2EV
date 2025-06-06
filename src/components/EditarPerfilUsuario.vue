@@ -10,72 +10,72 @@
         <div class="perfil__campo">
           <label for="username" class="perfil__label">Username</label>
           <div class="perfil__input-container">
-            <input 
-              v-model="form.username" 
-              id="username" 
-              class="perfil__input" 
-              type="text" 
-              placeholder="Tu nombre de usuario" 
-              required 
+            <input
+              v-model="form.username"
+              id="username"
+              class="perfil__input"
+              type="text"
+              placeholder="Tu nombre de usuario"
+              required
             />
             <span class="perfil__input-icon">@</span>
           </div>
         </div>
-  
+
         <div class="perfil__campo">
           <label for="nombre" class="perfil__label">Nombre</label>
           <div class="perfil__input-container">
-            <input 
-              v-model="form.nombre" 
-              id="nombre" 
-              class="perfil__input" 
-              type="text" 
-              placeholder="Tu nombre completo" 
-              required 
+            <input
+              v-model="form.nombre"
+              id="nombre"
+              class="perfil__input"
+              type="text"
+              placeholder="Tu nombre completo"
+              required
             />
           </div>
         </div>
-  
+
         <div class="perfil__campo perfil__campo--full">
           <label for="email" class="perfil__label">Email</label>
           <div class="perfil__input-container">
-            <input 
-              v-model="form.email" 
-              id="email" 
-              class="perfil__input" 
-              type="email" 
-              placeholder="ejemplo@correo.com" 
-              required 
+            <input
+              v-model="form.email"
+              id="email"
+              class="perfil__input"
+              type="email"
+              placeholder="ejemplo@correo.com"
+              required
             />
           </div>
         </div>
-  
+
         <div class="perfil__campo">
           <label for="ubicacion" class="perfil__label">Ubicación</label>
           <div class="perfil__input-container">
-            <input 
-              v-model="form.ubicacion" 
-              id="ubicacion" 
-              class="perfil__input" 
-              type="text" 
-              placeholder="Ciudad, País" 
+            <input
+              v-model="form.ubicacion"
+              id="ubicacion"
+              class="perfil__input"
+              type="text"
+              placeholder="Ciudad, País"
             />
           </div>
         </div>
-  
+
         <div class="perfil__campo">
           <label for="password" class="perfil__label">Nueva contraseña</label>
           <div class="perfil__input-container">
-            <input 
-              v-model="form.password" 
-              id="password" 
-              class="perfil__input" 
-              type="password" 
-              placeholder="" 
+            <input
+              v-model="form.password"
+              id="password"
+              class="perfil__input"
+              type="password"
+              placeholder=""
             />
-            <button 
-              type="button" 
-              class="perfil__toggle-password" 
+            <button
+              type="button"
+              class="perfil__toggle-password"
               @click="togglePasswordVisibility"
             >
               {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
@@ -93,7 +93,7 @@
         </button>
       </div>
     </form>
-  
+
     <transition name="fade">
       <div v-if="mensaje" :class="['perfil__mensaje', {'perfil__mensaje--error': hayError}]">
         {{ mensaje }}
@@ -138,25 +138,24 @@ async function actualizarPerfil() {
   hayError.value = false;
   mensaje.value = '';
 
-  // Generar nueva clase usuario completa
+
   const usuarioActualizado = {
     ...usuario,
     username: form.username,
     nombre: form.nombre,
     email: form.email,
     ubicacion: form.ubicacion,
-    password: form.password.trim() !== '' ? form.password : usuario.password
+    password: form.password.trim() !== '' ? form.password : usuario.contrasenia
   };
 
   try {
     await store.updateUsuario(usuario.id, usuarioActualizado);
 
     mensaje.value = 'Perfil actualizado correctamente.';
-    form.password = ''; 
+    form.password = '';
 
-
-    store.usuarioLogeado = { ...usuarioActualizado, password: undefined };
-  } catch (error) {
+store.usuarioLogeado = { ...usuarioActualizado, contrasenia: usuario.contrasenia };
+  } catch (error: any) {
     console.error(error);
     mensaje.value = 'Hubo un error al actualizar el perfil.';
     hayError.value = true;
@@ -171,7 +170,7 @@ async function actualizarPerfil() {
 @import "@/assets/styles/_variables.scss";
 
 .perfil {
-    
+
   padding: 2rem;
   font-family: $first-font;
   max-width: 800px;
@@ -198,7 +197,7 @@ async function actualizarPerfil() {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    
+
     @media (min-width: 576px) {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -207,7 +206,7 @@ async function actualizarPerfil() {
   &__campo {
     display: flex;
     flex-direction: column;
-    
+
     &--full {
       @media (min-width: 576px) {
         grid-column: span 2;
@@ -237,14 +236,14 @@ async function actualizarPerfil() {
     background-color:white;
     color: white;
     transition: all 0.3s ease;
-    
+
     &:focus {
       outline: none;
       border-color: $color-red;
       background-color: rgba(white, 0.1);
       box-shadow: 0 0 0 3px rgba($color-red, 0.2);
     }
-    
+
     &::placeholder {
       color: rgba($color-lightgray, 0.5);
     }
@@ -275,7 +274,7 @@ async function actualizarPerfil() {
     font-size: 0.8rem;
     cursor: pointer;
     padding: 2px 6px;
-    
+
     &:hover {
       color: white;
     }
@@ -286,7 +285,7 @@ async function actualizarPerfil() {
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
-    
+
     @media (max-width: 576px) {
       flex-direction: column;
     }
@@ -305,30 +304,30 @@ async function actualizarPerfil() {
     justify-content: center;
     gap: 0.5rem;
     min-width: 150px;
-    
+
     @media (max-width: 576px) {
       width: 100%;
     }
-    
+
     &--primario {
       background-color: $color-red;
       color: white;
-      
+
       &:hover {
         background-color: $color-lightred;
         transform: translateY(-2px);
       }
-      
+
       &:active {
         transform: translateY(0);
       }
     }
-    
+
     &--secundario {
       background-color: transparent;
       border: 1px solid $color-lightgray;
       color: $color-lightgray;
-      
+
       &:hover {
         background-color: rgba(white, 0.05);
         color: white;
@@ -357,7 +356,7 @@ async function actualizarPerfil() {
     background-color: rgba($color-green, 0.2);
     color: $color-green;
     text-align: center;
-    
+
     &--error {
       background-color: rgba($color-red, 0.2);
       color: $color-red;

@@ -1,53 +1,46 @@
+<!-- src/components/Formulogin.vue -->
 <template>
-  <v-container class="login">
-    <v-sheet class="login__sheet" elevation="8">
-      <h2 class="login__title">Ingresar</h2>
-      <p class="login__subtitle">.</p>
+  <v-form class="form-login">
+    <v-text-field
+      v-model="username"
+      :rules="usernameRules"
+      label="Username o Email"
+      class="form-login__input"
+    ></v-text-field>
 
-      <v-form fast-fail class="login__form">
-        <v-text-field
-          v-model="username"
-          :rules="usernameRules"
-          label="Username o Email"
-          class="login__input"
-        ></v-text-field>
+    <v-text-field
+      v-model="contrasenia"
+      :rules="contraseniaRules"
+      label="Contraseña"
+      type="password"
+      class="form-login__input"
+    ></v-text-field>
 
-        <v-text-field
-          v-model="contrasenia"
-          :rules="contraseniaRules"
-          label="Contraseña"
-          type="password"
-          class="login__input"
-        ></v-text-field>
+    <a href="#" class="form-login__forgot-password">¿OLVIDASTE LA CONTRASEÑA?</a>
+    <RouterLink to="/register" class="form-login__register">¿NO ESTÁS REGISTRADO/A?</RouterLink>
 
-        <a href="#" class="login__forgot-password">¿OLVIDASTE LA CONTRASEÑA?</a>
-        <RouterLink to="/register" class="login__register">¿NO ESTÁS REGISTRADO/A?</RouterLink>
+    <v-btn class="form-login__button" block color="red" @click="loginUser">
+      Ingresar
+    </v-btn>
 
-        <v-btn class="login__button" block color="red" @click="loginUser">
-          Ingresar
-        </v-btn>
+    <v-btn class="form-login__button_organizador" block @click="loginComoOrganizador">
+      Ingresar como organizador
+    </v-btn>
 
-        <v-btn class="login__button_organizador" block @click="loginComoOrganizador">
-          Ingresar como organizador
-        </v-btn>
-
-        <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
+    <v-alert v-if="usuariosStore.errorMessage" type="error" class="form-login__error">
       Credenciales incorrectas
-        </v-alert>
-      </v-form>
-    </v-sheet>
-  </v-container>
+    </v-alert>
+  </v-form>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsuariosStore } from '@/stores/usuarios';
 import { useOrganizadoresStore } from '@/stores/organizadores';
-
 import type { UsuarioLoginDto } from '@/stores/dtos/usuarioLogin.dto';
-
-const usuariosStore = useUsuariosStore(); 
+import Swal from 'sweetalert2';
+const usuariosStore = useUsuariosStore();
 const router = useRouter();
 const organizadoresStore = useOrganizadoresStore();
 
@@ -78,13 +71,17 @@ const loginComoOrganizador = async () => {
   const ok = await organizadoresStore.loginOrganizador(dto);
 
   if (ok && organizadoresStore.organizadorLogeado?.idRol === 2) {
-    
     localStorage.setItem("organizadorLogeado", JSON.stringify(organizadoresStore.organizadorLogeado));
     localStorage.setItem("tokenLoginOrganizador", organizadoresStore.tokenLoginOrganizador ?? "");
     router.push("/");
   } else {
-    organizadoresStore.logoutOrganizador(); 
-    alert("Este usuario no tiene permisos de organizador.");
+    organizadoresStore.logoutOrganizador();
+    await Swal.fire({
+      icon: 'error',
+      title: 'Acceso denegado',
+      text: 'Este usuario no tiene permisos de organizador.',
+      confirmButtonColor: '#d40202' // tu $color-red
+    });
   }
 };
 </script>
@@ -93,42 +90,10 @@ const loginComoOrganizador = async () => {
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
-.login {
+.form-login {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-
-  &__sheet {
-    padding: 24px;
-    border-radius: 8px;
-    background: rgba($color-black, 0.9);
-    border: 2px solid $color-red;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    margin-bottom: 50px;
-  }
-
-  &__title {
-    color: white;
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  &__subtitle {
-    color: $color-lightred;
-    font-size: 17px;
-    margin-bottom: 16px;
-  }
-
-  &__form {
-    background: url('@/assets/Images/fondo1.jpg') no-repeat center center;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+  flex-direction: column;
+  gap: 16px;
 
   &__input {
     background: transparent;
@@ -184,12 +149,6 @@ const loginComoOrganizador = async () => {
     color: $color-black;
     font-weight: bold;
     margin-top: 16px;
-  }
-
-  @media (max-width: 768px) {
-    &__sheet {
-      width: 90%;
-    }
   }
 }
 </style>

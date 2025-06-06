@@ -71,7 +71,7 @@ const vistasFiltradas = computed(() =>
       </li>
 
       <li class="sidebar__item">
-        <router-link to="/" class="sidebar__button sidebar__button--link">
+        <router-link to="/" class="sidebar__button sidebar__button--link-out">
           Volver a la página principal
         </router-link>
       </li>
@@ -87,6 +87,9 @@ const vistasFiltradas = computed(() =>
 
 <style scoped lang="scss">
 @import '@/assets/styles/_variables.scss';
+@import '@/assets/styles/_mixins.scss';
+
+
 
 .sidebar__toggle-btn {
   position: fixed;
@@ -107,7 +110,7 @@ const vistasFiltradas = computed(() =>
   &:hover {
     background-color: $color-lightred;
     box-shadow: 0 0 10px $color-lightred;
-    transform: scale(1.05); 
+    transform: scale(1.05);
   }
 }
 
@@ -185,6 +188,15 @@ const vistasFiltradas = computed(() =>
     &--link {
       display: inline-block;
       text-decoration: none;
+
+      &-out{
+       @include boton-borde-rosa;
+
+      &:hover {
+        background-color: $color-red;
+        transform: scale(1.05);
+      }
+      }
     }
 
     &--logout {

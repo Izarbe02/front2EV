@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { useUsuariosOrganizadoresStore } from "@/stores/UsuarioOrganizador";
+import { useUsuariosOrganizadoresStore } from "@/stores/usuarioOrganizador";
 import { useUsuariosStore } from "@/stores/usuarios";
 import type UsuarioOrganizadorDto from "@/stores/dtos/UsuarioOrganizador.dto";
+import type OrganizadorDto from "@/stores/dtos/organizador.dto";
 
 const usuariosStore = useUsuariosStore();
 const usuariosOrganizadoresStore = useUsuariosOrganizadoresStore();
 
 const usuario = computed(() => usuariosStore.usuarioLogeado);
-const organizadoresSeguidos = ref([]);
+const organizadoresSeguidos = ref<OrganizadorDto[]>([]);
 
 const cargarOrganizadores = async () => {
   if (usuario.value?.id) {
@@ -110,10 +111,15 @@ onMounted(() => {
 }
 
 .organizador-card {
-  background-color: $color-darkgray;
+ background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+   border: 2px solid #951f1f;
+  border-radius: 8px;
+
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   &__imagen {
     width: 100%;

@@ -9,7 +9,6 @@ import type ComentarioCreateDto from '@/stores/dtos/comentarioCrear.dto'
 import type ComentarioUpdateDto from '@/stores/dtos/comentarioUpdate.dto'
 import { RouterLink } from 'vue-router'
 import Swal from 'sweetalert2'
-import { log } from 'console'
 
 const eventosStore = useEventosStore()
 const eventosGuardadosStore = useEventosGuardadosStore()
