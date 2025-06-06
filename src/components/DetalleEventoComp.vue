@@ -215,7 +215,15 @@ console.log(usuariosStore.currentUsuario);
 
           <div class="evento-detalle__acciones">
             <button class="evento-detalle__boton">📅 Añadir al calendario</button>
-            <button class="evento-detalle__boton">⬇️ Descargar folleto</button>
+            <a
+              class="evento-detalle__boton"
+              :href="evento.enlace"
+              target="_blank"
+              rel="noopener"
+            >
+              ⬇️ Ver y descargar folleto
+            </a>
+
             <button class="evento-detalle__boton" @click="onToggleGuardar">
               {{ estaGuardado ? '💔 Quitar de guardados' : '❤️ Guardar evento' }}
             </button>
@@ -395,6 +403,7 @@ console.log(usuariosStore.currentUsuario);
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
+    text-decoration: none;
 
     &:hover {
       background-color: #d40202;

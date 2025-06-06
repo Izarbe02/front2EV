@@ -22,9 +22,6 @@ onMounted(async () => {
   <Header />
 
   <main class="eventos-container">
-    <div class="eventos-container__buscador">
-      <BuscadorEventos />
-    </div>
 
     <EventoCard />
   </main>
@@ -40,8 +37,4 @@ onMounted(async () => {
   align-items: center;
 }
 
-.eventos-container__buscador {
-  width: 100%;
-  max-width: 600px;
-}
 </style>

@@ -450,6 +450,85 @@ watch(
     }
 
     &__contenido {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    &__imagen {
+      flex: 1;
+      max-width: 400px;
+    }
+
+    &__portada {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    &__botonInfo {
+      flex: 1;
+      min-width: 0; // clave para evitar que el texto desborde
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    &__info {
+      font-size: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      word-wrap: break-word;
+    }
+
+    &__subtitulo {
+      font-size: 1.8rem;
+    }
+
+    &__direccion {
+      font-size: 1.6rem;
+    }
+
+    &__boton {
+      margin-top: 2rem;
+
+      &-boton {
+        font-size: 1.1rem;
+        padding: 12px 28px;
+      }
+
+      &-contador {
+        font-size: 1.4rem;
+        padding: 8px 16px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1520px) {
+  .organizador-detalle {
+    max-width: 80%;
+
+    &__titulo {
+      font-size: 2rem;
+      margin-bottom: 3%;
+    }
+
+    &__contenedor {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__contenido {
       width: 80%;
       flex-direction: row;
       justify-content: space-between;

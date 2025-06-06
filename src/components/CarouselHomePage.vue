@@ -1,7 +1,8 @@
 <template>
 <div class="tituloCont">
-    <h2 class="txto">Difunde tus eventos, encuentra actividades y apoya iniciativas en Zaragoza. </h2><br>
-    <h1 class="txtoB">Cultura, activismo, comunidad</h1>
+    <h1 class="txtoB">Cultura, activismo, comunidad</h1><br>
+    <h2 class="txto">Difunde tus eventos, encuentra actividades y apoya iniciativas en Zaragoza. </h2>
+    
  </div>
 
 
@@ -78,24 +79,24 @@ const items = ref([
   position: relative;
   width: 100%;
   max-width: 400px;
-  margin-top: 21%;
   @media (min-width: 768px){
     max-width: 1200px;
-    margin-top: 7%;
+    margin-top: 1.5%;
   }
 }
 
 .tituloCont {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 6%;
   z-index: 2;
   text-align: center;
   padding: 0 10px;
   width: 100%;
   max-width: 1000px;
-
+   text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;  
   @media (min-width: 768px) {
     top: 20px;
   }
@@ -103,16 +104,22 @@ const items = ref([
 
 .txto {
   font-family: $first-font;
-  color: rgb(180, 1, 1);
+  color: $color-red;
   margin: 0;
+  
 }
 
 .txtoB {
   font-family: $titulo;
   font-weight: bold;
-  color: red;
+  color: #e00303e1;
   text-shadow: 1px 1px 1px rgba(187, 187, 187, 0.7);
   margin: 0;
+   text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
 }
 
 .carousel__item {

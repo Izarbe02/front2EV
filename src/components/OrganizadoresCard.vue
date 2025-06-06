@@ -63,6 +63,7 @@ onMounted(() => {
 h1 {
   @include titulo-evento;
   text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
+  font-size: 42px;
 }
 
 .organizador-card {

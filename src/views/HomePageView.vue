@@ -31,5 +31,6 @@ import HomePage from '@/components/HomePage.vue'
     justify-content: center;
     align-items: center;
     margin-bottom: 2%;
+    flex-direction: column;
 }
 </style>

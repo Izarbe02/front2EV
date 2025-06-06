@@ -32,9 +32,7 @@ const buscar = () => {
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 30%;
   @media (min-width: 768px) {
-    margin-top: 20%;
   }
 }
 
