@@ -51,7 +51,7 @@ const router = createRouter({
       path: '/Productos',
       name: 'Productos',
       component: ProductoView
-      
+
     },
     {
       path: '/Organizadores',

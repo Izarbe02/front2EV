@@ -1,8 +1,9 @@
+
 <template>
   <section class="homepage">
     <div class="homepage__container">
 
-      <!-- Tarjetas de proximos eventos -->
+
       <div class="homepage__events">
         <h2 class="homepage__title">Próximos Eventos</h2>
         <div class="homepage__cards">
@@ -11,7 +12,7 @@
             :key="index"
             class="homepage__card"
           >
-            <img :src="event.enlace" class="homepage__card-image"></img>
+            <img :src="event.enlace" class="homepage__card-image">
             <v-card-title class="homepage__card-title">
               {{ event.nombre }}
             </v-card-title>
@@ -38,12 +39,13 @@ import { useEventosStore } from "@/stores/eventos";
 import EventoDto from "@/stores/dtos/evento.dto";
 
 export default defineComponent({
+
   name: "Homepage",
   setup() {
     const store = useEventosStore();
     const events = ref<EventoDto[]>([]);
 
-    // Cargar los proximos eventos al montar el componente
+
     onMounted(async () => {
       await store.proximosEventos();
       events.value = store.eventosProximos;
@@ -90,6 +92,7 @@ export default defineComponent({
     @include titulo-evento;
     text-align: center;
     text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
+    color: white;
   }
 
   &__cards {
@@ -104,15 +107,16 @@ export default defineComponent({
     }
   }
   &__card {
-    width: 300px; 
-    height: 450px; 
+    width: 300px;
+    height: 450px;
     margin: 0 auto;
-    background-color: rgb(247, 247, 247);
+    background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; 
+    justify-content: space-between;
     border-radius: 10px;
-    overflow: hidden; 
+    overflow: hidden;
 
     @include desktop {
       width: 30%;
@@ -123,23 +127,23 @@ export default defineComponent({
   &__card-image {
     width: 100%;
     height: 50%;
-    object-fit: cover; 
+    object-fit: cover;
   }
 
   &__card-title {
     font-family: $first-font;
     font-size: 1.4rem;
-    color: $color-darkgray;
+    color: white;
     padding: 10px;
     text-align: center;
   }
 
   &__card-text {
     font-size: 1.0rem;
-    color: $color-gray;
+    color: white;
     padding: 14px;
     text-align: center;
-    flex-grow: 1; 
+    flex-grow: 1;
   }
 
   &__card-actions {

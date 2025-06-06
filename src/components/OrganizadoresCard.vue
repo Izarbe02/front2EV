@@ -6,8 +6,6 @@ import { useOrganizadoresStore } from "@/stores/organizadores";
 const store = useOrganizadoresStore();
 const { organizadores, findAll } = store;
 
-
-// Cargar productos al montar el componente
 onMounted(() => {
   findAll();
 });
@@ -15,27 +13,24 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="organizadores-container">
-    <h1 class="titulo">ORGANIZADORES</h1>
-    <div class="organizadores-container__tarjetas">
+  <div class="organizador-container">
+    <h1 class="organizador-container__titulo">ORGANIZADORES</h1>
+    <div class="organizador-container__tarjetas">
       <div v-for="organizador in organizadores" :key="organizador.id" class="organizador-card">
         <img :src="organizador.enlace" :alt="organizador.nombre" class="organizador-card__imagen" />
         <div class="organizador-card__contenido">
           <p class="organizador-card__titulo">{{ organizador.nombre }}</p>
 
           <div class="organizador-card__info">
-            
+
             <span class="organizador-card__localizacion">
               {{ organizador.ubicacion }}
             </span>
-            
-          </div>
 
-          <button class="organizador-card__boton">
-            <RouterLink :to="`/OrganizadorDetalle?id=${organizador.id}`" class="organizador-card__link">
-                Saber más
-            </RouterLink>
-          </button>
+          </div>
+          <RouterLink :to="`/OrganizadorDetalle?id=${organizador.id}`" class="organizador-card__boton">
+              Saber más
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -46,100 +41,120 @@ onMounted(() => {
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
 
-.organizadores-container {
+.organizador-container {
   padding: 2%;
-  margin-top: 17%;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__titulo {
+    @include titulo-evento;
+    text-align: center;
+    text-shadow: 0 0 10px $color-black, 0 0 20px $color-black;
+    font-size: 2.4rem;
+    margin-bottom: 1.5rem;
+
+    @media (min-width: 768px) {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+    }
+  }
 
   &__tarjetas {
-    margin-top: 25px;
+    width: 100%;
     display: grid;
-    gap: 20px;
     grid-template-columns: 1fr;
+    gap: 1.5rem;
     justify-items: center;
-    margin-bottom: 30px;
-  }
-}
 
-h1 {
-  @include titulo-evento;
-  text-shadow: 0px 0px 10px $color-black, 0px 0px 20px $color-black;
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
 }
 
 .organizador-card {
-  background-color: #272525;
+ background: url("@/assets/Images/fondo1.jpg") no-repeat center center;
+  background-size: cover;
   border: 2px solid #292929;
+
   border-radius: 8px;
   color: #fff;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   width: 100%;
-  max-width: 370px;
+  max-width: 430px;
   display: flex;
   flex-direction: column;
   border: 2px solid #3b0000;
-  
-  
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0px 0px 15px rgba(92, 92, 92, 0.7);
+    box-shadow: 0 0 15px rgba(92, 92, 92, 0.7);
   }
-
   &__imagen {
     width: 100%;
-    height: 200px;
+    height: 250px;
     object-fit: cover;
 
   }
-
   &__contenido {
-    padding: 12px;
+    padding: 1rem 1.5rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
   }
-
   &__titulo {
-    font-family: $titulo;
-    margin-top: 5%;
-    font-size: 25px;
+    font-family: $first-font;
+    font-size: 2rem;
+    font-weight: 600;
     text-align: center;
-    margin-bottom: 30px;
-    color: #fff9f9;
+    margin-bottom: 1rem;
+    color: $color-whitered;
     text-shadow: 2px 2px 5px rgba(255, 5, 5, 0.7);
-    width: 100%;
-    padding: 10px;
-    font-weight: 500;
   }
 
   &__info {
     font-family: $first-font;
-    font-size: 1.2rem;
-    color: #bbb;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 10px;
+    font-size: 1.4rem;
+    color: #838383;
+    margin-bottom: 1.5rem;
+    text-align: center;
   }
 
-  &__link{
-    text-decoration: none;
+  &__localizacion {
+    display: block;
+  }
+
+  &__link {
     color: $color-lightred;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+
+    &:hover {
+      color: $color-red;
+      text-decoration: none;
+    }
   }
 
   &__boton {
-    font-family: $titulo;
-    padding: 8px;
-    border-radius: 5px;
     @include boton-rojo;
-  }
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition:  0.3s ease;
+    margin-top: auto;
 
-
-}
-@media (min-width: 768px) {
-  .organizadores-container{
-    margin-top: 10px;
-        &__tarjetas {
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 20px;
-            margin-bottom: 50px;
-        }
+    &:hover {
+      background-color: $color-lightred;
+      color: #fff;
     }
+  }
 }
 </style>

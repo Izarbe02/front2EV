@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import Header from '@/components/Header.vue';
-import OrganizadoresCard from '@/components/OrganizadoresCard.vue';
+import { defineAsyncComponent } from 'vue';
+
+const Header = defineAsyncComponent(() => import("@/components/Header.vue"));
+const OrganizadoresCard = defineAsyncComponent(() => import("@/components/OrganizadoresCard.vue"));
 import Footer from '@/components/Footer.vue';
+
 
 </script>
 

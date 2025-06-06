@@ -1,8 +1,9 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   frontend:
     container_name: 2EvFront
+    image: zarbix/docker-frontend-eventos:19
     build: 
       context: .
       dockerfile: Dockerfile
@@ -11,3 +12,6 @@ services:
     volumes:
       - ./src/assets:/usr/share/nginx/html/src/assets
     restart: always
+
+
+    

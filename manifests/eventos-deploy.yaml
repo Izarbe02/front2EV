@@ -1,0 +1,29 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: frontend-eventos-deployment
+  labels: 
+     app: eventos
+
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: eventos
+
+  template:
+    metadata:
+      labels:
+        app: eventos
+    spec:
+      containers:
+      - name: eventos
+        image: zarbix/docker-frontend-eventos:19
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

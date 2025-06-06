@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import FormRegister from '@/components/FormRegister.vue';
-import Header from '@/components/Header.vue'
+
+import { defineAsyncComponent } from 'vue';
+
+const Header = defineAsyncComponent(() => import("@/components/Header.vue"));
+
+const FormRegister = defineAsyncComponent(() => import("@/components/FormRegister.vue"));
 
 import Footer from '@/components/Footer.vue'
 

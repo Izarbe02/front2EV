@@ -1,25 +1,22 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useUsuariosStore } from '@/stores/usuarios';
-import type UsuarioDto from '@/stores/dtos/usuario.dto'; // Importa el DTO
+import type UsuarioDto from '@/stores/dtos/usuario.dto';
 
 const usuariosStore = useUsuariosStore();
 
-// Variables reactivas para los datos del usuario
 const username = ref("");
 const nombre = ref("");
 const email = ref("");
 const ubicacion = ref("");
 const contrasenia = ref("");
 
-// Reglas de validación para Vuetify
 const requiredRule = [(v: string) => !!v || "Campo obligatorio"];
 const emailRule = [
   (v: string) => !!v || "Campo obligatorio",
   (v: string) => /.+@.+\..+/.test(v) || "Email inválido"
 ];
 
-// Función para registrar usuario usando el DTO
 const registrarUsuario = async () => {
   const usuario: UsuarioDto = {
     id: 0,
@@ -47,8 +44,8 @@ const registrarUsuario = async () => {
         <v-text-field v-model="email" :rules="emailRule" label="Email" type="email" class="registro__input"></v-text-field>
         <v-text-field v-model="ubicacion" :rules="requiredRule" label="Ubicación" class="registro__input"></v-text-field>
         <v-text-field v-model="contrasenia" :rules="requiredRule" label="Contraseña" type="password" class="registro__input"></v-text-field>
+        <RouterLink to="/login" class="login__register"><v-btn type="submit" block class="registro__button">Registrarse</v-btn></RouterLink>
 
-        <v-btn type="submit" block class="registro__button">Registrarse</v-btn>
       </v-form>
     </v-sheet>
   </v-container>
@@ -57,7 +54,7 @@ const registrarUsuario = async () => {
 <style lang="scss" scoped>
 @import "@/assets/styles/_variables.scss";
 @import "@/assets/styles/_mixins.scss";
-
+.login__register{text-decoration: none;}
 .registro {
   display: flex;
   justify-content: center;
