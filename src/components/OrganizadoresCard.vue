@@ -24,11 +24,11 @@ onMounted(() => {
           <p class="organizador-card__titulo">{{ organizador.nombre }}</p>
 
           <div class="organizador-card__info">
-            
+
             <span class="organizador-card__localizacion">
               {{ organizador.ubicacion }}
             </span>
-            
+
           </div>
 
           <button class="organizador-card__boton">
@@ -76,25 +76,21 @@ h1 {
   display: flex;
   flex-direction: column;
   border: 2px solid #3b0000;
-  
-  
+
+
 
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0px 0px 15px rgba(92, 92, 92, 0.7);
   }
-
   &__imagen {
     width: 100%;
     height: 200px;
     object-fit: cover;
-
   }
-
   &__contenido {
     padding: 12px;
   }
-
   &__titulo {
     font-family: $titulo;
     margin-top: 5%;

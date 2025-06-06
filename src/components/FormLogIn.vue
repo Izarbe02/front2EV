@@ -33,11 +33,11 @@
 
           <v-alert v-if="usuariosStore.errorMessage" type="error" class="login__error">
         Credenciales incorrectas
-          </v-alert>
-        </v-form>
-      </v-sheet>
-    </v-container>
-  </template>
+           </v-alert>
+      </v-form>
+    </v-sheet>
+  </v-container>
+</template>
 
   <script setup lang="ts">
   import { ref } from 'vue';
